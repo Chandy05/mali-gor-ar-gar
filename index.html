@@ -62,11 +62,7 @@
 
         .game-title {
             margin: 0;
-<<<<<<< HEAD
-            font-size: 1.45rem;
-=======
             font-size: 1.4rem;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             color: #FF4757;
             text-shadow: 2px 2px 0px #FFF, 4px 4px 0px rgba(0,0,0,0.1);
         }
@@ -150,10 +146,6 @@
         .btn-lv5 { background-color: #F15BB5; }
         .btn-lv6 { background-color: #2ED573; }
 
-<<<<<<< HEAD
-        /* Stage Container */
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         .stage-container {
             width: 95%;
             max-width: 940px;
@@ -533,11 +525,7 @@
         .btn-random { background: #FF9F1C; }
         .btn-prev { background: #747D8C; }
 
-<<<<<<< HEAD
-        /* Level 5: Tone Marks & 5-Tone Board */
-=======
         /* Level 5: Tone Marks */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         .tone-marks-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -607,11 +595,7 @@
             margin-top: 4px;
         }
 
-<<<<<<< HEAD
-        /* Level 6: Mana Manee Story Reader */
-=======
         /* Level 6: Story Reader */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         .story-stage {
             display: flex;
             flex-direction: column;
@@ -693,11 +677,7 @@
             color: #D35400;
         }
 
-<<<<<<< HEAD
-        /* Matching Mode (Full Width Fix) */
-=======
         /* Matching Mode */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         .match-board {
             display: flex;
             flex-direction: column;
@@ -870,11 +850,7 @@
         .modal-box {
             background: var(--white);
             width: 100%;
-<<<<<<< HEAD
-            max-width: 720px;
-=======
             max-width: 740px;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             max-height: 85vh;
             border-radius: 26px;
             padding: 18px;
@@ -912,37 +888,23 @@
         }
 
         .voice-item-title { font-size: 0.95rem; font-weight: 700; }
-<<<<<<< HEAD
-        .voice-controls { display: flex; gap: 6px; align-items: center; }
-
-        .rec-btn {
-            padding: 6px 12px;
-=======
         .voice-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 
         .rec-btn {
             padding: 6px 11px;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             border: none;
             border-radius: 12px;
             font-family: 'Mali', sans-serif;
             font-weight: 700;
             cursor: pointer;
             color: var(--white);
-<<<<<<< HEAD
-            font-size: 0.85rem;
-=======
             font-size: 0.82rem;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         }
 
         .rec-btn.record { background: #FF4757; }
         .rec-btn.recording { background: #2ED573; animation: pulse 1s infinite; }
         .rec-btn.play { background: #1E90FF; }
-<<<<<<< HEAD
-=======
         .rec-btn.download { background: #9B5DE5; }
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         .rec-btn.delete { background: #747D8C; }
 
         @keyframes fadeIn {
@@ -979,21 +941,12 @@
 <body>
 
     <canvas id="confetti-canvas"></canvas>
-<<<<<<< HEAD
-=======
     <audio id="tts-audio-player" preload="auto"></audio>
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
 
     <header>
         <div class="header-top">
             <h1 class="game-title">🎈 ภาษาไทยหรรษา & หัดอ่านมานะ-มานี</h1>
             <div class="utility-btns">
-<<<<<<< HEAD
-                <button class="util-btn active-toggle" id="btn-voice-engine" onclick="toggleVoiceEngineMode()">
-                    🔊 เสียง: อัตโนมัติ
-                </button>
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 <button class="util-btn active-toggle" id="btn-toggle-view" onclick="toggleCardViewMode()">
                     🗂️ ดูทีละใบ
                 </button>
@@ -1001,11 +954,7 @@
                     🖼️ รูปภาพ
                 </button>
                 <button class="util-btn" onclick="openVoiceStudio()">
-<<<<<<< HEAD
-                    🎙️ อัดเสียง
-=======
                     🎙️ คลังเสียง / อัดเสียง
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 </button>
             </div>
         </div>
@@ -1041,13 +990,8 @@
         <div class="modal-box">
             <div class="modal-header">
                 <div>
-<<<<<<< HEAD
-                    <h2 style="margin:0; font-size:1.25rem; color:#FF4757;">🎙️ สตูดิโออัดเสียงผู้ปกครอง</h2>
-                    <small style="color:#57606F;">อัดเสียงทับคำที่ต้องการได้ทันที ระบบจะใช้เสียงที่อัดเป็นอันดับแรกครับ</small>
-=======
                     <h2 style="margin:0; font-size:1.25rem; color:#FF4757;">🎙️ คลังเสียง & สตูดิโออัดเสียง</h2>
                     <small style="color:#57606F;">ลำดับการเล่นเสียง: 1. เสียงอัดในเครื่อง ➡️ 2. ไฟล์ <b>audio/*.mp3</b> บน GitHub ➡️ 3. เสียงอัตโนมัติในเครื่อง</small>
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 </div>
                 <button class="util-btn" onclick="closeVoiceStudio()">❌ ปิด</button>
             </div>
@@ -1063,11 +1007,7 @@
             { id: 'c_ฃ', char: 'ฃ', name: 'ฃอ ขวด', tts: 'ขอ ขวด', sound: 'ขอ', emoji: '🍾', easy: false },
             { id: 'c_ค', char: 'ค', name: 'คอ ควาย', tts: 'คอ ควาย', sound: 'คอ', emoji: '🐃', easy: true },
             { id: 'c_ฅ', char: 'ฅ', name: 'ฅอ คน', tts: 'คอ คน', sound: 'คอ', emoji: '🧑', easy: false },
-<<<<<<< HEAD
-            { id: 'c_ฆ', char: 'ฆ', name: 'ฆอ ระฆัง', tts: 'คอ ระ-ฆัง', sound: 'คอ', emoji: '🔔', easy: false },
-=======
             { id: 'c_ฆ', char: 'ฆ', name: 'ฆอ ระฆัง', tts: 'คอ ระ ฆัง', sound: 'คอ', emoji: '🔔', easy: false },
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             { id: 'c_ง', char: 'ง', name: 'งอ งู', tts: 'งอ งู', sound: 'งอ', emoji: '🐍', easy: true },
             { id: 'c_จ', char: 'จ', name: 'จอ จาน', tts: 'จอ จาน', sound: 'จอ', emoji: '🍽️', easy: true },
             { id: 'c_ฉ', char: 'ฉ', name: 'ฉอ ฉิ่ง', tts: 'ฉอ ฉิ่ง', sound: 'ฉอ', emoji: '🎶', easy: true },
@@ -1075,28 +1015,16 @@
             { id: 'c_ซ', char: 'ซ', name: 'ซอ โซ่', tts: 'ซอ โซ่', sound: 'ซอ', emoji: '⛓️', easy: false },
             { id: 'c_ฌ', char: 'ฌ', name: 'ฌอ เฌอ', tts: 'ชอ เฌอ', sound: 'ชอ', emoji: '🌳', easy: false },
             { id: 'c_ญ', char: 'ญ', name: 'ญอ หญิง', tts: 'ยอ หญิง', sound: 'ยอ', emoji: '👩', easy: false },
-<<<<<<< HEAD
-            { id: 'c_ฎ', char: 'ฎ', name: 'ฎอ ชฎา', tts: 'ดอ ชะ-ดา', sound: 'ดอ', emoji: '👑', easy: false },
-            { id: 'c_ฏ', char: 'ฏ', name: 'ฏอ ปฏัก', tts: 'ตอ ปะ-ตัก', sound: 'ตอ', emoji: '🔱', easy: false },
-            { id: 'c_ฐ', char: 'ฐ', name: 'ฐอ ฐาน', tts: 'ถอ ฐาน', sound: 'ถอ', emoji: '🏛️', easy: false },
-            { id: 'c_ฑ', char: 'ฑ', name: 'ฑอ มณโฑ', tts: 'ทอ มน-โท', sound: 'ทอ', emoji: '👸', easy: false },
-            { id: 'c_ฒ', char: 'ฒ', name: 'ฒอ ผู้เฒ่า', tts: 'ทอ ผู้-เฒ่า', sound: 'ทอ', emoji: '👴', easy: false },
-=======
             { id: 'c_ฎ', char: 'ฎ', name: 'ฎอ ชฎา', tts: 'ดอ ชะ ดา', sound: 'ดอ', emoji: '👑', easy: false },
             { id: 'c_ฏ', char: 'ฏ', name: 'ฏอ ปฏัก', tts: 'ตอ ปะ ตัก', sound: 'ตอ', emoji: '🔱', easy: false },
             { id: 'c_ฐ', char: 'ฐ', name: 'ฐอ ฐาน', tts: 'ถอ ฐาน', sound: 'ถอ', emoji: '🏛️', easy: false },
             { id: 'c_ฑ', char: 'ฑ', name: 'ฑอ มณโฑ', tts: 'ทอ มน โท', sound: 'ทอ', emoji: '👸', easy: false },
             { id: 'c_ฒ', char: 'ฒ', name: 'ฒอ ผู้เฒ่า', tts: 'ทอ ผู้ เฒ่า', sound: 'ทอ', emoji: '👴', easy: false },
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             { id: 'c_ณ', char: 'ณ', name: 'ณอ เณร', tts: 'นอ เณร', sound: 'นอ', emoji: '🧘', easy: false },
             { id: 'c_ด', char: 'ด', name: 'ดอ เด็ก', tts: 'ดอ เด็ก', sound: 'ดอ', emoji: '👶', easy: true },
             { id: 'c_ต', char: 'ต', name: 'ตอ เต่า', tts: 'ตอ เต่า', sound: 'ตอ', emoji: '🐢', easy: true },
             { id: 'c_ถ', char: 'ถ', name: 'ถอ ถุง', tts: 'ถอ ถุง', sound: 'ถอ', emoji: '🛍️', easy: true },
-<<<<<<< HEAD
-            { id: 'c_ท', char: 'ท', name: 'ทอ ทหาร', tts: 'ทอ ทะ-หาร', sound: 'ทอ', emoji: '🪖', easy: true },
-=======
             { id: 'c_ท', char: 'ท', name: 'ทอ ทหาร', tts: 'ทอ ทะ หาร', sound: 'ทอ', emoji: '🪖', easy: true },
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             { id: 'c_ธ', char: 'ธ', name: 'ธอ ธง', tts: 'ทอ ธง', sound: 'ทอ', emoji: '🚩', easy: false },
             { id: 'c_น', char: 'น', name: 'นอ หนู', tts: 'นอ หนู', sound: 'นอ', emoji: '🐭', easy: true },
             { id: 'c_บ', char: 'บ', name: 'บอ ใบไม้', tts: 'บอ ใบไม้', sound: 'บอ', emoji: '🍃', easy: true },
@@ -1105,56 +1033,12 @@
             { id: 'c_ฝ', char: 'ฝ', name: 'ฝอ ฝา', tts: 'ฝอ ฝา', sound: 'ฝอ', emoji: '🥘', easy: true },
             { id: 'c_พ', char: 'พ', name: 'พอ พาน', tts: 'พอ พาน', sound: 'พอ', emoji: '🏆', easy: true },
             { id: 'c_ฟ', char: 'ฟ', name: 'ฟอ ฟัน', tts: 'ฟอ ฟัน', sound: 'ฟอ', emoji: '🦷', easy: true },
-<<<<<<< HEAD
-            { id: 'c_ภ', char: 'ภ', name: 'ภอ สำเภา', tts: 'พอ สำ-เภา', sound: 'พอ', emoji: '⛵', easy: false },
-=======
             { id: 'c_ภ', char: 'ภ', name: 'ภอ สำเภา', tts: 'พอ สำ เภา', sound: 'พอ', emoji: '⛵', easy: false },
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             { id: 'c_ม', char: 'ม', name: 'มอ ม้า', tts: 'มอ ม้า', sound: 'มอ', emoji: '🐴', easy: true },
             { id: 'c_ย', char: 'ย', name: 'ยอ ยักษ์', tts: 'ยอ ยักษ์', sound: 'ยอ', emoji: '👹', easy: true },
             { id: 'c_ร', char: 'ร', name: 'รอ เรือ', tts: 'รอ เรือ', sound: 'รอ', emoji: '🛶', easy: true },
             { id: 'c_ล', char: 'ล', name: 'ลอ ลิง', tts: 'ลอ ลิง', sound: 'ลอ', emoji: '🐵', easy: true },
             { id: 'c_ว', char: 'ว', name: 'วอ แหวน', tts: 'วอ แหวน', sound: 'วอ', emoji: '💍', easy: true },
-<<<<<<< HEAD
-            { id: 'c_ศ', char: 'ศ', name: 'ศอ ศาลา', tts: 'สอ สา-ลา', sound: 'สอ', emoji: '🛖', easy: false },
-            { id: 'c_ษ', char: 'ษ', name: 'ษอ ฤๅษี', tts: 'สอ รือ-สี', sound: 'สอ', emoji: '🧙‍♂️', easy: false },
-            { id: 'c_ส', char: 'ส', name: 'สอ เสือ', tts: 'สอ เสือ', sound: 'สอ', emoji: '🐯', easy: true },
-            { id: 'c_ห', char: 'ห', name: 'หอ หีบ', tts: 'หอ หีบ', sound: 'หอ', emoji: '🧰', easy: true },
-            { id: 'c_ฬ', char: 'ฬ', name: 'ฬอ จุฬา', tts: 'ลอ จุ-ฬา', sound: 'ลอ', emoji: '🪁', easy: false },
-            { id: 'c_อ', char: 'อ', name: 'ออ อ่าง', tts: 'ออ อ่าง', sound: 'ออ', emoji: '🥣', easy: true },
-            { id: 'c_ฮ', char: 'ฮ', name: 'ฮอ นกฮูก', tts: 'ฮอ นก-ฮูก', sound: 'ฮอ', emoji: '🦉', easy: true }
-        ];
-
-        const vowels = [
-            { id: 'v_อะ', display: '◌ะ', template: '{c}ะ', name: 'สระ อะ', tts: 'สะ-ระ อะ', sound: 'อะ', desc: 'วางข้างหลังพยัญชนะ', easy: true },
-            { id: 'v_อา', display: '◌า', template: '{c}า', name: 'สระ อา', tts: 'สะ-ระ อา', sound: 'อา', desc: 'วางข้างหลังพยัญชนะ', easy: true },
-            { id: 'v_อิ', display: '◌ิ', template: '{c}ิ', name: 'สระ อิ', tts: 'สะ-ระ อิ', sound: 'อิ', desc: 'วางข้างบนพยัญชนะ', easy: true },
-            { id: 'v_อี', display: '◌ี', template: '{c}ี', name: 'สระ อี', tts: 'สะ-ระ อี', sound: 'อี', desc: 'วางข้างบนพยัญชนะ', easy: true },
-            { id: 'v_อึ', display: '◌ึ', template: '{c}ึ', name: 'สระ อึ', tts: 'สะ-ระ อึ', sound: 'อึ', desc: 'วางข้างบนพยัญชนะ', easy: false },
-            { id: 'v_อือ', display: '◌ือ', template: '{c}ือ', name: 'สระ อือ', tts: 'สะ-ระ อือ', sound: 'อือ', desc: 'วางข้างบนพยัญชนะ', easy: true },
-            { id: 'v_อุ', display: '◌ุ', template: '{c}ุ', name: 'สระ อุ', tts: 'สะ-ระ อุ', sound: 'อุ', desc: 'วางข้างล่างพยัญชนะ', easy: true },
-            { id: 'v_อู', display: '◌ู', template: '{c}ู', name: 'สระ อู', tts: 'สะ-ระ อู', sound: 'อู', desc: 'วางข้างล่างพยัญชนะ', easy: true },
-            { id: 'v_เอะ', display: 'เ◌ะ', template: 'เ{c}ะ', name: 'สระ เอะ', tts: 'สะ-ระ เอะ', sound: 'เอะ', desc: 'วางหน้าและหลังพยัญชนะ', easy: false },
-            { id: 'v_เอ', display: 'เ◌', template: 'เ{c}', name: 'สระ เอ', tts: 'สะ-ระ เอ', sound: 'เอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
-            { id: 'v_แอะ', display: 'แ◌ะ', template: 'แ{c}ะ', name: 'สระ แอะ', tts: 'สะ-ระ แอะ', sound: 'แอะ', desc: 'วางหน้าและหลังพยัญชนะ', easy: false },
-            { id: 'v_แอ', display: 'แ◌', template: 'แ{c}', name: 'สระ แอ', tts: 'สะ-ระ แอ', sound: 'แอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
-            { id: 'v_โอะ', display: 'โ◌ะ', template: 'โ{c}ะ', name: 'สระ โอะ', tts: 'สะ-ระ โอะ', sound: 'โอะ', desc: 'วางหน้าและหลังพยัญชนะ', easy: false },
-            { id: 'v_โอ', display: 'โ◌', template: 'โ{c}', name: 'สระ โอ', tts: 'สะ-ระ โอ', sound: 'โอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
-            { id: 'v_เอาะ', display: 'เ◌าะ', template: 'เ{c}าะ', name: 'สระ เอาะ', tts: 'สะ-ระ เอาะ', sound: 'เอาะ', desc: 'วางหน้าและหลังพยัญชนะ', easy: false },
-            { id: 'v_ออ', display: '◌อ', template: '{c}อ', name: 'สระ ออ', tts: 'สะ-ระ ออ', sound: 'ออ', desc: 'วางข้างหลังพยัญชนะ', easy: true },
-            { id: 'v_เออะ', display: 'เ◌อะ', template: 'เ{c}อะ', name: 'สระ เออะ', tts: 'สะ-ระ เออะ', sound: 'เออะ', desc: 'วางหน้าและหลังพยัญชนะ', easy: false },
-            { id: 'v_เออ', display: 'เ◌อ', template: 'เ{c}อ', name: 'สระ เออ', tts: 'สะ-ระ เออ', sound: 'เออ', desc: 'วางหน้าและหลังพยัญชนะ', easy: true },
-            { id: 'v_เอียะ', display: 'เ◌ียะ', template: 'เ{c}ียะ', name: 'สระ เอียะ', tts: 'สะ-ระ เอียะ', sound: 'เอียะ', desc: 'สระประสมเสียงสั้น', easy: false },
-            { id: 'v_เอีย', display: 'เ◌ีย', template: 'เ{c}ีย', name: 'สระ เอีย', tts: 'สะ-ระ เอีย', sound: 'เอีย', desc: 'สระประสมเสียงยาว', easy: true },
-            { id: 'v_เอือะ', display: 'เ◌ือะ', template: 'เ{c}ือะ', name: 'สระ เอือะ', tts: 'สะ-ระ เอือะ', sound: 'เอือะ', desc: 'สระประสมเสียงสั้น', easy: false },
-            { id: 'v_เอือ', display: 'เ◌ือ', template: 'เ{c}ือ', name: 'สระ เอือ', tts: 'สะ-ระ เอือ', sound: 'เอือ', desc: 'สระประสมเสียงยาว', easy: true },
-            { id: 'v_อัวะ', display: '◌ัวะ', template: '{c}ัวะ', name: 'สระ อัวะ', tts: 'สะ-ระ อัวะ', sound: 'อัวะ', desc: 'สระประสมเสียงสั้น', easy: false },
-            { id: 'v_อัว', display: '◌ัว', template: '{c}ัว', name: 'สระ อัว', tts: 'สะ-ระ อัว', sound: 'อัว', desc: 'วางบนและหลังพยัญชนะ', easy: true },
-            { id: 'v_อำ', display: '◌ำ', template: '{c}ำ', name: 'สระ อำ', tts: 'สะ-ระ อำ', sound: 'อำ', desc: 'วางข้างหลังพยัญชนะ', easy: true },
-            { id: 'v_ใอ', display: 'ใ◌', template: 'ใ{c}', name: 'สระ ใอ ไม้ม้วน', tts: 'สะ-ระ ใอ ไม้ม้วน', sound: 'ใอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
-            { id: 'v_ไอ', display: 'ไ◌', template: 'ไ{c}', name: 'สระ ไอ ไม้มลาย', tts: 'สะ-ระ ไอ ไม้มลาย', sound: 'ไอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
-            { id: 'v_เอา', display: 'เ◌า', template: 'เ{c}า', name: 'สระ เอา', tts: 'สะ-ระ เอา', sound: 'เอา', desc: 'วางหน้าและหลังพยัญชนะ', easy: true }
-=======
             { id: 'c_ศ', char: 'ศ', name: 'ศอ ศาลา', tts: 'สอ สา ลา', sound: 'สอ', emoji: '🛖', easy: false },
             { id: 'c_ษ', char: 'ษ', name: 'ษอ ฤๅษี', tts: 'สอ รือ สี', sound: 'สอ', emoji: '🧙‍♂️', easy: false },
             { id: 'c_ส', char: 'ส', name: 'สอ เสือ', tts: 'สอ เสือ', sound: 'สอ', emoji: '🐯', easy: true },
@@ -1193,7 +1077,6 @@
             { id: 'v_ใอ', display: 'ใ◌', template: 'ใ{c}', name: 'สระ ใอ ไม้ม้วน', tts: 'สะ ระ ใอ ไม้ม้วน', sound: 'ใอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
             { id: 'v_ไอ', display: 'ไ◌', template: 'ไ{c}', name: 'สระ ไอ ไม้มลาย', tts: 'สะ ระ ไอ ไม้มลาย', sound: 'ไอ', desc: 'วางข้างหน้าพยัญชนะ', easy: true },
             { id: 'v_เอา', display: 'เ◌า', template: 'เ{c}า', name: 'สระ เอา', tts: 'สะ ระ เอา', sound: 'เอา', desc: 'วางหน้าและหลังพยัญชนะ', easy: true }
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         ];
 
         /* ==================== 2. คลังคำผสม (ด่าน 3-4) ==================== */
@@ -1236,28 +1119,17 @@
 
         /* ==================== 3. ข้อมูลด่านที่ 5: วรรณยุกต์และการผันเสียง ==================== */
         const toneMarks = [
-<<<<<<< HEAD
-            { id: 'tm_1', mark: '◌่', name: 'ไม้เอก', tts: 'ไม้-เอก', toneName: 'เสียงเอก' },
-            { id: 'tm_2', mark: '◌้', name: 'ไม้โท', tts: 'ไม้-โท', toneName: 'เสียงโท' },
-            { id: 'tm_3', mark: '◌๊', name: 'ไม้ตรี', tts: 'ไม้-ตรี', toneName: 'เสียงตรี' },
-            { id: 'tm_4', mark: '◌๋', name: 'ไม้จัตวา', tts: 'ไม้-จัด-ตะ-วา', toneName: 'เสียงจัตวา' }
-=======
             { id: 'tm_1', mark: '◌่', name: 'ไม้เอก', tts: 'ไม้ เอก', toneName: 'เสียงเอก' },
             { id: 'tm_2', mark: '◌้', name: 'ไม้โท', tts: 'ไม้ โท', toneName: 'เสียงโท' },
             { id: 'tm_3', mark: '◌๊', name: 'ไม้ตรี', tts: 'ไม้ ตรี', toneName: 'เสียงตรี' },
             { id: 'tm_4', mark: '◌๋', name: 'ไม้จัตวา', tts: 'ไม้ จัด ตะ วา', toneName: 'เสียงจัตวา' }
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         ];
 
         const toneSets = [
             { id: 'ts_กา', base: 'กา', words: ['กา', 'ก่า', 'ก้า', 'ก๊า', 'ก๋า'], ttsAll: 'กา, ก่า, ก้า, ก๊า, ก๋า', sampleWord: 'อีกา', emoji: '🐦‍⬛', targetWord: 'กา' },
             { id: 'ts_ปา', base: 'ปา', words: ['ปา', 'ป่า', 'ป้า', 'ป๊า', 'ป๋า'], ttsAll: 'ปา, ป่า, ป้า, ป๊า, ป๋า', sampleWord: 'คุณป้า', emoji: '👵', targetWord: 'ป้า' },
             { id: 'ts_เตา', base: 'เตา', words: ['เตา', 'เต่า', 'เต้า', 'เต๊า', 'เต๋า'], ttsAll: 'เตา, เต่า, เต้า, เต๊า, เต๋า', sampleWord: 'ตอ เต่า', emoji: '🐢', targetWord: 'เต่า' },
-<<<<<<< HEAD
-            { id: 'ts_ดอ', base: 'ดอ', words: ['ดอ', 'ด่อ', 'ด้อ', 'ด๊อ', 'ด๋อ'], ttsAll: 'ดอ, ด่อ, ด้อ, ด๊อ, ด๋อ', sampleWord: 'เด็กดื้อ', emoji: '👦', targetWord: 'ด้อ' },
-=======
             { id: 'ts_ดอ', base: 'ดอ', words: ['ดอ', 'ด่อ', 'ด้อ', 'ด๊อ', 'ด๋อ'], ttsAll: 'ดอ, ด่อ, ด้อ, ด๊อ, ด๋อ', sampleWord: 'เด็กดี', emoji: '👦', targetWord: 'ดอ' },
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             { id: 'ts_จา', base: 'จา', words: ['จา', 'จ่า', 'จ้า', 'จ๊า', 'จ๋า'], ttsAll: 'จา, จ่า, จ้า, จ๊า, จ๋า', sampleWord: 'แม่จ๋า', emoji: '👩‍👧', targetWord: 'จ๋า' },
             { id: 'ts_บาน', base: 'บาน', words: ['บาน', 'บ่าน', 'บ้าน', 'บ๊าน', 'บ๋าน'], ttsAll: 'บาน, บ่าน, บ้าน, บ๊าน, บ๋าน', sampleWord: 'บ้านของเรา', emoji: '🏡', targetWord: 'บ้าน' },
             { id: 'ts_ไก', base: 'ไก', words: ['ไก', 'ไก่', 'ไก้', 'ไก๊', 'ไก๋'], ttsAll: 'ไก, ไก่, ไก้, ไก๊, ไก๋', sampleWord: 'แม่ไก่', emoji: '🐔', targetWord: 'ไก่' },
@@ -1266,10 +1138,6 @@
 
         /* ==================== 4. ข้อมูลด่านที่ 6: หัดอ่านประโยค สไตล์ มานะ-มานี ==================== */
         const stories = [
-<<<<<<< HEAD
-            // ระดับ 1: แม่ ก กา ง่ายมาก (จากตำรามานะ-มานี)
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             {
                 id: 'st_1', diff: 1, title: 'บทที่ ๑ เจ้าโต', emoji: '🐕👀',
                 lines: ['โต มี ตา', 'โต มี ขา', 'โต มี หู', 'หู โต มี อะไร']
@@ -1282,10 +1150,6 @@
                 id: 'st_3', diff: 1, title: 'บทที่ ๓ ปูนาในรู', emoji: '🦀🕳️',
                 lines: ['ปูนา มี สี ดำ', 'โต ก็ มี หู สี ดำ', 'หู โต มี ปูนา']
             },
-<<<<<<< HEAD
-            // ระดับ 2: ประโยคต่อเนื่อง สไตล์มานะ-มานี
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             {
                 id: 'st_4', diff: 2, title: 'บทที่ ๔ มานีทายา', emoji: '👧🐕💊',
                 lines: ['มานี จะ ตี ปูนา', 'ปูนา ไป ใน รู', 'มานี เท ยา ทา หู โต', 'มานี ทา ยา เบา เบา']
@@ -1298,10 +1162,6 @@
                 id: 'st_6', diff: 2, title: 'บทที่ ๖ ในนาเรา', emoji: '🐮🌾🐦‍⬛',
                 lines: ['ใน นา มี กา', 'กา ดู ปูนา', 'อา ไถ นา ไว ไว', 'เรา เอา ใจ อา']
             },
-<<<<<<< HEAD
-            // ระดับ 3: ประโยคผสมวรรณยุกต์
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             {
                 id: 'st_7', diff: 3, title: 'บทที่ ๗ บ้านของมานี', emoji: '🏡👨‍👩‍👧',
                 lines: ['พ่อ แม่ อยู่ ที่ บ้าน', 'ป้า ซื้อ เสื้อ ผ้า ใหม่', 'มานี ไหว้ พ่อ แม่', 'แม่ จ๋า มานี รัก แม่']
@@ -1335,10 +1195,6 @@
         let currentMode = 'learn';
         let singleCardMode = true;
         let showImages = true;
-<<<<<<< HEAD
-        let forceCloudTts = false; // สำหรับบังคับโหมดเสียงออนไลน์บน Android
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         let stars = 0;
 
         let currentConsonantIndex = 0;
@@ -1453,16 +1309,9 @@
             });
         }
 
-<<<<<<< HEAD
-        /* ==================== 7. ระบบเสียง 3 ชั้น (แก้ปัญหา Android S22 Ultra ไม่มีเสียง) ==================== */
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        let currentAudioElement = null;
-=======
         /* ==================== 7. ระบบเสียง 3 ชั้น: อัดเสียง -> โฟลเดอร์ audio/*.mp3 บน GitHub -> เสียงอัตโนมัติในเครื่อง ==================== */
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         let speechSessionId = 0;
 
         function initAudio() {
@@ -1470,22 +1319,14 @@
             if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
-<<<<<<< HEAD
-        function playTone(freq, type = 'sine', duration = 0.15, delay = 0) {
-=======
         function playTone(freq, type = 'sine', duration = 0.14, delay = 0) {
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             initAudio();
             setTimeout(() => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-<<<<<<< HEAD
-                gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
-=======
                 gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
@@ -1494,31 +1335,6 @@
             }, delay * 1000);
         }
 
-<<<<<<< HEAD
-        function playPopSound() { playTone(520, 'sine', 0.08); }
-        function playSuccessSound() {
-            playTone(523.25, 'triangle', 0.13, 0);
-            playTone(659.25, 'triangle', 0.13, 0.1);
-            playTone(783.99, 'triangle', 0.13, 0.2);
-            playTone(1046.50, 'triangle', 0.28, 0.3);
-        }
-        function playWrongSound() {
-            playTone(280, 'sawtooth', 0.16, 0);
-            playTone(210, 'sawtooth', 0.22, 0.15);
-        }
-
-        function toggleVoiceEngineMode() {
-            playPopSound();
-            forceCloudTts = !forceCloudTts;
-            const btn = document.getElementById('btn-voice-engine');
-            if (forceCloudTts) {
-                btn.innerHTML = '☁️ เสียง: ออนไลน์ (S22)';
-                btn.classList.remove('active-toggle');
-            } else {
-                btn.innerHTML = '🔊 เสียง: อัตโนมัติ';
-                btn.classList.add('active-toggle');
-            }
-=======
         function playPopSound() { playTone(520, 'sine', 0.07); }
         function playSuccessSound() {
             playTone(523.25, 'triangle', 0.12, 0);
@@ -1529,7 +1345,6 @@
         function playWrongSound() {
             playTone(280, 'sawtooth', 0.15, 0);
             playTone(210, 'sawtooth', 0.2, 0.14);
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         }
 
         function stopAllSpeech() {
@@ -1538,57 +1353,22 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
             }
-<<<<<<< HEAD
-            if (currentAudioElement) {
-                currentAudioElement.pause();
-                currentAudioElement = null;
-=======
             const player = document.getElementById('tts-audio-player');
             if (player) {
                 player.pause();
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             }
         }
 
         function getBestThaiVoice() {
             if (!('speechSynthesis' in window)) return null;
             const voices = window.speechSynthesis.getVoices();
-<<<<<<< HEAD
-            const thVoices = voices.filter(v => v.lang && (v.lang.toLowerCase().includes('th')));
-=======
             const thVoices = voices.filter(v => v.lang && v.lang.toLowerCase().includes('th'));
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             if (thVoices.length === 0) return null;
 
             return thVoices.find(v => v.name.includes('Premwadee') && v.name.includes('Natural')) ||
                    thVoices.find(v => v.name.includes('Niwat') && v.name.includes('Natural')) ||
                    thVoices.find(v => v.name.includes('Natural')) ||
                    thVoices.find(v => v.name.includes('Premwadee')) ||
-<<<<<<< HEAD
-                   thVoices.find(v => v.name.includes('Kanya')) ||
-                   thVoices.find(v => v.name.includes('Google')) ||
-                   thVoices[0];
-        }
-
-        // Fallback ออนไลน์สำหรับ Samsung S22 Ultra หรือเครื่องที่ไม่มีชุดเสียงภาษาไทย
-        function playCloudThaiTTS(ttsText, mySession, safeCallback) {
-            if (mySession !== speechSessionId) return;
-            const cleanText = ttsText.replace(/-/g, ' ');
-            const url = `https://translate.googleapis.com/translate_tts?client=tw-ob&ie=UTF-8&tl=th&q=${encodeURIComponent(cleanText)}`;
-            const audio = new Audio(url);
-            currentAudioElement = audio;
-            audio.onended = () => safeCallback();
-            audio.onerror = () => {
-                // หากออนไลน์ถูกบล็อก ให้คลาย callback เพื่อไม่ให้เกมค้าง
-                setTimeout(safeCallback, 600);
-            };
-            audio.play().catch(() => {
-                setTimeout(safeCallback, 600);
-            });
-        }
-
-        async function speakSmart(voiceKey, ttsText, callback) {
-=======
                    thVoices.find(v => v.name.includes('Google')) ||
                    thVoices.find(v => v.name.includes('Kanya')) ||
                    thVoices[0];
@@ -1645,7 +1425,6 @@
         }
 
         function speakSmart(voiceKey, ttsText, callback) {
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             stopAllSpeech();
             const mySession = speechSessionId;
             let callbackCalled = false;
@@ -1657,79 +1436,6 @@
                 }
             };
 
-<<<<<<< HEAD
-            // ชั้นที่ 1: เช็คเสียงที่ผู้ปกครองอัดไว้
-            if (voiceKey && recordedKeys.has(voiceKey)) {
-                const blob = await getVoiceBlob(voiceKey);
-                if (blob && mySession === speechSessionId) {
-                    const url = URL.createObjectURL(blob);
-                    const audio = new Audio(url);
-                    currentAudioElement = audio;
-                    audio.onended = () => { URL.revokeObjectURL(url); safeCallback(); };
-                    audio.onerror = () => safeCallback();
-                    audio.play().catch(() => safeCallback());
-                    return;
-                }
-            }
-
-            // ชั้นที่ 2: หากผู้ใช้เลือกโหมดบังคับเสียงออนไลน์ (สำหรับ S22 Ultra)
-            if (forceCloudTts) {
-                playCloudThaiTTS(ttsText, mySession, safeCallback);
-                return;
-            }
-
-            // ชั้นที่ 3: Web Speech API พร้อม Watchdog ตรวจจับอาการเงียบของ Android
-            if (!('speechSynthesis' in window)) {
-                playCloudThaiTTS(ttsText, mySession, safeCallback);
-                return;
-            }
-
-            // หน่วง 60ms หลัง cancel() เพื่อแก้บั๊ก Chrome Android ค้าง
-            const startTimer = setTimeout(() => {
-                if (mySession !== speechSessionId) return;
-
-                const bestVoice = getBestThaiVoice();
-                const isAndroid = /Android/i.test(navigator.userAgent);
-
-                // หากเป็น Android และตรวจไม่พบ Voice ภาษาไทยในเครื่องเลย ให้สลับไปใช้ Cloud TTS ทันที
-                if (isAndroid && !bestVoice) {
-                    playCloudThaiTTS(ttsText, mySession, safeCallback);
-                    return;
-                }
-
-                const utter = new SpeechSynthesisUtterance(ttsText);
-                utter.lang = 'th-TH';
-                utter.rate = 0.92;
-                utter.pitch = 1.0;
-                if (bestVoice) utter.voice = bestVoice;
-
-                let speechStarted = false;
-                utter.onstart = () => { speechStarted = true; };
-                utter.onend = () => { speechStarted = true; safeCallback(); };
-                utter.onerror = () => {
-                    if (!speechStarted) {
-                        playCloudThaiTTS(ttsText, mySession, safeCallback);
-                    } else {
-                        safeCallback();
-                    }
-                };
-
-                window.speechSynthesis.speak(utter);
-
-                // Watchdog: หากผ่านไป 500ms แล้วเครื่อง Android ยังไม่ยอมเริ่มออกเสียง ให้ดึง Cloud TTS มาพูดแทนทันที
-                if (isAndroid) {
-                    const watchdog = setTimeout(() => {
-                        if (!speechStarted && !callbackCalled && mySession === speechSessionId) {
-                            window.speechSynthesis.cancel();
-                            playCloudThaiTTS(ttsText, mySession, safeCallback);
-                        }
-                    }, 500);
-                    activeTimers.push(watchdog);
-                }
-            }, 60);
-
-            activeTimers.push(startTimer);
-=======
             // 1. เช็คเสียงที่ผู้ปกครองอัดไว้ในเครื่องก่อน
             if (voiceKey && recordedKeys.has(voiceKey)) {
                 getVoiceBlob(voiceKey).then(blob => {
@@ -1749,7 +1455,6 @@
 
             // 2. เล่นจากโฟลเดอร์ audio/*.mp3 บน GitHub (หากไม่มีจะใช้เสียงอัตโนมัติในเครื่องทันที)
             playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback);
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         }
 
         /* ==================== 8. ระบบควบคุมหน้าจอหลัก ==================== */
@@ -1832,11 +1537,7 @@
             }
         }
 
-<<<<<<< HEAD
-        /* ==================== 9. โหมดเรียนรู้ ด่าน 1 & 2 (ไม่รันเสียงเองตอนเลื่อน) ==================== */
-=======
         /* ==================== 9. โหมดเรียนรู้ ด่าน 1 & 2 ==================== */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         function renderLevel1Learn(container) {
             setInstruction('แตะที่กล่องบัตรคำ เพื่อฟังเสียงพยัญชนะนะจ๊ะ', 'แตะที่กล่องบัตรคำ เพื่อฟังเสียงพยัญชนะนะจ๊ะ');
             if (singleCardMode) {
@@ -1882,11 +1583,7 @@
         }
 
         function renderLevel2Learn(container) {
-<<<<<<< HEAD
-            setInstruction('แตะที่กล่องบัตรสระ เพื่อฟังเสียงอ่านจ้า', 'แตะที่กล่องบัตรสะ-ระ เพื่อฟังเสียงอ่านจ้า');
-=======
             setInstruction('แตะที่กล่องบัตรสระ เพื่อฟังเสียงอ่านจ้า', 'แตะที่กล่องบัตรสะ ระ เพื่อฟังเสียงอ่านจ้า');
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             if (singleCardMode) {
                 const item = vowels[currentVowelIndex];
                 const stage = document.createElement('div');
@@ -1945,22 +1642,14 @@
             renderStage();
         }
 
-<<<<<<< HEAD
-        /* ==================== 10. โหมดเรียนรู้ ด่าน 3 & 4 (สุ่มคำผสม) ==================== */
-=======
         /* ==================== 10. โหมดเรียนรู้ ด่าน 3 & 4 ==================== */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         function renderLevel3And4Learn(container, lv) {
             ensureInitialBlendWord();
             const item = blendHistory[blendHistoryIndex];
             const voiceKey = lv === 3 ? `${item.id}_lv3` : `${item.id}_lv4`;
 
             if (lv === 3) {
-<<<<<<< HEAD
-                setInstruction('แตะที่กล่องเพื่อฟังเสียงผสมคำ (เช่น ตอ เต่า สระ อา อ่านว่า ตอ อา ตา)', 'แตะที่กล่องเพื่อฟังเสียงผสมคำ เช่น ตอ เต่า สะ-ระ อา อ่านว่า ตอ อา ตา');
-=======
                 setInstruction('แตะที่กล่องเพื่อฟังเสียงผสมคำ (เช่น ตอ เต่า สระ อา อ่านว่า ตอ อา ตา)', 'แตะที่กล่องเพื่อฟังเสียงผสมคำ เช่น ตอ เต่า สะ ระ อา อ่านว่า ตอ อา ตา');
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             } else {
                 setInstruction('แตะที่กล่องเพื่อฝึกสะกดคำ (เช่น ตอ อา ตา)', 'แตะที่กล่องเพื่อฝึกสะกดคำ เช่น ตอ อา ตา');
             }
@@ -2034,12 +1723,6 @@
 
             if (part === 'c') {
                 slotC.classList.add('highlight');
-<<<<<<< HEAD
-                speakSmart(null, currentLevel === 3 ? item.cTts : item.cSound, () => slotC.classList.remove('highlight'));
-            } else {
-                slotV.classList.add('highlight');
-                speakSmart(null, currentLevel === 3 ? item.vTts : item.vSound, () => slotV.classList.remove('highlight'));
-=======
                 const key = currentLevel === 3 ? `c_${item.c}` : null;
                 speakSmart(key, currentLevel === 3 ? item.cTts : item.cSound, () => slotC.classList.remove('highlight'));
             } else {
@@ -2047,7 +1730,6 @@
                 const vObj = vowels.find(v => v.display === item.v);
                 const key = (currentLevel === 3 && vObj) ? vObj.id : null;
                 speakSmart(key, currentLevel === 3 ? item.vTts : item.vSound, () => slotV.classList.remove('highlight'));
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             }
         }
 
@@ -2065,13 +1747,8 @@
 
             const voiceKey = currentLevel === 3 ? `${item.id}_lv3` : `${item.id}_lv4`;
             const fullTts = currentLevel === 3
-<<<<<<< HEAD
-                ? `${item.cTts}, ${item.vTts}, อ่านว่า, ${item.cSound} ${item.vSound} ${item.word}`
-                : `${item.cSound}, ${item.vSound}, ${item.word}`;
-=======
                 ? `${item.cTts} ${item.vTts} อ่านว่า ${item.cSound} ${item.vSound} ${item.word}`
                 : `${item.cSound} ${item.vSound} ${item.word}`;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
 
             const t1 = currentLevel === 3 ? 950 : 600;
             const t2 = currentLevel === 3 ? 1950 : 1200;
@@ -2305,11 +1982,7 @@
             readNext();
         }
 
-<<<<<<< HEAD
-        /* ==================== 13. โหมดจับคู่ (ไม่พูดซ้ำ & ล้างหน้าจอฉลองไม่ให้บีบแคบ) ==================== */
-=======
         /* ==================== 13. โหมดจับคู่ ==================== */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         let selectedLeft = null;
         let selectedRight = null;
         let matchedPairsCount = 0;
@@ -2324,21 +1997,12 @@
             if (currentLevel === 1) {
                 setInstruction('🧩 แตะพยัญชนะฝั่งซ้าย แล้วแตะรูปภาพคู่กันฝั่งขวานะจ๊ะ', 'แตะพยัญชนะฝั่งซ้าย แล้วแตะรูปภาพคู่กันฝั่งขวานะจ๊ะ');
                 pool = [...consonants].sort(() => 0.5 - Math.random()).slice(0, 4).map(x => ({
-<<<<<<< HEAD
-                    id: x.id, leftText: x.char, rightText: `${x.emoji} ${x.name}`, ttsLeft: x.sound, ttsRight: x.tts
-                }));
-            } else if (currentLevel === 2) {
-                setInstruction('🧩 จับคู่รูปสระ กับชื่อสระให้ถูกต้องนะจ๊ะ', 'จับคู่รูปสะ-ระ กับชื่อสะ-ระให้ถูกต้องนะจ๊ะ');
-                pool = [...vowels].sort(() => 0.5 - Math.random()).slice(0, 4).map(x => ({
-                    id: x.id, leftText: x.display, rightText: x.name, ttsLeft: x.sound, ttsRight: x.tts
-=======
                     id: x.id, leftText: x.char, rightText: `${x.emoji} ${x.name}`, ttsLeft: x.sound, ttsRight: x.tts, keyRight: x.id
                 }));
             } else if (currentLevel === 2) {
                 setInstruction('🧩 จับคู่รูปสระ กับชื่อสระให้ถูกต้องนะจ๊ะ', 'จับคู่รูปสะ ระ กับชื่อสะ ระให้ถูกต้องนะจ๊ะ');
                 pool = [...vowels].sort(() => 0.5 - Math.random()).slice(0, 4).map(x => ({
                     id: x.id, leftText: x.display, rightText: x.name, ttsLeft: x.sound, ttsRight: x.tts, keyRight: x.id
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 }));
             } else if (currentLevel === 5) {
                 setInstruction('🧩 จับคู่คำที่มีวรรณยุกต์ กับภาพความหมายให้ตรงกันจ้า', 'จับคู่คำวรรณยุกต์ กับภาพความหมายให้ตรงกันจ้า');
@@ -2348,16 +2012,9 @@
             } else if (currentLevel === 6) {
                 setInstruction('🧩 จับคู่ประโยคสั้นๆ กับภาพเหตุการณ์ให้ตรงกันจ้า', 'จับคู่ประโยค กับภาพให้ตรงกันจ้า');
                 pool = [...stories].sort(() => 0.5 - Math.random()).slice(0, 4).map(s => ({
-<<<<<<< HEAD
-                    id: s.id, leftText: s.lines[0], rightText: `${s.emoji} ${s.title.replace(/บทที่ \S+ /, '')}`, ttsLeft: s.lines[0], ttsRight: s.title.replace(/บทที่ \S+ /, '')
-                }));
-            } else {
-                // ด่าน 3 และ 4: ฝั่งขวาอ่านเต็มคำ เช่น "ทุ่งนา", "อีกา", "ดวงตา"
-=======
                     id: s.id, leftText: s.lines[0], rightText: `${s.emoji} ${s.title.replace(/บทที่ \S+ /, '')}`, ttsLeft: s.lines[0], ttsRight: s.title.replace(/บทที่ \S+ /, ''), keyLeft: `${s.id}_line_0`
                 }));
             } else {
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 setInstruction('🧩 จับคู่คำอ่านฝั่งซ้าย กับความหมายฝั่งขวาให้ตรงกันจ้า', 'จับคู่คำอ่าน กับความหมายให้ตรงกันจ้า');
                 const randomCurated = [...curatedBlendWords].sort(() => 0.5 - Math.random()).slice(0, 4);
                 pool = randomCurated.map(pick => {
@@ -2369,12 +2026,8 @@
                         leftText: b.word,
                         rightText: `${b.emoji} ${b.meaning}`,
                         ttsLeft: `${b.cSound} ${b.vSound} ${b.word}`,
-<<<<<<< HEAD
-                        ttsRight: b.meaning // อ่านเต็มคำ เช่น "ทุ่งนา"
-=======
                         ttsRight: b.meaning,
                         keyLeft: `${b.id}_lv4`
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                     };
                 });
             }
@@ -2417,17 +2070,10 @@
             container.appendChild(board);
         }
 
-<<<<<<< HEAD
-        // Logic การออกเสียงโหมดจับคู่แบบไม่พูดซ้ำ: กดใบไหน พูดเฉพาะเสียงใบที่เพิ่งกด 1 ครั้งเดียวจบ
-        function selectMatchCard(side, cardEl, item) {
-            playPopSound();
-            const clickedTts = side === 'left' ? item.ttsLeft : item.ttsRight;
-=======
         function selectMatchCard(side, cardEl, item) {
             playPopSound();
             const clickedTts = side === 'left' ? item.ttsLeft : item.ttsRight;
             const clickedKey = side === 'left' ? (item.keyLeft || null) : (item.keyRight || null);
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
 
             if (side === 'left') {
                 if (selectedLeft) selectedLeft.el.classList.remove('selected');
@@ -2439,21 +2085,11 @@
                 cardEl.classList.add('selected');
             }
 
-<<<<<<< HEAD
-            // กรณีเพิ่งเลือกใบแรกใบเดียว -> อ่านเสียงของใบที่เพิ่งกดทันที
-            if (!selectedLeft || !selectedRight) {
-                speakSmart(null, clickedTts);
-                return;
-            }
-
-            // กรณีเลือกครบ 2 ใบแล้ว -> ตรวจสอบผล
-=======
             if (!selectedLeft || !selectedRight) {
                 speakSmart(clickedKey, clickedTts);
                 return;
             }
 
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             const left = selectedLeft;
             const right = selectedRight;
             selectedLeft = null;
@@ -2467,12 +2103,7 @@
                 playSuccessSound();
                 matchedPairsCount++;
 
-<<<<<<< HEAD
-                // พูดเฉพาะเสียงของการ์ดใบที่ 2 ที่เพิ่งจิ้มเพียง 1 ครั้งเดียว (ไม่พูดทวนซ้ำ)
-                speakSmart(null, clickedTts, () => {
-=======
                 speakSmart(clickedKey, clickedTts, () => {
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                     if (matchedPairsCount === 4) {
                         addStar();
                         showTransitionScreen('จับคู่ครบแล้ว เก่งมากจ้า!', () => {
@@ -2491,11 +2122,7 @@
             }
         }
 
-<<<<<<< HEAD
-        /* ==================== 14. โหมดทายเสียง (ครบทั้ง 6 ด่าน & ล้างหน้าจอทีละข้อ) ==================== */
-=======
         /* ==================== 14. โหมดทายเสียง ==================== */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         function renderQuiz(container) {
             container.innerHTML = '';
 
@@ -2524,19 +2151,12 @@
                 ttsQuestion = `คำไหนคือคำว่า ${answer.targetWord} จ๊ะ`;
             } else if (currentLevel === 6) {
                 const allLines = [];
-<<<<<<< HEAD
-                stories.forEach(s => s.lines.forEach(l => allLines.push({ id: l, text: l, emoji: s.emoji })));
-=======
                 stories.forEach(s => s.lines.forEach((l, idx) => allLines.push({ id: `${s.id}_line_${idx}`, text: l, emoji: s.emoji })));
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 choices = allLines.sort(() => 0.5 - Math.random()).slice(0, 3);
                 answer = choices[Math.floor(Math.random() * choices.length)];
                 displayQuestion = `ข้อที่ ${quizQuestionNumber}: ประโยคไหนอ่านว่า "${answer.text}" จ๊ะ?`;
                 ttsQuestion = answer.text;
-<<<<<<< HEAD
-=======
                 voiceKeyToUse = answer.id;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             } else {
                 const pickedRaw = [...curatedBlendWords].sort(() => 0.5 - Math.random()).slice(0, 3);
                 choices = pickedRaw.map(pick => {
@@ -2548,19 +2168,11 @@
 
                 if (currentLevel === 3) {
                     displayQuestion = `ข้อที่ ${quizQuestionNumber}: ${answer.cName} ${answer.vName} อ่านว่า ${answer.cSound} ${answer.vSound} ${answer.word}`;
-<<<<<<< HEAD
-                    ttsQuestion = `${answer.cTts}, ${answer.vTts}, อ่านว่า, ${answer.cSound} ${answer.vSound} ${answer.word}`;
-                    voiceKeyToUse = `${answer.id}_lv3`;
-                } else {
-                    displayQuestion = `ข้อที่ ${quizQuestionNumber}: คำว่า "${answer.cSound} - ${answer.vSound} - ${answer.word}" คือข้อไหนจ๊ะ?`;
-                    ttsQuestion = `${answer.cSound}, ${answer.vSound}, ${answer.word}`;
-=======
                     ttsQuestion = `${answer.cTts} ${answer.vTts} อ่านว่า ${answer.cSound} ${answer.vSound} ${answer.word}`;
                     voiceKeyToUse = `${answer.id}_lv3`;
                 } else {
                     displayQuestion = `ข้อที่ ${quizQuestionNumber}: คำว่า "${answer.cSound} - ${answer.vSound} - ${answer.word}" คือข้อไหนจ๊ะ?`;
                     ttsQuestion = `${answer.cSound} ${answer.vSound} ${answer.word}`;
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                     voiceKeyToUse = `${answer.id}_lv4`;
                 }
             }
@@ -2624,11 +2236,7 @@
             quizWrapper.appendChild(choicesBox);
             container.appendChild(quizWrapper);
 
-<<<<<<< HEAD
-            activeTimers.push(setTimeout(() => speakSmart(voiceKeyToUse, ttsQuestion), 280));
-=======
             speakSmart(voiceKeyToUse, ttsQuestion);
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         }
 
         function handleQuizChoice(cardEl, selected, answer) {
@@ -2643,20 +2251,12 @@
                 if (cardEl.classList.contains('wrong')) return;
                 cardEl.classList.add('wrong');
                 playWrongSound();
-<<<<<<< HEAD
-                speakSmart(null, 'ลองดูใหม่อีกทีนะจ๊ะ', () => {
-=======
                 speakSmart('sys_wrong', 'ลองดูใหม่อีกทีนะจ๊ะ', () => {
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                     setTimeout(() => cardEl.classList.remove('wrong'), 400);
                 });
             }
         }
 
-<<<<<<< HEAD
-        // หน้าจอคั่นเวลาจบข้อ: ล้างตัวเองทิ้งทั้งหมดเมื่อครบเวลา เพื่อไม่ให้หน้าจอบีบแคบ
-=======
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         function showTransitionScreen(message, onComplete) {
             const container = document.getElementById('game-content');
             container.innerHTML = `
@@ -2665,11 +2265,7 @@
                     <div class="transition-text">${message}</div>
                 </div>
             `;
-<<<<<<< HEAD
-            speakSmart(null, 'เก่งมากจ้า', () => {
-=======
             speakSmart('sys_correct', 'เก่งมากจ้า', () => {
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 activeTimers.push(setTimeout(() => {
                     container.innerHTML = '';
                     if (onComplete) onComplete();
@@ -2677,45 +2273,21 @@
             });
         }
 
-<<<<<<< HEAD
-        /* ==================== 15. สตูดิโออัดเสียงผู้ปกครอง ==================== */
-=======
         /* ==================== 15. สตูดิโออัดเสียงผู้ปกครอง + ปุ่มดาวน์โหลดไฟล์เสียง ==================== */
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         let mediaRecorder = null;
         let audioChunks = [];
         let currentlyRecordingKey = null;
 
         function getAllRecordableItems() {
             const list = [];
-<<<<<<< HEAD
-            consonants.forEach(c => list.push({ key: c.id, label: `[ด่าน 1] ${c.char} - ${c.name}`, defaultTts: c.tts }));
-            vowels.forEach(v => list.push({ key: v.id, label: `[ด่าน 2] ${v.display} - ${v.name}`, defaultTts: v.tts }));
-=======
             consonants.forEach(c => list.push({ key: c.id, label: `[ด่าน 1] ${c.char} - ${c.name} (audio/${c.id}.mp3)`, defaultTts: c.tts }));
             vowels.forEach(v => list.push({ key: v.id, label: `[ด่าน 2] ${v.display} - ${v.name} (audio/${v.id}.mp3)`, defaultTts: v.tts }));
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
             curatedBlendWords.forEach(pick => {
                 const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
                 const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
                 const w = buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
                 list.push({
                     key: `${w.id}_lv3`,
-<<<<<<< HEAD
-                    label: `[ด่าน 3] ${w.word} ("${w.cName} ${w.vName} อ่านว่า ${w.cSound} ${w.vSound} ${w.word}")`,
-                    defaultTts: `${w.cTts}, ${w.vTts}, อ่านว่า, ${w.cSound} ${w.vSound} ${w.word}`
-                });
-                list.push({
-                    key: `${w.id}_lv4`,
-                    label: `[ด่าน 4] ${w.word} ("${w.cSound} ${w.vSound} ${w.word}")`,
-                    defaultTts: `${w.cSound}, ${w.vSound}, ${w.word}`
-                });
-            });
-            toneSets.forEach(t => list.push({ key: t.id, label: `[ด่าน 5] ผันเสียง: ${t.words.join('-')}`, defaultTts: t.ttsAll }));
-            stories.forEach(s => {
-                s.lines.forEach((line, idx) => {
-                    list.push({ key: `${s.id}_line_${idx}`, label: `[ด่าน 6 ${s.title}] "${line}"`, defaultTts: line });
-=======
                     label: `[ด่าน 3] ${w.word} (audio/${w.id}_lv3.mp3)`,
                     defaultTts: `${w.cTts} ${w.vTts} อ่านว่า ${w.cSound} ${w.vSound} ${w.word}`
                 });
@@ -2729,7 +2301,6 @@
             stories.forEach(s => {
                 s.lines.forEach((line, idx) => {
                     list.push({ key: `${s.id}_line_${idx}`, label: `[ด่าน 6 ${s.title}] "${line}" (audio/${s.id}_line_${idx}.mp3)`, defaultTts: line });
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                 });
             });
             return list;
@@ -2762,10 +2333,7 @@
                             ${isRec ? '⏹️ หยุดอัด' : '🎙️ อัดเสียง'}
                         </button>
                         <button class="rec-btn play" onclick="speakSmart('${item.key}', '${item.defaultTts}')">🔊 ฟัง</button>
-<<<<<<< HEAD
-=======
                         ${hasRecorded ? `<button class="rec-btn download" onclick="downloadRecording('${item.key}')">💾 ดาวน์โหลด</button>` : ''}
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
                         ${hasRecorded ? `<button class="rec-btn delete" onclick="removeRecording('${item.key}')">🗑️ ลบ</button>` : ''}
                     </div>
                 `;
@@ -2801,8 +2369,6 @@
             }
         }
 
-<<<<<<< HEAD
-=======
         async function downloadRecording(key) {
             const blob = await getVoiceBlob(key);
             if (!blob) return;
@@ -2816,7 +2382,6 @@
             URL.revokeObjectURL(url);
         }
 
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
         async function removeRecording(key) {
             await deleteVoiceBlob(key);
             renderVoiceStudioList();
@@ -2883,8 +2448,4 @@
         };
     </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 3fbdd84 (Add index.html and all 184 audio files)
