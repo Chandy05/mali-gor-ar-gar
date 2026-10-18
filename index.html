@@ -1251,6 +1251,13 @@
         /* ==================== 6. ระบบฐานข้อมูลเสียงผู้ปกครอง (IndexedDB) ==================== */
         let db;
         const recordedKeys = new Set();
+        let activeRecordedAudioUrl = null;
+
+        function revokeActiveRecordedAudioUrl() {
+            if (!activeRecordedAudioUrl) return;
+            URL.revokeObjectURL(activeRecordedAudioUrl);
+            activeRecordedAudioUrl = null;
+        }
 
         function initDB() {
             return new Promise((resolve) => {
@@ -1354,9 +1361,8 @@
                 window.speechSynthesis.cancel();
             }
             const player = document.getElementById('tts-audio-player');
-            if (player) {
-                player.pause();
-            }
+            if (player) player.pause();
+            revokeActiveRecordedAudioUrl();
         }
 
         function getBestThaiVoice() {
@@ -1403,24 +1409,38 @@
 
         // ลองเล่นไฟล์เสียงจากโฟลเดอร์ audio/<voiceKey>.mp3 บน GitHub ของคุณพ่อก่อน หากยังไม่มีไฟล์ค่อยใช้เสียงอัตโนมัติในเครื่อง
         function playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback) {
+            if (mySession !== speechSessionId) return;
             if (!voiceKey) {
                 playNativeSpeechDirect(ttsText, mySession, safeCallback);
                 return;
             }
 
-            const player = document.getElementById('tts-audio-player');
-            player.src = `audio/${encodeURIComponent(voiceKey)}.mp3`;
-            player.onended = () => safeCallback();
-            player.onerror = () => {
-                // หากยังไม่ได้อัปโหลดไฟล์ .mp3 ของคำนี้ขึ้นโฟลเดอร์ audio/ ให้สลับไปใช้เสียงอัตโนมัติในเครื่องทันที
+            let playbackSettled = false;
+            const triggerFallback = () => {
+                if (playbackSettled || mySession !== speechSessionId) return;
+                playbackSettled = true;
                 playNativeSpeechDirect(ttsText, mySession, safeCallback);
             };
 
-            const playPromise = player.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    playNativeSpeechDirect(ttsText, mySession, safeCallback);
-                });
+            const player = document.getElementById('tts-audio-player');
+            const normalizedKey = voiceKey.normalize('NFC');
+            player.src = `audio/${encodeURIComponent(normalizedKey)}.mp3`;
+            player.onended = () => {
+                playbackSettled = true;
+                safeCallback();
+            };
+            player.onerror = () => {
+                // หากยังไม่ได้อัปโหลดไฟล์ .mp3 ของคำนี้ขึ้นโฟลเดอร์ audio/ ให้สลับไปใช้เสียงอัตโนมัติในเครื่องทันที
+                triggerFallback();
+            };
+
+            try {
+                const playPromise = player.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(triggerFallback);
+                }
+            } catch {
+                triggerFallback();
             }
         }
 
@@ -1439,14 +1459,45 @@
             // 1. เช็คเสียงที่ผู้ปกครองอัดไว้ในเครื่องก่อน
             if (voiceKey && recordedKeys.has(voiceKey)) {
                 getVoiceBlob(voiceKey).then(blob => {
-                    if (blob && mySession === speechSessionId) {
+                    if (mySession !== speechSessionId) return;
+                    if (blob) {
                         const player = document.getElementById('tts-audio-player');
                         const url = URL.createObjectURL(blob);
+                        activeRecordedAudioUrl = url;
+                        let playbackSettled = false;
+                        const releaseUrl = () => {
+                            if (activeRecordedAudioUrl === url) {
+                                URL.revokeObjectURL(url);
+                                activeRecordedAudioUrl = null;
+                            }
+                        };
+                        const triggerFallback = () => {
+                            if (playbackSettled || mySession !== speechSessionId) return;
+                            playbackSettled = true;
+                            releaseUrl();
+                            playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback);
+                        };
+
                         player.src = url;
-                        player.onended = () => { URL.revokeObjectURL(url); safeCallback(); };
-                        player.onerror = () => safeCallback();
-                        player.play().catch(() => safeCallback());
+                        player.onended = () => {
+                            playbackSettled = true;
+                            releaseUrl();
+                            safeCallback();
+                        };
+                        player.onerror = triggerFallback;
+                        try {
+                            const playPromise = player.play();
+                            if (playPromise !== undefined) {
+                                playPromise.catch(triggerFallback);
+                            }
+                        } catch {
+                            triggerFallback();
+                        }
                     } else {
+                        playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback);
+                    }
+                }, () => {
+                    if (mySession === speechSessionId) {
                         playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback);
                     }
                 });
@@ -2445,6 +2496,32 @@
             await initDB();
             ensureInitialBlendWord();
             renderStage();
+
+            if ('serviceWorker' in navigator) {
+                try {
+                    await navigator.serviceWorker.register('./sw.js');
+                    const audioKeys = getAllRecordableItems().map(item => item.key);
+                    audioKeys.push('sys_correct', 'sys_wrong');
+                    const audioUrls = [...new Set(audioKeys)].map(key =>
+                        `audio/${encodeURIComponent(key.normalize('NFC'))}.mp3`
+                    );
+                    const sendUrlsToCache = () => {
+                        if (navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.controller.postMessage({
+                                type: 'CACHE_AUDIO_FILES',
+                                urls: audioUrls
+                            });
+                        }
+                    };
+                    if (navigator.serviceWorker.controller) {
+                        sendUrlsToCache();
+                    } else {
+                        navigator.serviceWorker.addEventListener('controllerchange', sendUrlsToCache, { once: true });
+                    }
+                } catch (e) {
+                    console.warn('ลงทะเบียน Service Worker ไม่สำเร็จ:', e);
+                }
+            }
         };
     </script>
 </body>
