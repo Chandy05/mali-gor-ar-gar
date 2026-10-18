@@ -991,7 +991,7 @@
             <div class="modal-header">
                 <div>
                     <h2 style="margin:0; font-size:1.25rem; color:#FF4757;">🎙️ คลังเสียง & สตูดิโออัดเสียง</h2>
-                    <small style="color:#57606F;">ลำดับการเล่นเสียง: 1. เสียงอัดในเครื่อง ➡️ 2. ไฟล์ <b>audio/*.mp3</b> บน GitHub ➡️ 3. เสียงอัตโนมัติในเครื่อง</small>
+                    <small style="color:#57606F;">ลำดับการเล่นเสียง: 1. เสียงอัดของผู้ปกครอง ➡️ 2. Google Translate TTS ออนไลน์ ➡️ 3. เสียงอัตโนมัติของเบราว์เซอร์</small>
                 </div>
                 <button class="util-btn" onclick="closeVoiceStudio()">❌ ปิด</button>
             </div>
@@ -1309,10 +1309,11 @@
             });
         }
 
-        /* ==================== 7. ระบบเสียง 3 ชั้น: อัดเสียง -> โฟลเดอร์ audio/*.mp3 บน GitHub -> เสียงอัตโนมัติในเครื่อง ==================== */
+        /* ==================== 7. ระบบเสียง: เสียงอัด -> Google Translate TTS -> เสียงอัตโนมัติในเบราว์เซอร์ ==================== */
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
         let speechSessionId = 0;
+        let activeRecordedAudioUrl = null;
 
         function initAudio() {
             if (!audioCtx) audioCtx = new AudioContext();
@@ -1356,6 +1357,12 @@
             const player = document.getElementById('tts-audio-player');
             if (player) {
                 player.pause();
+                player.onended = null;
+                player.onerror = null;
+            }
+            if (activeRecordedAudioUrl) {
+                URL.revokeObjectURL(activeRecordedAudioUrl);
+                activeRecordedAudioUrl = null;
             }
         }
 
@@ -1401,26 +1408,38 @@
             }
         }
 
-        // ลองเล่นไฟล์เสียงจากโฟลเดอร์ audio/<voiceKey>.mp3 บน GitHub ของคุณพ่อก่อน หากยังไม่มีไฟล์ค่อยใช้เสียงอัตโนมัติในเครื่อง
-        function playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback) {
-            if (!voiceKey) {
+        function playGoogleTtsOrFallback(ttsText, mySession, safeCallback) {
+            if (mySession !== speechSessionId) return;
+            if (navigator.onLine === false) {
                 playNativeSpeechDirect(ttsText, mySession, safeCallback);
                 return;
             }
 
             const player = document.getElementById('tts-audio-player');
-            player.src = `audio/${encodeURIComponent(voiceKey)}.mp3`;
-            player.onended = () => safeCallback();
-            player.onerror = () => {
-                // หากยังไม่ได้อัปโหลดไฟล์ .mp3 ของคำนี้ขึ้นโฟลเดอร์ audio/ ให้สลับไปใช้เสียงอัตโนมัติในเครื่องทันที
+            let fallbackStarted = false;
+            const fallback = () => {
+                if (fallbackStarted || mySession !== speechSessionId) return;
+                fallbackStarted = true;
+                player.onended = null;
+                player.onerror = null;
+                player.pause();
                 playNativeSpeechDirect(ttsText, mySession, safeCallback);
             };
 
-            const playPromise = player.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    playNativeSpeechDirect(ttsText, mySession, safeCallback);
-                });
+            player.src = `https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=th&q=${encodeURIComponent(ttsText)}`;
+            player.onended = () => {
+                if (mySession !== speechSessionId) return;
+                player.onended = null;
+                player.onerror = null;
+                safeCallback();
+            };
+            player.onerror = fallback;
+
+            try {
+                const playPromise = player.play();
+                if (playPromise !== undefined) playPromise.catch(fallback);
+            } catch (error) {
+                fallback();
             }
         }
 
@@ -1436,25 +1455,58 @@
                 }
             };
 
-            // 1. เช็คเสียงที่ผู้ปกครองอัดไว้ในเครื่องก่อน
+            const playRecordedVoice = (blob) => {
+                if (mySession !== speechSessionId) return;
+                if (!blob) {
+                    playGoogleTtsOrFallback(ttsText, mySession, safeCallback);
+                    return;
+                }
+
+                const player = document.getElementById('tts-audio-player');
+                const url = URL.createObjectURL(blob);
+                activeRecordedAudioUrl = url;
+                let playbackSettled = false;
+                const releaseUrl = () => {
+                    if (playbackSettled) return false;
+                    playbackSettled = true;
+                    URL.revokeObjectURL(url);
+                    if (activeRecordedAudioUrl === url) activeRecordedAudioUrl = null;
+                    return true;
+                };
+                const fallback = () => {
+                    if (!releaseUrl() || mySession !== speechSessionId) return;
+                    player.onended = null;
+                    player.onerror = null;
+                    playGoogleTtsOrFallback(ttsText, mySession, safeCallback);
+                };
+
+                player.src = url;
+                player.onended = () => {
+                    if (!releaseUrl() || mySession !== speechSessionId) return;
+                    player.onended = null;
+                    player.onerror = null;
+                    safeCallback();
+                };
+                player.onerror = fallback;
+
+                try {
+                    const playPromise = player.play();
+                    if (playPromise !== undefined) playPromise.catch(fallback);
+                } catch (error) {
+                    fallback();
+                }
+            };
+
+            // 1. ใช้เสียงที่ผู้ปกครองอัดไว้ก่อน หากเล่นไม่ได้จึงไปลองเสียงออนไลน์
             if (voiceKey && recordedKeys.has(voiceKey)) {
-                getVoiceBlob(voiceKey).then(blob => {
-                    if (blob && mySession === speechSessionId) {
-                        const player = document.getElementById('tts-audio-player');
-                        const url = URL.createObjectURL(blob);
-                        player.src = url;
-                        player.onended = () => { URL.revokeObjectURL(url); safeCallback(); };
-                        player.onerror = () => safeCallback();
-                        player.play().catch(() => safeCallback());
-                    } else {
-                        playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback);
-                    }
-                });
+                getVoiceBlob(voiceKey)
+                    .then(playRecordedVoice)
+                    .catch(() => playGoogleTtsOrFallback(ttsText, mySession, safeCallback));
                 return;
             }
 
-            // 2. เล่นจากโฟลเดอร์ audio/*.mp3 บน GitHub (หากไม่มีจะใช้เสียงอัตโนมัติในเครื่องทันที)
-            playGitHubMp3OrFallback(voiceKey, ttsText, mySession, safeCallback);
+            // 2. ลอง Google Translate TTS ก่อน และใช้เสียงของเบราว์เซอร์เมื่อเสียงออนไลน์ใช้ไม่ได้
+            playGoogleTtsOrFallback(ttsText, mySession, safeCallback);
         }
 
         /* ==================== 8. ระบบควบคุมหน้าจอหลัก ==================== */
@@ -2280,27 +2332,27 @@
 
         function getAllRecordableItems() {
             const list = [];
-            consonants.forEach(c => list.push({ key: c.id, label: `[ด่าน 1] ${c.char} - ${c.name} (audio/${c.id}.mp3)`, defaultTts: c.tts }));
-            vowels.forEach(v => list.push({ key: v.id, label: `[ด่าน 2] ${v.display} - ${v.name} (audio/${v.id}.mp3)`, defaultTts: v.tts }));
+            consonants.forEach(c => list.push({ key: c.id, label: `[ด่าน 1] ${c.char} - ${c.name}`, defaultTts: c.tts }));
+            vowels.forEach(v => list.push({ key: v.id, label: `[ด่าน 2] ${v.display} - ${v.name}`, defaultTts: v.tts }));
             curatedBlendWords.forEach(pick => {
                 const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
                 const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
                 const w = buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
                 list.push({
                     key: `${w.id}_lv3`,
-                    label: `[ด่าน 3] ${w.word} (audio/${w.id}_lv3.mp3)`,
+                    label: `[ด่าน 3] ${w.word}`,
                     defaultTts: `${w.cTts} ${w.vTts} อ่านว่า ${w.cSound} ${w.vSound} ${w.word}`
                 });
                 list.push({
                     key: `${w.id}_lv4`,
-                    label: `[ด่าน 4] ${w.word} (audio/${w.id}_lv4.mp3)`,
+                    label: `[ด่าน 4] ${w.word}`,
                     defaultTts: `${w.cSound} ${w.vSound} ${w.word}`
                 });
             });
-            toneSets.forEach(t => list.push({ key: t.id, label: `[ด่าน 5] ผันเสียง: ${t.words.join('-')} (audio/${t.id}.mp3)`, defaultTts: t.ttsAll }));
+            toneSets.forEach(t => list.push({ key: t.id, label: `[ด่าน 5] ผันเสียง: ${t.words.join('-')}`, defaultTts: t.ttsAll }));
             stories.forEach(s => {
                 s.lines.forEach((line, idx) => {
-                    list.push({ key: `${s.id}_line_${idx}`, label: `[ด่าน 6 ${s.title}] "${line}" (audio/${s.id}_line_${idx}.mp3)`, defaultTts: line });
+                    list.push({ key: `${s.id}_line_${idx}`, label: `[ด่าน 6 ${s.title}] "${line}"`, defaultTts: line });
                 });
             });
             return list;
