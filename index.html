@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>เกมหรรษา พยัญชนะ 44 ตัว และสระไทย</title>
+    <title>เกมหรรษา พยัญชนะ สระ วรรณยุกต์ และหัดอ่านมานะ-มานี</title>
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,8 @@
             --purple: #9B5DE5;
             --blue: #00BBF9;
             --green: #2ED573;
+            --orange: #FF9F1C;
+            --pink: #F15BB5;
             --dark: #2C3E50;
             --white: #FFFFFF;
         }
@@ -40,12 +42,12 @@
 
         header {
             width: 100%;
-            max-width: 960px;
-            padding: 12px 15px 5px 15px;
+            max-width: 980px;
+            padding: 10px 14px 4px 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 10;
         }
 
@@ -60,7 +62,7 @@
 
         .game-title {
             margin: 0;
-            font-size: 1.55rem;
+            font-size: 1.45rem;
             color: #FF4757;
             text-shadow: 2px 2px 0px #FFF, 4px 4px 0px rgba(0,0,0,0.1);
         }
@@ -72,20 +74,20 @@
         }
 
         .util-btn {
-            padding: 7px 12px;
+            padding: 6px 11px;
             border: 3px solid var(--white);
-            border-radius: 18px;
+            border-radius: 16px;
             font-family: 'Mali', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
             background: var(--white);
             color: var(--dark);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+            box-shadow: 0 3px 0 rgba(0,0,0,0.12);
             transition: 0.15s;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .util-btn.active-toggle {
@@ -94,45 +96,45 @@
         }
 
         .util-btn:active {
-            transform: translateY(3px);
+            transform: translateY(2px);
             box-shadow: 0 1px 0 rgba(0,0,0,0.12);
         }
 
         .level-nav {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 7px;
             width: 100%;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
-        @media (min-width: 700px) {
+        @media (min-width: 680px) {
             .level-nav {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
         .level-btn {
-            padding: 10px 12px;
-            border: 4px solid var(--white);
-            border-radius: 20px;
+            padding: 9px 10px;
+            border: 3px solid var(--white);
+            border-radius: 18px;
             font-family: 'Mali', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--white);
             cursor: pointer;
-            box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
             transition: transform 0.15s, box-shadow 0.15s;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .level-btn:active, .level-btn.active {
             transform: translateY(3px);
-            box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.15);
             border-color: var(--accent);
             outline: 3px solid #FF4757;
         }
@@ -141,18 +143,20 @@
         .btn-lv2 { background-color: #4ECDC4; }
         .btn-lv3 { background-color: #FF9F1C; }
         .btn-lv4 { background-color: #9B5DE5; }
+        .btn-lv5 { background-color: #F15BB5; }
+        .btn-lv6 { background-color: #2ED573; }
 
         /* Stage Container */
         .stage-container {
             width: 95%;
-            max-width: 920px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            border: 6px solid var(--white);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            padding: 18px;
-            margin: 8px 0 30px 0;
-            min-height: 470px;
+            max-width: 940px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 28px;
+            border: 5px solid var(--white);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin: 6px 0 28px 0;
+            min-height: 460px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -166,25 +170,25 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 10px;
         }
 
         .mode-switch {
             display: flex;
             background: #F1F2F6;
-            border-radius: 18px;
-            padding: 5px;
+            border-radius: 16px;
+            padding: 4px;
             gap: 4px;
             flex-wrap: wrap;
         }
 
         .mode-btn {
-            padding: 7px 13px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             font-family: 'Mali', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             cursor: pointer;
             background: transparent;
@@ -195,25 +199,25 @@
         .mode-btn.active {
             background: var(--white);
             color: var(--dark);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
         }
 
         .score-box {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #FFA502;
             background: #FFF9E6;
-            padding: 6px 14px;
-            border-radius: 18px;
+            padding: 5px 14px;
+            border-radius: 16px;
             border: 3px solid #FFEAA7;
         }
 
         .instruction-bar {
             background: #FFEAA7;
             color: var(--dark);
-            padding: 10px 18px;
-            border-radius: 22px;
-            font-size: 1.1rem;
+            padding: 9px 16px;
+            border-radius: 20px;
+            font-size: 1.05rem;
             font-weight: 700;
             text-align: center;
             margin-bottom: 14px;
@@ -230,39 +234,44 @@
             transform: scale(0.98);
         }
 
+        #game-content {
+            width: 100%;
+            display: block;
+        }
+
         /* Single Flashcard View */
         .single-card-stage {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            gap: 16px;
-            padding: 5px 0;
+            gap: 14px;
+            padding: 4px 0;
             animation: fadeIn 0.2s ease-out;
         }
 
         .card-progress {
             background: #F1F2F6;
             color: #57606F;
-            padding: 4px 16px;
-            border-radius: 15px;
-            font-size: 0.95rem;
+            padding: 4px 14px;
+            border-radius: 14px;
+            font-size: 0.92rem;
             font-weight: 700;
         }
 
         .flashcard-box {
             width: 100%;
-            max-width: 340px;
-            min-height: 265px;
+            max-width: 330px;
+            min-height: 250px;
             background: var(--white);
             border: 6px solid #FF6B6B;
-            border-radius: 35px;
-            box-shadow: 0 12px 0 #FF6B6B, 0 18px 30px rgba(0,0,0,0.12);
+            border-radius: 32px;
+            box-shadow: 0 10px 0 #FF6B6B, 0 15px 25px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 18px;
             cursor: pointer;
             transition: transform 0.15s, box-shadow 0.15s, background-color 0.2s;
             position: relative;
@@ -270,45 +279,46 @@
 
         .flashcard-box.vowel-theme {
             border-color: #00A8FF;
-            box-shadow: 0 12px 0 #00A8FF, 0 18px 30px rgba(0,0,0,0.12);
+            box-shadow: 0 10px 0 #00A8FF, 0 15px 25px rgba(0,0,0,0.1);
         }
 
         .flashcard-box:active, .flashcard-box.speaking {
-            transform: translateY(6px) scale(1.02);
+            transform: translateY(5px) scale(1.02);
             background: #FFF9E6;
             border-color: #FFA502;
-            box-shadow: 0 6px 0 #FFA502;
+            box-shadow: 0 5px 0 #FFA502;
         }
 
         .flashcard-char {
-            font-size: 6rem;
+            font-size: 5.8rem;
             font-weight: 700;
             line-height: 1.05;
             color: var(--dark);
         }
 
         .flashcard-char.no-img-mode {
-            font-size: 7.8rem;
-            margin: 15px 0;
+            font-size: 7.4rem;
+            margin: 12px 0;
         }
 
         .flashcard-emoji {
-            font-size: 4.5rem;
-            margin: 6px 0;
+            font-size: 4.2rem;
+            margin: 5px 0;
         }
 
         .flashcard-title {
-            font-size: 1.75rem;
+            font-size: 1.65rem;
             font-weight: 700;
             color: #2C3E50;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         .flashcard-sub {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #747D8C;
             margin-top: 4px;
+            text-align: center;
         }
 
         /* Grid View */
@@ -317,7 +327,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             width: 100%;
-            padding: 5px 0;
+            padding: 4px 0;
         }
 
         @media (min-width: 600px) {
@@ -331,7 +341,7 @@
             border: 4px solid #70A1FF;
             border-radius: 22px;
             padding: 12px 8px;
-            min-height: 145px;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -339,7 +349,6 @@
             cursor: pointer;
             box-shadow: 0 6px 0 #70A1FF;
             transition: transform 0.15s, border-color 0.2s;
-            position: relative;
         }
 
         .char-card:active, .char-card.speaking {
@@ -350,24 +359,24 @@
         }
 
         .char-big {
-            font-size: 3.4rem;
+            font-size: 3.2rem;
             font-weight: 700;
             line-height: 1.1;
             color: var(--dark);
         }
 
         .char-big.no-img-mode {
-            font-size: 4.4rem;
-            margin: 8px 0;
+            font-size: 4.2rem;
+            margin: 6px 0;
         }
 
         .char-emoji {
-            font-size: 2.4rem;
+            font-size: 2.3rem;
             margin: 4px 0;
         }
 
         .char-label {
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 700;
             color: #2C3E50;
             text-align: center;
@@ -380,7 +389,6 @@
             align-items: center;
             width: 100%;
             gap: 14px;
-            margin-top: 2px;
         }
 
         .blend-filter-bar {
@@ -391,12 +399,12 @@
         }
 
         .filter-chip {
-            padding: 6px 14px;
-            border-radius: 16px;
+            padding: 6px 13px;
+            border-radius: 15px;
             border: 2px solid #DFE4EA;
             background: var(--white);
             font-family: 'Mali', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: #57606F;
             cursor: pointer;
@@ -413,69 +421,69 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-            padding: 16px 10px;
+            padding: 15px 10px;
             background: #F8F9FA;
-            border-radius: 26px;
+            border-radius: 24px;
             border: 4px dashed #CED6E0;
         }
 
         .eq-slot {
-            min-width: 100px;
-            height: 138px;
-            padding: 10px 14px;
+            min-width: 96px;
+            height: 132px;
+            padding: 8px 12px;
             background: var(--white);
             border: 5px solid #A4B0BE;
-            border-radius: 24px;
+            border-radius: 22px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 6px 0 #A4B0BE;
-            transition: all 0.25s;
+            box-shadow: 0 5px 0 #A4B0BE;
+            transition: all 0.2s;
         }
 
-        .eq-slot.consonant-slot { border-color: #FF6B6B; box-shadow: 0 6px 0 #FF6B6B; }
-        .eq-slot.vowel-slot { border-color: #4ECDC4; box-shadow: 0 6px 0 #4ECDC4; }
-        .eq-slot.result-slot { min-width: 130px; border-color: #FFA502; box-shadow: 0 6px 0 #FFA502; background: #FFFDF0; }
+        .eq-slot.consonant-slot { border-color: #FF6B6B; box-shadow: 0 5px 0 #FF6B6B; }
+        .eq-slot.vowel-slot { border-color: #4ECDC4; box-shadow: 0 5px 0 #4ECDC4; }
+        .eq-slot.result-slot { min-width: 125px; border-color: #FFA502; box-shadow: 0 5px 0 #FFA502; background: #FFFDF0; }
 
         .eq-slot.highlight {
-            transform: scale(1.1) translateY(-5px);
+            transform: scale(1.08) translateY(-4px);
             background: #FFEAA7;
             border-color: #FF4757;
-            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.35);
+            box-shadow: 0 8px 18px rgba(255, 71, 87, 0.35);
             z-index: 5;
         }
 
         .eq-symbol {
-            font-size: 2rem;
+            font-size: 1.9rem;
             font-weight: 700;
             color: #747D8C;
         }
 
         .slot-main-text {
-            font-size: 3.4rem;
+            font-size: 3.2rem;
             font-weight: 700;
             line-height: 1.1;
         }
 
         .slot-sub-text {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: #57606F;
             font-weight: 700;
-            margin-top: 6px;
+            margin-top: 5px;
             text-align: center;
         }
 
         .phonetic-banner {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--purple);
             background: #F3E8FF;
-            padding: 10px 18px;
-            border-radius: 20px;
+            padding: 10px 16px;
+            border-radius: 18px;
             border: 3px solid #D8B4FE;
             text-align: center;
             width: 100%;
@@ -487,30 +495,30 @@
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
 
         .action-btn {
-            padding: 11px 18px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 22px;
+            border-radius: 20px;
             font-family: 'Mali', sans-serif;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--white);
             cursor: pointer;
-            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
             transition: 0.15s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .action-btn:active {
             transform: translateY(3px);
-            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
         }
 
         .btn-speak-all { background: #2ED573; }
@@ -518,50 +526,257 @@
         .btn-random { background: #FF9F1C; }
         .btn-prev { background: #747D8C; }
 
+        /* Level 5: Tone Marks & 5-Tone Board */
+        .tone-marks-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .tone-mark-pill {
+            background: #FFF0F6;
+            border: 3px solid #F15BB5;
+            border-radius: 18px;
+            padding: 8px 4px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #F15BB5;
+            transition: 0.15s;
+        }
+
+        .tone-mark-pill:active, .tone-mark-pill.highlight {
+            transform: translateY(3px);
+            background: #FFEAA7;
+        }
+
+        .tone-steps-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            width: 100%;
+            padding: 12px 8px;
+            background: #F8F9FA;
+            border-radius: 24px;
+            border: 3px dashed #CED6E0;
+        }
+
+        .tone-step-card {
+            background: var(--white);
+            border: 4px solid #9B5DE5;
+            border-radius: 20px;
+            padding: 12px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #9B5DE5;
+            transition: 0.2s;
+        }
+
+        .tone-step-card.highlight {
+            transform: translateY(-6px) scale(1.06);
+            background: #FFEAA7;
+            border-color: #FF4757;
+            box-shadow: 0 8px 15px rgba(255,71,87,0.3);
+        }
+
+        .tone-word-big {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .tone-label-small {
+            font-size: 0.8rem;
+            color: #57606F;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* Level 6: Mana Manee Story Reader */
+        .story-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 14px;
+            animation: fadeIn 0.25s;
+        }
+
+        .story-book {
+            width: 100%;
+            max-width: 680px;
+            background: #FFFDF7;
+            border: 5px solid #E6CCB2;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 10px 0 #DDB892, 0 14px 25px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            border-bottom: 2px dashed #E6CCB2;
+            padding-bottom: 8px;
+        }
+
+        .story-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #9C6644;
+        }
+
+        .story-scene-emoji {
+            font-size: 3.4rem;
+            background: #F8F4E8;
+            padding: 8px 24px;
+            border-radius: 20px;
+        }
+
+        .story-lines-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .story-line {
+            width: 100%;
+            background: var(--white);
+            border: 3px solid #EDE0D4;
+            border-radius: 18px;
+            padding: 12px 18px;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+            letter-spacing: 0.5px;
+            word-spacing: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #EDE0D4;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .story-line:active, .story-line.reading-now {
+            background: #FFEAA7;
+            border-color: #FFA502;
+            box-shadow: 0 4px 0 #FFA502;
+            transform: scale(1.02);
+            color: #D35400;
+        }
+
+        /* Matching Mode (Full Width Fix) */
+        .match-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 14px;
+            animation: fadeIn 0.25s;
+        }
+
+        .match-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            width: 100%;
+            max-width: 680px;
+        }
+
+        .match-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .match-card {
+            width: 100%;
+            min-height: 82px;
+            background: var(--white);
+            border: 4px solid #70A1FF;
+            border-radius: 20px;
+            box-shadow: 0 5px 0 #70A1FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .match-card.selected {
+            background: #FFEAA7;
+            border-color: #FFA502;
+            box-shadow: 0 5px 0 #FFA502;
+            transform: scale(1.03);
+        }
+
+        .match-card.matched {
+            background: #7BED9F;
+            border-color: #2ED573;
+            box-shadow: 0 3px 0 #2ED573;
+            opacity: 0.4;
+            pointer-events: none;
+            transform: scale(0.96);
+        }
+
+        .match-card.wrong {
+            background: #FF6B81;
+            border-color: #FF4757;
+            animation: shake 0.4s;
+        }
+
         /* Quiz Mode */
         .quiz-area {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            gap: 18px;
-            margin: 5px 0;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            gap: 16px;
+            margin: 4px 0;
+            animation: fadeIn 0.25s ease-out;
         }
 
         .quiz-counter {
             background: #ECCC68;
             color: var(--dark);
-            padding: 5px 16px;
-            border-radius: 15px;
+            padding: 4px 16px;
+            border-radius: 14px;
             font-weight: 700;
-            font-size: 1.05rem;
+            font-size: 1rem;
         }
 
         .sound-prompt-btn {
-            width: 95px;
-            height: 95px;
+            width: 92px;
+            height: 92px;
             border-radius: 50%;
             background: #FF6B6B;
             border: 5px solid var(--white);
-            box-shadow: 0 7px 0 #EE5253, 0 10px 18px rgba(0,0,0,0.15);
-            font-size: 3rem;
+            box-shadow: 0 6px 0 #EE5253, 0 10px 18px rgba(0,0,0,0.15);
+            font-size: 2.8rem;
             color: var(--white);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.07); }
         }
 
         .quiz-choices {
@@ -573,12 +788,12 @@
         }
 
         .choice-card {
-            width: 140px;
-            height: 160px;
+            width: 145px;
+            min-height: 155px;
             background: var(--white);
             border: 5px solid #70A1FF;
-            border-radius: 26px;
-            box-shadow: 0 7px 0 #70A1FF;
+            border-radius: 24px;
+            box-shadow: 0 6px 0 #70A1FF;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -586,99 +801,37 @@
             cursor: pointer;
             transition: 0.15s;
             padding: 10px;
+            text-align: center;
         }
 
         .choice-card.wrong {
             background: #FF6B81;
             border-color: #FF4757;
-            box-shadow: 0 7px 0 #FF4757;
+            box-shadow: 0 6px 0 #FF4757;
             animation: shake 0.4s;
         }
 
         .transition-screen {
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 250px;
-            gap: 14px;
-            animation: fadeIn 0.25s;
+            min-height: 250px;
+            gap: 12px;
+            animation: fadeIn 0.2s;
         }
 
         .transition-emoji {
-            font-size: 4.8rem;
+            font-size: 4.5rem;
             animation: bounce 0.6s infinite;
         }
 
         .transition-text {
-            font-size: 1.7rem;
+            font-size: 1.65rem;
             font-weight: 700;
             color: #2ED573;
             text-align: center;
-        }
-
-        /* Matching Mode */
-        .match-board {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            gap: 14px;
-            animation: fadeIn 0.3s;
-        }
-
-        .match-columns {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            width: 100%;
-            max-width: 640px;
-        }
-
-        .match-col {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .match-card {
-            height: 82px;
-            background: var(--white);
-            border: 4px solid #70A1FF;
-            border-radius: 20px;
-            box-shadow: 0 5px 0 #70A1FF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            padding: 5px;
-            text-align: center;
-        }
-
-        .match-card.selected {
-            background: #FFEAA7;
-            border-color: #FFA502;
-            box-shadow: 0 5px 0 #FFA502;
-            transform: scale(1.04);
-        }
-
-        .match-card.matched {
-            background: #7BED9F;
-            border-color: #2ED573;
-            box-shadow: 0 3px 0 #2ED573;
-            opacity: 0.45;
-            pointer-events: none;
-            transform: scale(0.95);
-        }
-
-        .match-card.wrong {
-            background: #FF6B81;
-            border-color: #FF4757;
-            animation: shake 0.4s;
         }
 
         /* Voice Studio Modal */
@@ -690,7 +843,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            padding: 15px;
+            padding: 14px;
         }
 
         .modal-overlay.show { display: flex; }
@@ -701,7 +854,7 @@
             max-width: 720px;
             max-height: 85vh;
             border-radius: 26px;
-            padding: 20px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -727,7 +880,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 14px;
+            padding: 9px 12px;
             background: #F8F9FA;
             border-radius: 14px;
             border: 2px solid #DFE4EA;
@@ -735,7 +888,7 @@
             gap: 8px;
         }
 
-        .voice-item-title { font-size: 1rem; font-weight: 700; }
+        .voice-item-title { font-size: 0.95rem; font-weight: 700; }
         .voice-controls { display: flex; gap: 6px; align-items: center; }
 
         .rec-btn {
@@ -754,15 +907,22 @@
         .rec-btn.play { background: #1E90FF; }
         .rec-btn.delete { background: #747D8C; }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.07); }
+        }
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-12px); }
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
 
         #confetti-canvas {
@@ -770,6 +930,11 @@
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 999;
+        }
+
+        @media (max-width: 550px) {
+            .tone-word-big { font-size: 1.55rem; }
+            .story-line { font-size: 1.4rem; padding: 10px 12px; word-spacing: 6px; }
         }
     </style>
 </head>
@@ -779,13 +944,16 @@
 
     <header>
         <div class="header-top">
-            <h1 class="game-title">🎈 พยัญชนะ 44 ตัว & สระหรรษา</h1>
+            <h1 class="game-title">🎈 ภาษาไทยหรรษา & หัดอ่านมานะ-มานี</h1>
             <div class="utility-btns">
+                <button class="util-btn active-toggle" id="btn-voice-engine" onclick="toggleVoiceEngineMode()">
+                    🔊 เสียง: อัตโนมัติ
+                </button>
                 <button class="util-btn active-toggle" id="btn-toggle-view" onclick="toggleCardViewMode()">
                     🗂️ ดูทีละใบ
                 </button>
                 <button class="util-btn active-toggle" id="btn-toggle-img" onclick="toggleImages()">
-                    🖼️ แสดงรูปภาพ
+                    🖼️ รูปภาพ
                 </button>
                 <button class="util-btn" onclick="openVoiceStudio()">
                     🎙️ อัดเสียง
@@ -793,16 +961,18 @@
             </div>
         </div>
         <nav class="level-nav">
-            <button class="level-btn btn-lv1 active" onclick="selectLevel(1)">🐣 1. พยัญชนะ (44 ตัว)</button>
-            <button class="level-btn btn-lv2" onclick="selectLevel(2)">🌈 2. สระไทยครบชุด</button>
+            <button class="level-btn btn-lv1 active" onclick="selectLevel(1)">🐣 1. พยัญชนะ (44)</button>
+            <button class="level-btn btn-lv2" onclick="selectLevel(2)">🌈 2. สระไทย (28)</button>
             <button class="level-btn btn-lv3" onclick="selectLevel(3)">🧩 3. ผสมพยัญชนะ+สระ</button>
             <button class="level-btn btn-lv4" onclick="selectLevel(4)">🚂 4. สะกดคำ (กอ-อา-กา)</button>
+            <button class="level-btn btn-lv5" onclick="selectLevel(5)">🎵 5. ผันวรรณยุกต์</button>
+            <button class="level-btn btn-lv6" onclick="selectLevel(6)">📖 6. หัดอ่านประโยค</button>
         </nav>
     </header>
 
     <main class="stage-container">
         <div class="top-bar">
-            <div class="mode-switch">
+            <div class="mode-switch" id="mode-switch-bar">
                 <button class="mode-btn active" id="btn-mode-learn" onclick="setMode('learn')">📖 โหมดเรียนรู้</button>
                 <button class="mode-btn" id="btn-mode-match" onclick="setMode('match')">🧩 โหมดจับคู่</button>
                 <button class="mode-btn" id="btn-mode-quiz" onclick="setMode('quiz')">🎮 โหมดทายเสียง</button>
@@ -811,10 +981,10 @@
         </div>
 
         <div class="instruction-bar" onclick="repeatInstruction()">
-            <span>🔊</span> <span id="instruction-text">แตะที่กล่องบัตรคำ เพื่อฟังเสียงพยัญชนะนะจ๊ะ!</span>
+            <span>🔊</span> <span id="instruction-text">แตะที่กล่องบัตรคำ เพื่อฟังเสียงอ่านนะจ๊ะ!</span>
         </div>
 
-        <div id="game-content" style="width: 100%; display: flex; justify-content: center;"></div>
+        <div id="game-content"></div>
     </main>
 
     <!-- Modal สตูดิโออัดเสียงผู้ปกครอง -->
@@ -822,8 +992,8 @@
         <div class="modal-box">
             <div class="modal-header">
                 <div>
-                    <h2 style="margin:0; font-size:1.3rem; color:#FF4757;">🎙️ สตูดิโออัดเสียงผู้ปกครอง</h2>
-                    <small style="color:#57606F;">คำไหนที่มีการอัดเสียงไว้ เกมจะใช้เสียงที่อัดแทนเสียง AI อัตโนมัติครับ</small>
+                    <h2 style="margin:0; font-size:1.25rem; color:#FF4757;">🎙️ สตูดิโออัดเสียงผู้ปกครอง</h2>
+                    <small style="color:#57606F;">อัดเสียงทับคำที่ต้องการได้ทันที ระบบจะใช้เสียงที่อัดเป็นอันดับแรกครับ</small>
                 </div>
                 <button class="util-btn" onclick="closeVoiceStudio()">❌ ปิด</button>
             </div>
@@ -832,7 +1002,7 @@
     </div>
 
     <script>
-        /* ==================== 1. ข้อมูลพยัญชนะไทยครบ 44 ตัว (ก - ฮ) ==================== */
+        /* ==================== 1. ข้อมูลพยัญชนะ 44 ตัว & สระ 28 รูป ==================== */
         const consonants = [
             { id: 'c_ก', char: 'ก', name: 'กอ ไก่', tts: 'กอ ไก่', sound: 'กอ', emoji: '🐔', easy: true },
             { id: 'c_ข', char: 'ข', name: 'ขอ ไข่', tts: 'ขอ ไข่', sound: 'ขอ', emoji: '🥚', easy: true },
@@ -880,7 +1050,6 @@
             { id: 'c_ฮ', char: 'ฮ', name: 'ฮอ นกฮูก', tts: 'ฮอ นก-ฮูก', sound: 'ฮอ', emoji: '🦉', easy: true }
         ];
 
-        /* ==================== 2. ข้อมูลสระไทยครบชุด (28 รูปสระ) ==================== */
         const vowels = [
             { id: 'v_อะ', display: '◌ะ', template: '{c}ะ', name: 'สระ อะ', tts: 'สะ-ระ อะ', sound: 'อะ', desc: 'วางข้างหลังพยัญชนะ', easy: true },
             { id: 'v_อา', display: '◌า', template: '{c}า', name: 'สระ อา', tts: 'สะ-ระ อา', sound: 'อา', desc: 'วางข้างหลังพยัญชนะ', easy: true },
@@ -912,19 +1081,17 @@
             { id: 'v_เอา', display: 'เ◌า', template: 'เ{c}า', name: 'สระ เอา', tts: 'สะ-ระ เอา', sound: 'เอา', desc: 'วางหน้าและหลังพยัญชนะ', easy: true }
         ];
 
-        /* ==================== 3. คลังคำผสมเรียงตามระดับความง่าย (Tier 1 -> Tier 3) ==================== */
+        /* ==================== 2. คลังคำผสม (ด่าน 3-4) ==================== */
         const curatedBlendWords = [
-            // Tier 1: สระอา, อี, อู (เข้าใจง่ายที่สุด เหมาะเป็นคำเริ่มต้น)
             { cChar: 'ก', vId: 'v_อา', word: 'กา', emoji: '🐦‍⬛', meaning: 'อีกา', tier: 1 },
             { cChar: 'ต', vId: 'v_อา', word: 'ตา', emoji: '👀', meaning: 'ดวงตา', tier: 1 },
             { cChar: 'ข', vId: 'v_อา', word: 'ขา', emoji: '🦵', meaning: 'เรียวขา', tier: 1 },
             { cChar: 'ม', vId: 'v_อา', word: 'มา', emoji: '👋', meaning: 'เดินมา', tier: 1 },
-            { cChar: 'ย', vId: 'v_อา', word: 'ยา', emoji: '💊', meaning: 'กินยา', tier: 1 },
+            { cChar: 'ย', vId: 'v_อา', word: 'ยา', emoji: '💊', meaning: 'ทายา', tier: 1 },
             { cChar: 'น', vId: 'v_อา', word: 'นา', emoji: '🌾', meaning: 'ทุ่งนา', tier: 1 },
             { cChar: 'ท', vId: 'v_อา', word: 'ทา', emoji: '🖌️', meaning: 'ทาสี', tier: 1 },
-            { cChar: 'ล', vId: 'v_อา', word: 'ลา', emoji: '🫏', meaning: 'เจ้าลา', tier: 1 },
             { cChar: 'ช', vId: 'v_อา', word: 'ชา', emoji: '🍵', meaning: 'น้ำชา', tier: 1 },
-            { cChar: 'ป', vId: 'v_อู', word: 'ปู', emoji: '🦀', meaning: 'ตัวปู', tier: 1 },
+            { cChar: 'ป', vId: 'v_อู', word: 'ปู', emoji: '🦀', meaning: 'ปูนา', tier: 1 },
             { cChar: 'ง', vId: 'v_อู', word: 'งู', emoji: '🐍', meaning: 'เจ้างู', tier: 1 },
             { cChar: 'ห', vId: 'v_อู', word: 'หู', emoji: '👂', meaning: 'ใบหู', tier: 1 },
             { cChar: 'ด', vId: 'v_อู', word: 'ดู', emoji: '🔭', meaning: 'มองดู', tier: 1 },
@@ -934,38 +1101,82 @@
             { cChar: 'ม', vId: 'v_อี', word: 'มี', emoji: '🤲', meaning: 'มั่งมี', tier: 1 },
             { cChar: 'ด', vId: 'v_อี', word: 'ดี', emoji: '👍', meaning: 'คนดี', tier: 1 },
             { cChar: 'ต', vId: 'v_อี', word: 'ตี', emoji: '🥁', meaning: 'ตีกลอง', tier: 1 },
-            { cChar: 'ผ', vId: 'v_อี', word: 'ผี', emoji: '👻', meaning: 'กุ๊กกู๋', tier: 1 },
-
-            // Tier 2: สระวางหน้า (เอ, แอ, โอ, ใอ, ไอ)
             { cChar: 'บ', vId: 'v_โอ', word: 'โบ', emoji: '🎀', meaning: 'ผูกโบ', tier: 2 },
-            { cChar: 'ต', vId: 'v_โอ', word: 'โต', emoji: '🐘', meaning: 'ตัวโต', tier: 2 },
-            { cChar: 'ล', vId: 'v_โอ', word: 'โล', emoji: '🐬', meaning: 'ปลาโลมา', tier: 2 },
-            { cChar: 'ท', vId: 'v_เอ', word: 'เท', emoji: '🫗', meaning: 'เทน้ำ', tier: 2 },
-            { cChar: 'ฮ', vId: 'v_เอ', word: 'เฮ', emoji: '🙌', meaning: 'ไชโยโห่ฮิ้ว', tier: 2 },
+            { cChar: 'ต', vId: 'v_โอ', word: 'โต', emoji: '🐕', meaning: 'เจ้าโต', tier: 2 },
+            { cChar: 'ท', vId: 'v_เอ', word: 'เท', emoji: '🫗', meaning: 'เทยา', tier: 2 },
             { cChar: 'พ', vId: 'v_แอ', word: 'แพ', emoji: '🛶', meaning: 'ล่องแพ', tier: 2 },
-            { cChar: 'บ', vId: 'v_แอ', word: 'แบ', emoji: '👐', meaning: 'แบมือ', tier: 2 },
             { cChar: 'จ', vId: 'v_ใอ', word: 'ใจ', emoji: '❤️', meaning: 'หัวใจ', tier: 2 },
             { cChar: 'บ', vId: 'v_ใอ', word: 'ใบ', emoji: '🍃', meaning: 'ใบไม้', tier: 2 },
             { cChar: 'ฟ', vId: 'v_ไอ', word: 'ไฟ', emoji: '🔥', meaning: 'กองไฟ', tier: 2 },
-            { cChar: 'ไ', cChar: 'ป', vId: 'v_ไอ', word: 'ไป', emoji: '🚶', meaning: 'เดินไป', tier: 2 },
-
-            // Tier 3: สระอำ, เอา, อัว, อือ, เอีย, เอือ
+            { cChar: 'ป', vId: 'v_ไอ', word: 'ไป', emoji: '🚶', meaning: 'เดินไป', tier: 2 },
             { cChar: 'ด', vId: 'v_อำ', word: 'ดำ', emoji: '⬛', meaning: 'สีดำ', tier: 3 },
             { cChar: 'ข', vId: 'v_อำ', word: 'ขำ', emoji: '😆', meaning: 'หัวเราะขำ', tier: 3 },
-            { cChar: 'ร', vId: 'v_อำ', word: 'รำ', emoji: '💃', meaning: 'ฟ้อนรำ', tier: 3 },
             { cChar: 'ม', vId: 'v_อือ', word: 'มือ', emoji: '✋', meaning: 'ฝ่ามือ', tier: 3 },
-            { cChar: 'ถ', vId: 'v_อือ', word: 'ถือ', emoji: '🛍️', meaning: 'ถือของ', tier: 3 },
             { cChar: 'บ', vId: 'v_อัว', word: 'บัว', emoji: '🪷', meaning: 'ดอกบัว', tier: 3 },
             { cChar: 'ว', vId: 'v_อัว', word: 'วัว', emoji: '🐄', meaning: 'แม่วัว', tier: 3 },
-            { cChar: 'ห', vId: 'v_อัว', word: 'หัว', emoji: '🙂', meaning: 'ศีรษะ', tier: 3 },
-            { cChar: 'ง', vId: 'v_เอา', word: 'เงา', emoji: '👤', meaning: 'เงาดำ', tier: 3 },
             { cChar: 'ต', vId: 'v_เอา', word: 'เตา', emoji: '🍳', meaning: 'เตาไฟ', tier: 3 },
             { cChar: 'ร', vId: 'v_เอือ', word: 'เรือ', emoji: '⛵', meaning: 'เรือใบ', tier: 3 },
-            { cChar: 'ส', vId: 'v_เอือ', word: 'เสือ', emoji: '🐯', meaning: 'พี่เสือ', tier: 3 },
-            { cChar: 'ล', vId: 'v_เอีย', word: 'เลีย', emoji: '👅', meaning: 'แลบลิ้น', tier: 3 }
+            { cChar: 'ส', vId: 'v_เอือ', word: 'เสือ', emoji: '🐯', meaning: 'พี่เสือ', tier: 3 }
         ];
 
-        // ฟังก์ชันสร้าง Object คำผสมที่สมบูรณ์
+        /* ==================== 3. ข้อมูลด่านที่ 5: วรรณยุกต์และการผันเสียง ==================== */
+        const toneMarks = [
+            { id: 'tm_1', mark: '◌่', name: 'ไม้เอก', tts: 'ไม้-เอก', toneName: 'เสียงเอก' },
+            { id: 'tm_2', mark: '◌้', name: 'ไม้โท', tts: 'ไม้-โท', toneName: 'เสียงโท' },
+            { id: 'tm_3', mark: '◌๊', name: 'ไม้ตรี', tts: 'ไม้-ตรี', toneName: 'เสียงตรี' },
+            { id: 'tm_4', mark: '◌๋', name: 'ไม้จัตวา', tts: 'ไม้-จัด-ตะ-วา', toneName: 'เสียงจัตวา' }
+        ];
+
+        const toneSets = [
+            { id: 'ts_กา', base: 'กา', words: ['กา', 'ก่า', 'ก้า', 'ก๊า', 'ก๋า'], ttsAll: 'กา, ก่า, ก้า, ก๊า, ก๋า', sampleWord: 'อีกา', emoji: '🐦‍⬛', targetWord: 'กา' },
+            { id: 'ts_ปา', base: 'ปา', words: ['ปา', 'ป่า', 'ป้า', 'ป๊า', 'ป๋า'], ttsAll: 'ปา, ป่า, ป้า, ป๊า, ป๋า', sampleWord: 'คุณป้า', emoji: '👵', targetWord: 'ป้า' },
+            { id: 'ts_เตา', base: 'เตา', words: ['เตา', 'เต่า', 'เต้า', 'เต๊า', 'เต๋า'], ttsAll: 'เตา, เต่า, เต้า, เต๊า, เต๋า', sampleWord: 'ตอ เต่า', emoji: '🐢', targetWord: 'เต่า' },
+            { id: 'ts_ดอ', base: 'ดอ', words: ['ดอ', 'ด่อ', 'ด้อ', 'ด๊อ', 'ด๋อ'], ttsAll: 'ดอ, ด่อ, ด้อ, ด๊อ, ด๋อ', sampleWord: 'เด็กดื้อ', emoji: '👦', targetWord: 'ด้อ' },
+            { id: 'ts_จา', base: 'จา', words: ['จา', 'จ่า', 'จ้า', 'จ๊า', 'จ๋า'], ttsAll: 'จา, จ่า, จ้า, จ๊า, จ๋า', sampleWord: 'แม่จ๋า', emoji: '👩‍👧', targetWord: 'จ๋า' },
+            { id: 'ts_บาน', base: 'บาน', words: ['บาน', 'บ่าน', 'บ้าน', 'บ๊าน', 'บ๋าน'], ttsAll: 'บาน, บ่าน, บ้าน, บ๊าน, บ๋าน', sampleWord: 'บ้านของเรา', emoji: '🏡', targetWord: 'บ้าน' },
+            { id: 'ts_ไก', base: 'ไก', words: ['ไก', 'ไก่', 'ไก้', 'ไก๊', 'ไก๋'], ttsAll: 'ไก, ไก่, ไก้, ไก๊, ไก๋', sampleWord: 'แม่ไก่', emoji: '🐔', targetWord: 'ไก่' },
+            { id: 'ts_เปา', base: 'เปา', words: ['เปา', 'เป่า', 'เป้า', 'เป๊า', 'เป๋า'], ttsAll: 'เปา, เป่า, เป้า, เป๊า, เป๋า', sampleWord: 'กระเป๋า', emoji: '🎒', targetWord: 'เป๋า' }
+        ];
+
+        /* ==================== 4. ข้อมูลด่านที่ 6: หัดอ่านประโยค สไตล์ มานะ-มานี ==================== */
+        const stories = [
+            // ระดับ 1: แม่ ก กา ง่ายมาก (จากตำรามานะ-มานี)
+            {
+                id: 'st_1', diff: 1, title: 'บทที่ ๑ เจ้าโต', emoji: '🐕👀',
+                lines: ['โต มี ตา', 'โต มี ขา', 'โต มี หู', 'หู โต มี อะไร']
+            },
+            {
+                id: 'st_2', diff: 1, title: 'บทที่ ๒ โตถูหู', emoji: '🐕🦀',
+                lines: ['โต เอา ขา ถู หู', 'ถู ไป ถู มา', 'โต ถู หู ไว ไว']
+            },
+            {
+                id: 'st_3', diff: 1, title: 'บทที่ ๓ ปูนาในรู', emoji: '🦀🕳️',
+                lines: ['ปูนา มี สี ดำ', 'โต ก็ มี หู สี ดำ', 'หู โต มี ปูนา']
+            },
+            // ระดับ 2: ประโยคต่อเนื่อง สไตล์มานะ-มานี
+            {
+                id: 'st_4', diff: 2, title: 'บทที่ ๔ มานีทายา', emoji: '👧🐕💊',
+                lines: ['มานี จะ ตี ปูนา', 'ปูนา ไป ใน รู', 'มานี เท ยา ทา หู โต', 'มานี ทา ยา เบา เบา']
+            },
+            {
+                id: 'st_5', diff: 2, title: 'บทที่ ๕ ไปดูปู', emoji: '🌾🦀🐍',
+                lines: ['อา จะ ไป นา', 'มานี ไป ดู ปู', 'จะ ดู ปู ใน รู งู', 'มา ดี ดี เดา ดู ที']
+            },
+            {
+                id: 'st_6', diff: 2, title: 'บทที่ ๖ ในนาเรา', emoji: '🐮🌾🐦‍⬛',
+                lines: ['ใน นา มี กา', 'กา ดู ปูนา', 'อา ไถ นา ไว ไว', 'เรา เอา ใจ อา']
+            },
+            // ระดับ 3: ประโยคผสมวรรณยุกต์
+            {
+                id: 'st_7', diff: 3, title: 'บทที่ ๗ บ้านของมานี', emoji: '🏡👨‍👩‍👧',
+                lines: ['พ่อ แม่ อยู่ ที่ บ้าน', 'ป้า ซื้อ เสื้อ ผ้า ใหม่', 'มานี ไหว้ พ่อ แม่', 'แม่ จ๋า มานี รัก แม่']
+            },
+            {
+                id: 'st_8', diff: 3, title: 'บทที่ ๘ เพื่อนรัก', emoji: '👦👧🐴',
+                lines: ['ปิติ ขี่ ม้า เจ้า แก่', 'ชูใจ เลี้ยง แมว สี เทา', 'มานะ วิ่ง เล่น กับ โต', 'ทุก คน หัวเราะ ดี ใจ']
+            }
+        ];
+
         function buildBlendObject(cObj, vObj, customMeaning = '', customEmoji = '✨') {
             const wordStr = vObj.template.replace('{c}', cObj.char);
             return {
@@ -984,24 +1195,27 @@
             };
         }
 
-        /* ==================== 4. สถานะของเกม & ระบบสุ่มคำแบบไล่ระดับ ==================== */
+        /* ==================== 5. สถานะของเกม (STATE) ==================== */
         let currentLevel = 1;
         let currentMode = 'learn';
         let singleCardMode = true;
         let showImages = true;
+        let forceCloudTts = false; // สำหรับบังคับโหมดเสียงออนไลน์บน Android
         let stars = 0;
 
         let currentConsonantIndex = 0;
         let currentVowelIndex = 0;
+        let currentToneSetIndex = 0;
+        let currentStoryDiff = 1;
+        let currentStoryIndex = 0;
 
-        // ระบบสุ่มคำสำหรับด่าน 3 และ 4
-        let blendPoolMode = 'easy'; // 'easy' (คำง่ายมีความหมาย) หรือ 'free' (สุ่มอิสระทุกพยัญชนะ+สระ)
+        let blendPoolMode = 'easy';
         let blendHistory = [];
         let blendHistoryIndex = -1;
         let easyWordsGeneratedCount = 0;
 
         let quizQuestionNumber = 1;
-        let currentInstructionTts = 'แตะที่กล่องบัตรคำ เพื่อฟังเสียงพยัญชนะนะจ๊ะ';
+        let currentInstructionTts = 'แตะที่กล่องบัตรคำ เพื่อฟังเสียงอ่านนะจ๊ะ';
         let activeTimers = [];
 
         function clearAllTimers() {
@@ -1009,88 +1223,38 @@
             activeTimers = [];
         }
 
-        // สุ่มคำใหม่โดยเริ่มจากคำง่ายๆ ก่อน (Tier 1 -> Tier 2 -> Tier 3)
         function generateRandomBlendWord() {
             const lastWord = blendHistoryIndex >= 0 ? blendHistory[blendHistoryIndex].word : '';
-
             if (blendPoolMode === 'easy') {
                 let maxTier = 1;
                 if (easyWordsGeneratedCount >= 5) maxTier = 2;
                 if (easyWordsGeneratedCount >= 12) maxTier = 3;
-
                 let candidates = curatedBlendWords.filter(w => w.tier <= maxTier && w.word !== lastWord);
                 if (candidates.length === 0) candidates = curatedBlendWords;
-
                 const pick = candidates[Math.floor(Math.random() * candidates.length)];
                 const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
                 const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
                 easyWordsGeneratedCount++;
                 return buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
             } else {
-                // สุ่มอิสระจากพยัญชนะ + สระ
                 const cPool = consonants.filter(c => c.easy);
                 const vPool = vowels.filter(v => v.easy);
                 const cObj = cPool[Math.floor(Math.random() * cPool.length)];
                 const vObj = vPool[Math.floor(Math.random() * vPool.length)];
-
-                // เช็คว่าตรงกับคำที่มีรูปภาพในคลังไหม
                 const matchCurated = curatedBlendWords.find(w => w.cChar === cObj.char && w.vId === vObj.id);
-                if (matchCurated) {
-                    return buildBlendObject(cObj, vObj, matchCurated.meaning, matchCurated.emoji);
-                }
+                if (matchCurated) return buildBlendObject(cObj, vObj, matchCurated.meaning, matchCurated.emoji);
                 return buildBlendObject(cObj, vObj, `ฝึกสะกดคำ`, cObj.emoji);
             }
         }
 
         function ensureInitialBlendWord() {
             if (blendHistory.length === 0) {
-                // คำแรกสุดเริ่มด้วยคำง่ายจาก Tier 1 เสมอ
-                const firstWord = generateRandomBlendWord();
-                blendHistory.push(firstWord);
+                blendHistory.push(generateRandomBlendWord());
                 blendHistoryIndex = 0;
             }
         }
 
-        function setBlendPoolMode(mode) {
-            playPopSound();
-            stopAllSpeech();
-            blendPoolMode = mode;
-            const nextW = generateRandomBlendWord();
-            blendHistory.push(nextW);
-            blendHistoryIndex = blendHistory.length - 1;
-            renderStage();
-        }
-
-        function toggleCardViewMode() {
-            playPopSound();
-            stopAllSpeech();
-            singleCardMode = !singleCardMode;
-            const btn = document.getElementById('btn-toggle-view');
-            if (singleCardMode) {
-                btn.innerHTML = '🗂️ ดูทีละใบ';
-                btn.classList.add('active-toggle');
-            } else {
-                btn.innerHTML = '🪟 ดูตารางรวม';
-                btn.classList.remove('active-toggle');
-            }
-            renderStage();
-        }
-
-        function toggleImages() {
-            playPopSound();
-            showImages = !showImages;
-            const btn = document.getElementById('btn-toggle-img');
-            if (showImages) {
-                btn.innerHTML = '🖼️ แสดงรูปภาพ';
-                btn.classList.add('active-toggle');
-            } else {
-                btn.innerHTML = '🙈 ซ่อนรูปภาพ';
-                btn.classList.remove('active-toggle');
-            }
-            renderStage();
-        }
-
-        /* ==================== 5. ระบบฐานข้อมูลเสียงผู้ปกครอง (IndexedDB) ==================== */
+        /* ==================== 6. ระบบฐานข้อมูลเสียงผู้ปกครอง (IndexedDB) ==================== */
         let db;
         const recordedKeys = new Set();
 
@@ -1115,8 +1279,7 @@
             return new Promise((resolve) => {
                 if (!db) return resolve();
                 const tx = db.transaction('voices', 'readonly');
-                const store = tx.objectStore('voices');
-                const req = store.getAllKeys();
+                const req = tx.objectStore('voices').getAllKeys();
                 req.onsuccess = () => {
                     recordedKeys.clear();
                     req.result.forEach(k => recordedKeys.add(k));
@@ -1130,10 +1293,7 @@
             return new Promise((resolve) => {
                 const tx = db.transaction('voices', 'readwrite');
                 tx.objectStore('voices').put(blob, key);
-                tx.oncomplete = () => {
-                    recordedKeys.add(key);
-                    resolve();
-                };
+                tx.oncomplete = () => { recordedKeys.add(key); resolve(); };
             });
         }
 
@@ -1151,14 +1311,11 @@
             return new Promise((resolve) => {
                 const tx = db.transaction('voices', 'readwrite');
                 tx.objectStore('voices').delete(key);
-                tx.oncomplete = () => {
-                    recordedKeys.delete(key);
-                    resolve();
-                };
+                tx.oncomplete = () => { recordedKeys.delete(key); resolve(); };
             });
         }
 
-        /* ==================== 6. ระบบเสียงพูด Natural AI + เล่นเสียงอัด ==================== */
+        /* ==================== 7. ระบบเสียง 3 ชั้น (แก้ปัญหา Android S22 Ultra ไม่มีเสียง) ==================== */
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
         let currentAudioElement = null;
@@ -1166,16 +1323,17 @@
 
         function initAudio() {
             if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
-        function playTone(freq, type = 'sine', duration = 0.16, delay = 0) {
+        function playTone(freq, type = 'sine', duration = 0.15, delay = 0) {
             initAudio();
             setTimeout(() => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
@@ -1186,14 +1344,27 @@
 
         function playPopSound() { playTone(520, 'sine', 0.08); }
         function playSuccessSound() {
-            playTone(523.25, 'triangle', 0.14, 0);
-            playTone(659.25, 'triangle', 0.14, 0.11);
-            playTone(783.99, 'triangle', 0.14, 0.22);
-            playTone(1046.50, 'triangle', 0.3, 0.33);
+            playTone(523.25, 'triangle', 0.13, 0);
+            playTone(659.25, 'triangle', 0.13, 0.1);
+            playTone(783.99, 'triangle', 0.13, 0.2);
+            playTone(1046.50, 'triangle', 0.28, 0.3);
         }
         function playWrongSound() {
-            playTone(280, 'sawtooth', 0.18, 0);
-            playTone(210, 'sawtooth', 0.25, 0.16);
+            playTone(280, 'sawtooth', 0.16, 0);
+            playTone(210, 'sawtooth', 0.22, 0.15);
+        }
+
+        function toggleVoiceEngineMode() {
+            playPopSound();
+            forceCloudTts = !forceCloudTts;
+            const btn = document.getElementById('btn-voice-engine');
+            if (forceCloudTts) {
+                btn.innerHTML = '☁️ เสียง: ออนไลน์ (S22)';
+                btn.classList.remove('active-toggle');
+            } else {
+                btn.innerHTML = '🔊 เสียง: อัตโนมัติ';
+                btn.classList.add('active-toggle');
+            }
         }
 
         function stopAllSpeech() {
@@ -1211,7 +1382,7 @@
         function getBestThaiVoice() {
             if (!('speechSynthesis' in window)) return null;
             const voices = window.speechSynthesis.getVoices();
-            const thVoices = voices.filter(v => v.lang.includes('th') || v.lang.includes('TH'));
+            const thVoices = voices.filter(v => v.lang && (v.lang.toLowerCase().includes('th')));
             if (thVoices.length === 0) return null;
 
             return thVoices.find(v => v.name.includes('Premwadee') && v.name.includes('Natural')) ||
@@ -1221,6 +1392,23 @@
                    thVoices.find(v => v.name.includes('Kanya')) ||
                    thVoices.find(v => v.name.includes('Google')) ||
                    thVoices[0];
+        }
+
+        // Fallback ออนไลน์สำหรับ Samsung S22 Ultra หรือเครื่องที่ไม่มีชุดเสียงภาษาไทย
+        function playCloudThaiTTS(ttsText, mySession, safeCallback) {
+            if (mySession !== speechSessionId) return;
+            const cleanText = ttsText.replace(/-/g, ' ');
+            const url = `https://translate.googleapis.com/translate_tts?client=tw-ob&ie=UTF-8&tl=th&q=${encodeURIComponent(cleanText)}`;
+            const audio = new Audio(url);
+            currentAudioElement = audio;
+            audio.onended = () => safeCallback();
+            audio.onerror = () => {
+                // หากออนไลน์ถูกบล็อก ให้คลาย callback เพื่อไม่ให้เกมค้าง
+                setTimeout(safeCallback, 600);
+            };
+            audio.play().catch(() => {
+                setTimeout(safeCallback, 600);
+            });
         }
 
         async function speakSmart(voiceKey, ttsText, callback) {
@@ -1235,56 +1423,92 @@
                 }
             };
 
+            // ชั้นที่ 1: เช็คเสียงที่ผู้ปกครองอัดไว้
             if (voiceKey && recordedKeys.has(voiceKey)) {
                 const blob = await getVoiceBlob(voiceKey);
                 if (blob && mySession === speechSessionId) {
                     const url = URL.createObjectURL(blob);
                     const audio = new Audio(url);
                     currentAudioElement = audio;
-                    audio.onended = () => {
-                        URL.revokeObjectURL(url);
-                        safeCallback();
-                    };
+                    audio.onended = () => { URL.revokeObjectURL(url); safeCallback(); };
                     audio.onerror = () => safeCallback();
                     audio.play().catch(() => safeCallback());
                     return;
                 }
             }
 
-            if (!('speechSynthesis' in window)) {
-                const t = setTimeout(safeCallback, 800);
-                activeTimers.push(t);
+            // ชั้นที่ 2: หากผู้ใช้เลือกโหมดบังคับเสียงออนไลน์ (สำหรับ S22 Ultra)
+            if (forceCloudTts) {
+                playCloudThaiTTS(ttsText, mySession, safeCallback);
                 return;
             }
 
-            const utter = new SpeechSynthesisUtterance(ttsText);
-            utter.lang = 'th-TH';
-            utter.rate = 0.92;
-            utter.pitch = 1.0;
+            // ชั้นที่ 3: Web Speech API พร้อม Watchdog ตรวจจับอาการเงียบของ Android
+            if (!('speechSynthesis' in window)) {
+                playCloudThaiTTS(ttsText, mySession, safeCallback);
+                return;
+            }
 
-            const bestVoice = getBestThaiVoice();
-            if (bestVoice) utter.voice = bestVoice;
+            // หน่วง 60ms หลัง cancel() เพื่อแก้บั๊ก Chrome Android ค้าง
+            const startTimer = setTimeout(() => {
+                if (mySession !== speechSessionId) return;
 
-            utter.onend = () => safeCallback();
-            utter.onerror = () => safeCallback();
+                const bestVoice = getBestThaiVoice();
+                const isAndroid = /Android/i.test(navigator.userAgent);
 
-            window.speechSynthesis.speak(utter);
+                // หากเป็น Android และตรวจไม่พบ Voice ภาษาไทยในเครื่องเลย ให้สลับไปใช้ Cloud TTS ทันที
+                if (isAndroid && !bestVoice) {
+                    playCloudThaiTTS(ttsText, mySession, safeCallback);
+                    return;
+                }
+
+                const utter = new SpeechSynthesisUtterance(ttsText);
+                utter.lang = 'th-TH';
+                utter.rate = 0.92;
+                utter.pitch = 1.0;
+                if (bestVoice) utter.voice = bestVoice;
+
+                let speechStarted = false;
+                utter.onstart = () => { speechStarted = true; };
+                utter.onend = () => { speechStarted = true; safeCallback(); };
+                utter.onerror = () => {
+                    if (!speechStarted) {
+                        playCloudThaiTTS(ttsText, mySession, safeCallback);
+                    } else {
+                        safeCallback();
+                    }
+                };
+
+                window.speechSynthesis.speak(utter);
+
+                // Watchdog: หากผ่านไป 500ms แล้วเครื่อง Android ยังไม่ยอมเริ่มออกเสียง ให้ดึง Cloud TTS มาพูดแทนทันที
+                if (isAndroid) {
+                    const watchdog = setTimeout(() => {
+                        if (!speechStarted && !callbackCalled && mySession === speechSessionId) {
+                            window.speechSynthesis.cancel();
+                            playCloudThaiTTS(ttsText, mySession, safeCallback);
+                        }
+                    }, 500);
+                    activeTimers.push(watchdog);
+                }
+            }, 60);
+
+            activeTimers.push(startTimer);
         }
 
-        /* ==================== 7. ระบบควบคุมหน้าจอ ==================== */
+        /* ==================== 8. ระบบควบคุมหน้าจอหลัก ==================== */
         function selectLevel(lv) {
             playPopSound();
             stopAllSpeech();
             currentLevel = lv;
             quizQuestionNumber = 1;
 
-            if (lv === 3 || lv === 4) {
-                ensureInitialBlendWord();
-            }
+            if (lv === 3 || lv === 4) ensureInitialBlendWord();
 
             document.querySelectorAll('.level-btn').forEach((btn, idx) => {
                 btn.classList.toggle('active', idx + 1 === lv);
             });
+
             renderStage();
         }
 
@@ -1297,6 +1521,25 @@
             document.getElementById('btn-mode-learn').classList.toggle('active', mode === 'learn');
             document.getElementById('btn-mode-match').classList.toggle('active', mode === 'match');
             document.getElementById('btn-mode-quiz').classList.toggle('active', mode === 'quiz');
+            renderStage();
+        }
+
+        function toggleCardViewMode() {
+            playPopSound();
+            stopAllSpeech();
+            singleCardMode = !singleCardMode;
+            const btn = document.getElementById('btn-toggle-view');
+            btn.innerHTML = singleCardMode ? '🗂️ ดูทีละใบ' : '🪟 ดูตารางรวม';
+            btn.classList.toggle('active-toggle', singleCardMode);
+            renderStage();
+        }
+
+        function toggleImages() {
+            playPopSound();
+            showImages = !showImages;
+            const btn = document.getElementById('btn-toggle-img');
+            btn.innerHTML = showImages ? '🖼️ รูปภาพ' : '🙈 ซ่อนรูป';
+            btn.classList.toggle('active-toggle', showImages);
             renderStage();
         }
 
@@ -1324,6 +1567,8 @@
                 else if (currentLevel === 2) renderLevel2Learn(container);
                 else if (currentLevel === 3) renderLevel3And4Learn(container, 3);
                 else if (currentLevel === 4) renderLevel3And4Learn(container, 4);
+                else if (currentLevel === 5) renderLevel5Learn(container);
+                else if (currentLevel === 6) renderLevel6Learn(container);
             } else if (currentMode === 'match') {
                 renderMatchGame(container);
             } else if (currentMode === 'quiz') {
@@ -1331,15 +1576,13 @@
             }
         }
 
-        /* ==================== 8. โหมดเรียนรู้: ด่าน 1 & 2 (ไม่รันเสียงอัตโนมัติเมื่อกดเลื่อน) ==================== */
+        /* ==================== 9. โหมดเรียนรู้ ด่าน 1 & 2 (ไม่รันเสียงเองตอนเลื่อน) ==================== */
         function renderLevel1Learn(container) {
             setInstruction('แตะที่กล่องบัตรคำ เพื่อฟังเสียงพยัญชนะนะจ๊ะ', 'แตะที่กล่องบัตรคำ เพื่อฟังเสียงพยัญชนะนะจ๊ะ');
-
             if (singleCardMode) {
                 const item = consonants[currentConsonantIndex];
                 const stage = document.createElement('div');
                 stage.className = 'single-card-stage';
-
                 stage.innerHTML = `
                     <div class="card-progress">พยัญชนะตัวที่ ${currentConsonantIndex + 1} / ${consonants.length}</div>
                     <div class="flashcard-box" id="main-flashcard" onclick="speakCurrentFlashcard(1)">
@@ -1354,7 +1597,6 @@
                     </div>
                 `;
                 container.appendChild(stage);
-                // ไม่รันเสียงอัตโนมัติ รอให้น้องแตะที่บัตรหรือกดปุ่มฟังเสียงเอง
             } else {
                 const grid = document.createElement('div');
                 grid.className = 'card-grid';
@@ -1381,12 +1623,10 @@
 
         function renderLevel2Learn(container) {
             setInstruction('แตะที่กล่องบัตรสระ เพื่อฟังเสียงอ่านจ้า', 'แตะที่กล่องบัตรสะ-ระ เพื่อฟังเสียงอ่านจ้า');
-
             if (singleCardMode) {
                 const item = vowels[currentVowelIndex];
                 const stage = document.createElement('div');
                 stage.className = 'single-card-stage';
-
                 stage.innerHTML = `
                     <div class="card-progress">สระตัวที่ ${currentVowelIndex + 1} / ${vowels.length}</div>
                     <div class="flashcard-box vowel-theme" id="main-flashcard" onclick="speakCurrentFlashcard(2)">
@@ -1401,7 +1641,6 @@
                     </div>
                 `;
                 container.appendChild(stage);
-                // ไม่รันเสียงอัตโนมัติ
             } else {
                 const grid = document.createElement('div');
                 grid.className = 'card-grid';
@@ -1430,47 +1669,29 @@
             const box = document.getElementById('main-flashcard');
             if (!box) return;
             box.classList.add('speaking');
-
-            if (lv === 1) {
-                const item = consonants[currentConsonantIndex];
-                speakSmart(item.id, item.tts, () => box.classList.remove('speaking'));
-            } else {
-                const item = vowels[currentVowelIndex];
-                speakSmart(item.id, item.tts, () => box.classList.remove('speaking'));
-            }
+            const item = lv === 1 ? consonants[currentConsonantIndex] : vowels[currentVowelIndex];
+            speakSmart(item.id, item.tts, () => box.classList.remove('speaking'));
         }
 
         function stepFlashcard(lv, dir) {
             playPopSound();
             stopAllSpeech();
-            if (lv === 1) {
-                currentConsonantIndex = (currentConsonantIndex + dir + consonants.length) % consonants.length;
-            } else {
-                currentVowelIndex = (currentVowelIndex + dir + vowels.length) % vowels.length;
-            }
+            if (lv === 1) currentConsonantIndex = (currentConsonantIndex + dir + consonants.length) % consonants.length;
+            else currentVowelIndex = (currentVowelIndex + dir + vowels.length) % vowels.length;
             renderStage();
         }
 
-        /* ==================== 9. ด่าน 3 และ 4 (สุ่มคำผสมไล่ระดับความง่าย & ไม่รันเสียงอัตโนมัติ) ==================== */
+        /* ==================== 10. โหมดเรียนรู้ ด่าน 3 & 4 (สุ่มคำผสม) ==================== */
         function renderLevel3And4Learn(container, lv) {
             ensureInitialBlendWord();
             const item = blendHistory[blendHistoryIndex];
             const voiceKey = lv === 3 ? `${item.id}_lv3` : `${item.id}_lv4`;
 
             if (lv === 3) {
-                setInstruction(
-                    'แตะที่กล่องเพื่อฟังเสียงผสมคำ (เช่น ตอ เต่า สระ อา อ่านว่า ตอ อา ตา)',
-                    'แตะที่กล่องเพื่อฟังเสียงผสมคำ เช่น ตอ เต่า สะ-ระ อา อ่านว่า ตอ อา ตา'
-                );
+                setInstruction('แตะที่กล่องเพื่อฟังเสียงผสมคำ (เช่น ตอ เต่า สระ อา อ่านว่า ตอ อา ตา)', 'แตะที่กล่องเพื่อฟังเสียงผสมคำ เช่น ตอ เต่า สะ-ระ อา อ่านว่า ตอ อา ตา');
             } else {
-                setInstruction(
-                    'แตะที่กล่องเพื่อฝึกสะกดคำ (เช่น ตอ อา ตา)',
-                    'แตะที่กล่องเพื่อฝึกสะกดคำ เช่น ตอ อา ตา'
-                );
+                setInstruction('แตะที่กล่องเพื่อฝึกสะกดคำ (เช่น ตอ อา ตา)', 'แตะที่กล่องเพื่อฝึกสะกดคำ เช่น ตอ อา ตา');
             }
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'blend-stage';
 
             const subC = lv === 3 ? item.cName : item.cSound;
             const subV = lv === 3 ? item.vName : item.vSound;
@@ -1478,13 +1699,15 @@
                 ? `${item.cName} + ${item.vName} อ่านว่า "${item.cSound} ${item.vSound} ${item.word}"`
                 : `สะกดว่า: "${item.cSound} - ${item.vSound} - ${item.word}"`;
 
+            const wrapper = document.createElement('div');
+            wrapper.className = 'blend-stage';
             wrapper.innerHTML = `
                 <div class="blend-filter-bar">
                     <button class="filter-chip ${blendPoolMode === 'easy' ? 'active' : ''}" onclick="setBlendPoolMode('easy')">
-                        ⭐ สุ่มคำง่าย (เริ่มจากสระพื้นฐาน)
+                        ⭐ สุ่มคำง่ายที่มีความหมาย
                     </button>
                     <button class="filter-chip ${blendPoolMode === 'free' ? 'active' : ''}" onclick="setBlendPoolMode('free')">
-                        🎲 สุ่มอิสระ (พยัญชนะ+สระทั่วไป)
+                        🎲 สุ่มอิสระ (พยัญชนะ+สระ)
                     </button>
                 </div>
 
@@ -1501,7 +1724,7 @@
                     <div class="eq-symbol">=</div>
                     <div class="eq-slot result-slot" id="slot-w" onclick="playBlendEquation()">
                         <div class="slot-main-text" style="color: #2ED573;">${item.word}</div>
-                        ${showImages ? `<div class="slot-sub-text">${item.emoji}${item.meaning}</div>` : `<div class="slot-sub-text">${item.word}</div>`}
+                        ${showImages ? `<div class="slot-sub-text">${item.emoji} ${item.meaning}</div>` : `<div class="slot-sub-text">${item.word}</div>`}
                     </div>
                 </div>
 
@@ -1515,9 +1738,16 @@
                     <button class="action-btn btn-random" onclick="stepBlendWord(1)">🎲 สุ่มคำถัดไป ➡️</button>
                 </div>
             `;
-
             container.appendChild(wrapper);
-            // ไม่รันเสียงอัตโนมัติเมื่อกดเปลี่ยนคำ
+        }
+
+        function setBlendPoolMode(mode) {
+            playPopSound();
+            stopAllSpeech();
+            blendPoolMode = mode;
+            blendHistory.push(generateRandomBlendWord());
+            blendHistoryIndex = blendHistory.length - 1;
+            renderStage();
         }
 
         function speakSinglePart(part) {
@@ -1525,21 +1755,17 @@
             const item = blendHistory[blendHistoryIndex];
             const slotC = document.getElementById('slot-c');
             const slotV = document.getElementById('slot-v');
-            const slotW = document.getElementById('slot-w');
-            if (!slotC || !slotV || !slotW) return;
+            if (!slotC || !slotV) return;
 
             slotC.classList.remove('highlight');
             slotV.classList.remove('highlight');
-            slotW.classList.remove('highlight');
 
             if (part === 'c') {
                 slotC.classList.add('highlight');
-                const txt = currentLevel === 3 ? item.cTts : item.cSound;
-                speakSmart(null, txt, () => slotC.classList.remove('highlight'));
-            } else if (part === 'v') {
+                speakSmart(null, currentLevel === 3 ? item.cTts : item.cSound, () => slotC.classList.remove('highlight'));
+            } else {
                 slotV.classList.add('highlight');
-                const txt = currentLevel === 3 ? item.vTts : item.vSound;
-                speakSmart(null, txt, () => slotV.classList.remove('highlight'));
+                speakSmart(null, currentLevel === 3 ? item.vTts : item.vSound, () => slotV.classList.remove('highlight'));
             }
         }
 
@@ -1556,7 +1782,6 @@
             slotW.classList.remove('highlight');
 
             const voiceKey = currentLevel === 3 ? `${item.id}_lv3` : `${item.id}_lv4`;
-
             const fullTts = currentLevel === 3
                 ? `${item.cTts}, ${item.vTts}, อ่านว่า, ${item.cSound} ${item.vSound} ${item.word}`
                 : `${item.cSound}, ${item.vSound}, ${item.word}`;
@@ -1565,7 +1790,6 @@
             const t2 = currentLevel === 3 ? 1950 : 1200;
 
             slotC.classList.add('highlight');
-
             speakSmart(voiceKey, fullTts, () => {
                 if (slotC) slotC.classList.remove('highlight');
                 if (slotV) slotV.classList.remove('highlight');
@@ -1586,33 +1810,221 @@
         function stepBlendWord(dir) {
             playPopSound();
             stopAllSpeech();
-
             if (dir < 0) {
-                if (blendHistoryIndex > 0) {
-                    blendHistoryIndex--;
-                } else {
-                    const prevW = generateRandomBlendWord();
-                    blendHistory.unshift(prevW);
+                if (blendHistoryIndex > 0) blendHistoryIndex--;
+                else {
+                    blendHistory.unshift(generateRandomBlendWord());
                     blendHistoryIndex = 0;
                 }
             } else {
-                if (blendHistoryIndex < blendHistory.length - 1) {
-                    blendHistoryIndex++;
-                } else {
-                    const nextW = generateRandomBlendWord();
-                    blendHistory.push(nextW);
+                if (blendHistoryIndex < blendHistory.length - 1) blendHistoryIndex++;
+                else {
+                    blendHistory.push(generateRandomBlendWord());
                     blendHistoryIndex = blendHistory.length - 1;
                 }
             }
             renderStage();
         }
 
-        /* ==================== 10. โหมดจับคู่ ==================== */
+        /* ==================== 11. ด่านที่ 5: วรรณยุกต์หรรษา & การผัน 5 เสียง ==================== */
+        function renderLevel5Learn(container) {
+            setInstruction('🎵 แตะที่รูปวรรณยุกต์ด้านบน หรือแตะกล่องทั้ง 5 ช่องเพื่อฝึกผันวรรณยุกต์จ้า', 'แตะที่รูปวรรณยุกต์ หรือแตะกล่องเพื่อฝึกผันเสียงวรรณยุกต์จ้า');
+            const set = toneSets[currentToneSetIndex];
+            const toneLabels = ['สามัญ', 'ไม้เอก (◌่)', 'ไม้โท (◌้)', 'ไม้ตรี (◌๊)', 'ไม้จัตวา (◌๋)'];
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'blend-stage';
+
+            let marksHtml = '';
+            toneMarks.forEach(m => {
+                marksHtml += `
+                    <div class="tone-mark-pill" onclick="speakSmart('${m.id}', '${m.tts}')">
+                        <div style="font-size:2rem; font-weight:700; color:#F15BB5;">${m.mark}</div>
+                        <div style="font-size:0.9rem; font-weight:700;">${m.name}</div>
+                    </div>
+                `;
+            });
+
+            let stepsHtml = '';
+            set.words.forEach((w, idx) => {
+                stepsHtml += `
+                    <div class="tone-step-card" id="tone-step-${idx}" onclick="speakSingleToneStep(${idx})">
+                        <div class="tone-word-big">${w}</div>
+                        <div class="tone-label-small">${toneLabels[idx]}</div>
+                    </div>
+                `;
+            });
+
+            wrapper.innerHTML = `
+                <div class="tone-marks-bar">${marksHtml}</div>
+                <div class="card-progress">ชุดผันเสียงที่ ${currentToneSetIndex + 1} / ${toneSets.length} (${showImages ? set.emoji + ' ' + set.sampleWord : set.base})</div>
+                <div class="tone-steps-row">${stepsHtml}</div>
+                <div class="phonetic-banner" onclick="playAllToneSteps()">
+                    📢 แตะเพื่อผัน 5 เสียง: "${set.words.join(' - ')}" ${recordedKeys.has(set.id) ? '🎙️' : ''}
+                </div>
+                <div class="word-nav">
+                    <button class="action-btn btn-prev" onclick="stepToneSet(-1)">⬅️ คำก่อนหน้า</button>
+                    <button class="action-btn btn-speak-all" onclick="playAllToneSteps()">🔊 ผันครบ 5 เสียง</button>
+                    <button class="action-btn btn-next" onclick="stepToneSet(1)">คำถัดไป ➡️</button>
+                </div>
+            `;
+            container.appendChild(wrapper);
+        }
+
+        function speakSingleToneStep(idx) {
+            playPopSound();
+            const set = toneSets[currentToneSetIndex];
+            document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
+            const card = document.getElementById(`tone-step-${idx}`);
+            if (card) card.classList.add('highlight');
+            speakSmart(null, set.words[idx], () => {
+                if (card) card.classList.remove('highlight');
+            });
+        }
+
+        function playAllToneSteps() {
+            playPopSound();
+            const set = toneSets[currentToneSetIndex];
+            document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
+
+            const step0 = document.getElementById('tone-step-0');
+            if (step0) step0.classList.add('highlight');
+
+            speakSmart(set.id, set.ttsAll, () => {
+                document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
+            });
+
+            [1, 2, 3, 4].forEach(idx => {
+                activeTimers.push(setTimeout(() => {
+                    document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
+                    const el = document.getElementById(`tone-step-${idx}`);
+                    if (el) el.classList.add('highlight');
+                }, idx * 620));
+            });
+        }
+
+        function stepToneSet(dir) {
+            playPopSound();
+            stopAllSpeech();
+            currentToneSetIndex = (currentToneSetIndex + dir + toneSets.length) % toneSets.length;
+            renderStage();
+        }
+
+        /* ==================== 12. ด่านที่ 6: หัดอ่านประโยค สไตล์ มานะ-มานี ==================== */
+        function getFilteredStories() {
+            return stories.filter(s => s.diff === currentStoryDiff);
+        }
+
+        function renderLevel6Learn(container) {
+            setInstruction('📖 แตะที่บรรทัดเพื่อฟังเสียงอ่านทีละบรรทัด หรือกดปุ่มสีเขียวเพื่ออ่านทั้งหน้าจ้า', 'แตะที่บรรทัดเพื่อฟังเสียงอ่านทีละบรรทัดนะจ๊ะ');
+            const list = getFilteredStories();
+            if (currentStoryIndex >= list.length) currentStoryIndex = 0;
+            const story = list[currentStoryIndex];
+
+            const stage = document.createElement('div');
+            stage.className = 'story-stage';
+
+            let linesHtml = '';
+            story.lines.forEach((line, idx) => {
+                const lineKey = `${story.id}_line_${idx}`;
+                linesHtml += `
+                    <div class="story-line" id="story-line-${idx}" onclick="readStoryLine(${idx})">
+                        <span>🔊</span>
+                        <span>${line}</span>
+                        ${recordedKeys.has(lineKey) ? '<span style="font-size:1rem;">🎙️</span>' : ''}
+                    </div>
+                `;
+            });
+
+            stage.innerHTML = `
+                <div class="blend-filter-bar">
+                    <button class="filter-chip ${currentStoryDiff === 1 ? 'active' : ''}" onclick="setStoryDifficulty(1)">⭐ ระดับ 1 (ง่ายมาก)</button>
+                    <button class="filter-chip ${currentStoryDiff === 2 ? 'active' : ''}" onclick="setStoryDifficulty(2)">⭐⭐ ระดับ 2 (ปานกลาง)</button>
+                    <button class="filter-chip ${currentStoryDiff === 3 ? 'active' : ''}" onclick="setStoryDifficulty(3)">⭐⭐⭐ ระดับ 3 (ผสมวรรณยุกต์)</button>
+                </div>
+
+                <div class="story-book">
+                    <div class="story-header">
+                        <span class="story-title">📕 ${story.title}</span>
+                        <span class="card-progress">หน้าที่ ${currentStoryIndex + 1} / ${list.length}</span>
+                    </div>
+                    ${showImages ? `<div class="story-scene-emoji">${story.emoji}</div>` : ''}
+                    <div class="story-lines-box">${linesHtml}</div>
+                </div>
+
+                <div class="word-nav">
+                    <button class="action-btn btn-prev" onclick="stepStoryPage(-1)">⬅️ หน้าก่อนหน้า</button>
+                    <button class="action-btn btn-speak-all" onclick="readFullStoryPage()">🔊 อ่านให้ฟังทั้งหน้า</button>
+                    <button class="action-btn btn-next" onclick="stepStoryPage(1)">หน้าถัดไป ➡️</button>
+                </div>
+            `;
+            container.appendChild(stage);
+        }
+
+        function setStoryDifficulty(diff) {
+            playPopSound();
+            stopAllSpeech();
+            currentStoryDiff = diff;
+            currentStoryIndex = 0;
+            renderStage();
+        }
+
+        function stepStoryPage(dir) {
+            playPopSound();
+            stopAllSpeech();
+            const list = getFilteredStories();
+            currentStoryIndex = (currentStoryIndex + dir + list.length) % list.length;
+            renderStage();
+        }
+
+        function readStoryLine(idx) {
+            playPopSound();
+            const story = getFilteredStories()[currentStoryIndex];
+            if (!story) return;
+
+            document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+            const lineEl = document.getElementById(`story-line-${idx}`);
+            if (lineEl) lineEl.classList.add('reading-now');
+
+            const lineKey = `${story.id}_line_${idx}`;
+            const ttsText = story.lines[idx];
+            speakSmart(lineKey, ttsText, () => {
+                if (lineEl) lineEl.classList.remove('reading-now');
+            });
+        }
+
+        function readFullStoryPage() {
+            playPopSound();
+            const story = getFilteredStories()[currentStoryIndex];
+            if (!story) return;
+
+            let idx = 0;
+            const readNext = () => {
+                if (idx >= story.lines.length) {
+                    document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+                    return;
+                }
+                document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+                const lineEl = document.getElementById(`story-line-${idx}`);
+                if (lineEl) lineEl.classList.add('reading-now');
+
+                const lineKey = `${story.id}_line_${idx}`;
+                const lineText = story.lines[idx];
+                idx++;
+                speakSmart(lineKey, lineText, () => {
+                    activeTimers.push(setTimeout(readNext, 300));
+                });
+            };
+            readNext();
+        }
+
+        /* ==================== 13. โหมดจับคู่ (ไม่พูดซ้ำ & ล้างหน้าจอฉลองไม่ให้บีบแคบ) ==================== */
         let selectedLeft = null;
         let selectedRight = null;
         let matchedPairsCount = 0;
 
         function renderMatchGame(container) {
+            container.innerHTML = '';
             selectedLeft = null;
             selectedRight = null;
             matchedPairsCount = 0;
@@ -1621,15 +2033,26 @@
             if (currentLevel === 1) {
                 setInstruction('🧩 แตะพยัญชนะฝั่งซ้าย แล้วแตะรูปภาพคู่กันฝั่งขวานะจ๊ะ', 'แตะพยัญชนะฝั่งซ้าย แล้วแตะรูปภาพคู่กันฝั่งขวานะจ๊ะ');
                 pool = [...consonants].sort(() => 0.5 - Math.random()).slice(0, 4).map(x => ({
-                    id: x.id, leftText: x.char, rightText: `${x.emoji} ${x.name}`, ttsLeft: x.sound, ttsMatch: x.tts
+                    id: x.id, leftText: x.char, rightText: `${x.emoji} ${x.name}`, ttsLeft: x.sound, ttsRight: x.tts
                 }));
             } else if (currentLevel === 2) {
                 setInstruction('🧩 จับคู่รูปสระ กับชื่อสระให้ถูกต้องนะจ๊ะ', 'จับคู่รูปสะ-ระ กับชื่อสะ-ระให้ถูกต้องนะจ๊ะ');
                 pool = [...vowels].sort(() => 0.5 - Math.random()).slice(0, 4).map(x => ({
-                    id: x.id, leftText: x.display, rightText: x.name, ttsLeft: x.sound, ttsMatch: x.tts
+                    id: x.id, leftText: x.display, rightText: x.name, ttsLeft: x.sound, ttsRight: x.tts
+                }));
+            } else if (currentLevel === 5) {
+                setInstruction('🧩 จับคู่คำที่มีวรรณยุกต์ กับภาพความหมายให้ตรงกันจ้า', 'จับคู่คำวรรณยุกต์ กับภาพความหมายให้ตรงกันจ้า');
+                pool = [...toneSets].sort(() => 0.5 - Math.random()).slice(0, 4).map(x => ({
+                    id: x.id, leftText: x.targetWord, rightText: `${x.emoji} ${x.sampleWord}`, ttsLeft: x.targetWord, ttsRight: x.sampleWord
+                }));
+            } else if (currentLevel === 6) {
+                setInstruction('🧩 จับคู่ประโยคสั้นๆ กับภาพเหตุการณ์ให้ตรงกันจ้า', 'จับคู่ประโยค กับภาพให้ตรงกันจ้า');
+                pool = [...stories].sort(() => 0.5 - Math.random()).slice(0, 4).map(s => ({
+                    id: s.id, leftText: s.lines[0], rightText: `${s.emoji} ${s.title.replace(/บทที่ \S+ /, '')}`, ttsLeft: s.lines[0], ttsRight: s.title.replace(/บทที่ \S+ /, '')
                 }));
             } else {
-                setInstruction('🧩 จับคู่คำอ่าน กับรูปภาพความหมายให้ตรงกันจ้า', 'จับคู่คำอ่าน กับรูปภาพความหมายให้ตรงกันจ้า');
+                // ด่าน 3 และ 4: ฝั่งขวาอ่านเต็มคำ เช่น "ทุ่งนา", "อีกา", "ดวงตา"
+                setInstruction('🧩 จับคู่คำอ่านฝั่งซ้าย กับความหมายฝั่งขวาให้ตรงกันจ้า', 'จับคู่คำอ่าน กับความหมายให้ตรงกันจ้า');
                 const randomCurated = [...curatedBlendWords].sort(() => 0.5 - Math.random()).slice(0, 4);
                 pool = randomCurated.map(pick => {
                     const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
@@ -1640,7 +2063,7 @@
                         leftText: b.word,
                         rightText: `${b.emoji} ${b.meaning}`,
                         ttsLeft: `${b.cSound} ${b.vSound} ${b.word}`,
-                        ttsMatch: `${b.cSound} ${b.vSound} ${b.word}`
+                        ttsRight: b.meaning // อ่านเต็มคำ เช่น "ทุ่งนา"
                     };
                 });
             }
@@ -1662,6 +2085,7 @@
             leftItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'match-card';
+                if (currentLevel === 6) card.style.fontSize = '1.25rem';
                 card.innerText = item.leftText;
                 card.onclick = () => selectMatchCard('left', card, item);
                 colL.appendChild(card);
@@ -1670,7 +2094,7 @@
             rightItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'match-card';
-                card.style.fontSize = '1.25rem';
+                card.style.fontSize = '1.2rem';
                 card.innerText = item.rightText;
                 card.onclick = () => selectMatchCard('right', card, item);
                 colR.appendChild(card);
@@ -1682,54 +2106,62 @@
             container.appendChild(board);
         }
 
+        // Logic การออกเสียงโหมดจับคู่แบบไม่พูดซ้ำ: กดใบไหน พูดเฉพาะเสียงใบที่เพิ่งกด 1 ครั้งเดียวจบ
         function selectMatchCard(side, cardEl, item) {
             playPopSound();
+            const clickedTts = side === 'left' ? item.ttsLeft : item.ttsRight;
+
             if (side === 'left') {
                 if (selectedLeft) selectedLeft.el.classList.remove('selected');
                 selectedLeft = { el: cardEl, item };
                 cardEl.classList.add('selected');
-                speakSmart(null, item.ttsLeft);
             } else {
                 if (selectedRight) selectedRight.el.classList.remove('selected');
                 selectedRight = { el: cardEl, item };
                 cardEl.classList.add('selected');
             }
 
-            if (selectedLeft && selectedRight) {
-                const left = selectedLeft;
-                const right = selectedRight;
-                selectedLeft = null;
-                selectedRight = null;
+            // กรณีเพิ่งเลือกใบแรกใบเดียว -> อ่านเสียงของใบที่เพิ่งกดทันที
+            if (!selectedLeft || !selectedRight) {
+                speakSmart(null, clickedTts);
+                return;
+            }
 
-                if (left.item.id === right.item.id) {
-                    left.el.classList.remove('selected');
-                    right.el.classList.remove('selected');
-                    left.el.classList.add('matched');
-                    right.el.classList.add('matched');
-                    playSuccessSound();
-                    matchedPairsCount++;
+            // กรณีเลือกครบ 2 ใบแล้ว -> ตรวจสอบผล
+            const left = selectedLeft;
+            const right = selectedRight;
+            selectedLeft = null;
+            selectedRight = null;
 
-                    speakSmart(left.item.id, left.item.ttsMatch, () => {
-                        if (matchedPairsCount === 4) {
-                            addStar();
-                            showTransitionScreen('จับคู่ครบแล้ว เก่งมากจ้า!', () => {
-                                renderMatchGame(document.getElementById('game-content'));
-                            });
-                        }
-                    });
-                } else {
-                    left.el.classList.add('wrong');
-                    right.el.classList.add('wrong');
-                    playWrongSound();
-                    setTimeout(() => {
-                        left.el.classList.remove('selected', 'wrong');
-                        right.el.classList.remove('selected', 'wrong');
-                    }, 500);
-                }
+            if (left.item.id === right.item.id) {
+                left.el.classList.remove('selected');
+                right.el.classList.remove('selected');
+                left.el.classList.add('matched');
+                right.el.classList.add('matched');
+                playSuccessSound();
+                matchedPairsCount++;
+
+                // พูดเฉพาะเสียงของการ์ดใบที่ 2 ที่เพิ่งจิ้มเพียง 1 ครั้งเดียว (ไม่พูดทวนซ้ำ)
+                speakSmart(null, clickedTts, () => {
+                    if (matchedPairsCount === 4) {
+                        addStar();
+                        showTransitionScreen('จับคู่ครบแล้ว เก่งมากจ้า!', () => {
+                            renderMatchGame(document.getElementById('game-content'));
+                        });
+                    }
+                });
+            } else {
+                left.el.classList.add('wrong');
+                right.el.classList.add('wrong');
+                playWrongSound();
+                setTimeout(() => {
+                    left.el.classList.remove('selected', 'wrong');
+                    right.el.classList.remove('selected', 'wrong');
+                }, 450);
             }
         }
 
-        /* ==================== 11. โหมดทายเสียง (ขึ้นทีละข้อ ล้างของเก่าก่อนขึ้นข้อใหม่) ==================== */
+        /* ==================== 14. โหมดทายเสียง (ครบทั้ง 6 ด่าน & ล้างหน้าจอทีละข้อ) ==================== */
         function renderQuiz(container) {
             container.innerHTML = '';
 
@@ -1751,6 +2183,18 @@
                 displayQuestion = `ข้อที่ ${quizQuestionNumber}: ตัวไหนคือ "${answer.name}" จ๊ะ?`;
                 ttsQuestion = `ตัวไหนคือ ${answer.tts} จ๊ะ`;
                 voiceKeyToUse = answer.id;
+            } else if (currentLevel === 5) {
+                choices = [...toneSets].sort(() => 0.5 - Math.random()).slice(0, 3);
+                answer = choices[Math.floor(Math.random() * choices.length)];
+                displayQuestion = `ข้อที่ ${quizQuestionNumber}: คำไหนคือคำว่า "${answer.targetWord}" (${answer.sampleWord}) จ๊ะ?`;
+                ttsQuestion = `คำไหนคือคำว่า ${answer.targetWord} จ๊ะ`;
+            } else if (currentLevel === 6) {
+                const allLines = [];
+                stories.forEach(s => s.lines.forEach(l => allLines.push({ id: l, text: l, emoji: s.emoji })));
+                choices = allLines.sort(() => 0.5 - Math.random()).slice(0, 3);
+                answer = choices[Math.floor(Math.random() * choices.length)];
+                displayQuestion = `ข้อที่ ${quizQuestionNumber}: ประโยคไหนอ่านว่า "${answer.text}" จ๊ะ?`;
+                ttsQuestion = answer.text;
             } else {
                 const pickedRaw = [...curatedBlendWords].sort(() => 0.5 - Math.random()).slice(0, 3);
                 choices = pickedRaw.map(pick => {
@@ -1800,7 +2244,19 @@
                 } else if (currentLevel === 2) {
                     card.innerHTML = `
                         <div class="char-big" style="color:#00A8FF;">${item.display}</div>
-                        ${showImages ? `<div class="char-label" style="margin-top:8px; font-size:0.9rem;">${item.desc}</div>` : ''}
+                        ${showImages ? `<div class="char-label" style="margin-top:8px; font-size:0.88rem;">${item.desc}</div>` : ''}
+                    `;
+                } else if (currentLevel === 5) {
+                    card.innerHTML = `
+                        <div class="char-big ${!showImages ? 'no-img-mode' : ''}" style="color:#F15BB5;">${item.targetWord}</div>
+                        ${showImages ? `<div class="char-emoji">${item.emoji}</div>` : ''}
+                    `;
+                } else if (currentLevel === 6) {
+                    card.style.width = '240px';
+                    card.style.minHeight = '105px';
+                    card.innerHTML = `
+                        <div style="font-size:1.45rem; font-weight:700; color:#2C3E50;">${item.text}</div>
+                        ${showImages ? `<div style="font-size:1.6rem; margin-top:4px;">${item.emoji}</div>` : ''}
                     `;
                 } else {
                     card.innerHTML = `
@@ -1818,7 +2274,7 @@
             quizWrapper.appendChild(choicesBox);
             container.appendChild(quizWrapper);
 
-            activeTimers.push(setTimeout(() => speakSmart(voiceKeyToUse, ttsQuestion), 300));
+            activeTimers.push(setTimeout(() => speakSmart(voiceKeyToUse, ttsQuestion), 280));
         }
 
         function handleQuizChoice(cardEl, selected, answer) {
@@ -1839,6 +2295,7 @@
             }
         }
 
+        // หน้าจอคั่นเวลาจบข้อ: ล้างตัวเองทิ้งทั้งหมดเมื่อครบเวลา เพื่อไม่ให้หน้าจอบีบแคบ
         function showTransitionScreen(message, onComplete) {
             const container = document.getElementById('game-content');
             container.innerHTML = `
@@ -1848,19 +2305,22 @@
                 </div>
             `;
             speakSmart(null, 'เก่งมากจ้า', () => {
-                activeTimers.push(setTimeout(onComplete, 450));
+                activeTimers.push(setTimeout(() => {
+                    container.innerHTML = '';
+                    if (onComplete) onComplete();
+                }, 400));
             });
         }
 
-        /* ==================== 12. สตูดิโออัดเสียงผู้ปกครอง ==================== */
+        /* ==================== 15. สตูดิโออัดเสียงผู้ปกครอง ==================== */
         let mediaRecorder = null;
         let audioChunks = [];
         let currentlyRecordingKey = null;
 
         function getAllRecordableItems() {
             const list = [];
-            consonants.forEach(c => list.push({ key: c.id, label: `[พยัญชนะ] ${c.char} - ${c.name}`, defaultTts: c.tts }));
-            vowels.forEach(v => list.push({ key: v.id, label: `[สระ] ${v.display} - ${v.name}`, defaultTts: v.tts }));
+            consonants.forEach(c => list.push({ key: c.id, label: `[ด่าน 1] ${c.char} - ${c.name}`, defaultTts: c.tts }));
+            vowels.forEach(v => list.push({ key: v.id, label: `[ด่าน 2] ${v.display} - ${v.name}`, defaultTts: v.tts }));
             curatedBlendWords.forEach(pick => {
                 const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
                 const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
@@ -1876,6 +2336,12 @@
                     defaultTts: `${w.cSound}, ${w.vSound}, ${w.word}`
                 });
             });
+            toneSets.forEach(t => list.push({ key: t.id, label: `[ด่าน 5] ผันเสียง: ${t.words.join('-')}`, defaultTts: t.ttsAll }));
+            stories.forEach(s => {
+                s.lines.forEach((line, idx) => {
+                    list.push({ key: `${s.id}_line_${idx}`, label: `[ด่าน 6 ${s.title}] "${line}"`, defaultTts: line });
+                });
+            });
             return list;
         }
 
@@ -1886,9 +2352,7 @@
         }
 
         function closeVoiceStudio() {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                mediaRecorder.stop();
-            }
+            if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
             document.getElementById('voice-modal').classList.remove('show');
             renderStage();
         }
@@ -1896,25 +2360,18 @@
         function renderVoiceStudioList() {
             const listEl = document.getElementById('voice-studio-list');
             listEl.innerHTML = '';
-            const items = getAllRecordableItems();
-
-            items.forEach(item => {
+            getAllRecordableItems().forEach(item => {
                 const hasRecorded = recordedKeys.has(item.key);
                 const isRec = currentlyRecordingKey === item.key;
-
                 const row = document.createElement('div');
                 row.className = 'voice-item';
                 row.innerHTML = `
-                    <div class="voice-item-title">
-                        ${hasRecorded ? '✅' : '⚪'} ${item.label}
-                    </div>
+                    <div class="voice-item-title">${hasRecorded ? '✅' : '⚪'} ${item.label}</div>
                     <div class="voice-controls">
                         <button class="rec-btn ${isRec ? 'recording' : 'record'}" onclick="toggleRecord('${item.key}')">
                             ${isRec ? '⏹️ หยุดอัด' : '🎙️ อัดเสียง'}
                         </button>
-                        <button class="rec-btn play" onclick="speakSmart('${item.key}', '${item.defaultTts}')">
-                            🔊 ฟัง
-                        </button>
+                        <button class="rec-btn play" onclick="speakSmart('${item.key}', '${item.defaultTts}')">🔊 ฟัง</button>
                         ${hasRecorded ? `<button class="rec-btn delete" onclick="removeRecording('${item.key}')">🗑️ ลบ</button>` : ''}
                     </div>
                 `;
@@ -1927,7 +2384,6 @@
                 mediaRecorder.stop();
                 return;
             }
-
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
@@ -1935,10 +2391,7 @@
                 currentlyRecordingKey = key;
                 renderVoiceStudioList();
 
-                mediaRecorder.ondataavailable = e => {
-                    if (e.data.size > 0) audioChunks.push(e.data);
-                };
-
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
                 mediaRecorder.onstop = async () => {
                     const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
                     await saveVoiceBlob(key, blob);
@@ -1946,7 +2399,6 @@
                     currentlyRecordingKey = null;
                     renderVoiceStudioList();
                 };
-
                 mediaRecorder.start();
             } catch (err) {
                 alert('ไม่สามารถเข้าถึงไมโครโฟนได้ กรุณาอนุญาตการใช้ไมโครโฟนบนเบราว์เซอร์ครับ');
@@ -1960,7 +2412,7 @@
             renderVoiceStudioList();
         }
 
-        /* ==================== 13. พลุกระดาษ (CONFETTI) ==================== */
+        /* ==================== 16. พลุกระดาษ (CONFETTI) ==================== */
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let confettiParticles = [];
@@ -1974,13 +2426,13 @@
 
         function launchConfetti() {
             const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#9B5DE5', '#00BBF9', '#2ED573'];
-            for (let i = 0; i < 60; i++) {
+            for (let i = 0; i < 55; i++) {
                 confettiParticles.push({
                     x: window.innerWidth / 2,
                     y: window.innerHeight / 2,
-                    vx: (Math.random() - 0.5) * 18,
-                    vy: (Math.random() - 0.8) * 18 - 4,
-                    size: Math.random() * 10 + 6,
+                    vx: (Math.random() - 0.5) * 16,
+                    vy: (Math.random() - 0.8) * 16 - 4,
+                    size: Math.random() * 9 + 5,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     rotation: Math.random() * 360,
                     vRot: (Math.random() - 0.5) * 12
@@ -2007,9 +2459,7 @@
                 if (p.y > canvas.height) confettiParticles.splice(index, 1);
             });
 
-            if (confettiParticles.length > 0) {
-                requestAnimationFrame(updateConfetti);
-            }
+            if (confettiParticles.length > 0) requestAnimationFrame(updateConfetti);
         }
 
         if ('speechSynthesis' in window) {
