@@ -550,6 +550,12 @@
             background: #FFEAA7;
         }
 
+        .tone-mark-pill.disabled, .tone-step-card.disabled {
+            opacity: 0.35;
+            pointer-events: none;
+            filter: grayscale(100%);
+        }
+
         .tone-steps-row {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -1139,36 +1145,36 @@
         /* ==================== 4. ข้อมูลด่านที่ 6: หัดอ่านประโยค สไตล์ มานะ-มานี ==================== */
         const stories = [
             {
-                id: 'st_1', diff: 1, title: 'บทที่ ๑ เจ้าโต', emoji: '🐕👀',
-                lines: ['โต มี ตา', 'โต มี ขา', 'โต มี หู', 'หู โต มี อะไร']
+                id: 'st_1', diff: 1, title: 'บทที่ ๑ แม่เมกับสุนัขเปเป้', emoji: '🐕👀',
+                lines: ['เปเป้ มี ตา', 'เปเป้ มี ขา', 'เปเป้ มี หู', 'หู เปเป้ มี อะไร']
             },
             {
-                id: 'st_2', diff: 1, title: 'บทที่ ๒ โตถูหู', emoji: '🐕🦀',
-                lines: ['โต เอา ขา ถู หู', 'ถู ไป ถู มา', 'โต ถู หู ไว ไว']
+                id: 'st_2', diff: 1, title: 'บทที่ ๒ เปเป้ถูหู', emoji: '🐕🦀',
+                lines: ['เปเป้ เอา ขา ถู หู', 'ถู ไป ถู มา', 'เปเป้ ถู หู ไว ไว']
             },
             {
-                id: 'st_3', diff: 1, title: 'บทที่ ๓ ปูนาในรู', emoji: '🦀🕳️',
-                lines: ['ปูนา มี สี ดำ', 'โต ก็ มี หู สี ดำ', 'หู โต มี ปูนา']
+                id: 'st_3', diff: 1, title: 'บทที่ ๓ มะลิในรู', emoji: '🦀🕳️',
+                lines: ['มะลิ มี สี ดำ', 'เปเป้ ก็ มี หู สี ดำ', 'หู เปเป้ มี มะลิ']
             },
             {
-                id: 'st_4', diff: 2, title: 'บทที่ ๔ มานีทายา', emoji: '👧🐕💊',
-                lines: ['มานี จะ ตี ปูนา', 'ปูนา ไป ใน รู', 'มานี เท ยา ทา หู โต', 'มานี ทา ยา เบา เบา']
+                id: 'st_4', diff: 2, title: 'บทที่ ๔ แม่เมทายา', emoji: '👧🐕💊',
+                lines: ['แม่เม จะ ตี มะลิ', 'มะลิ ไป ใน รู', 'แม่เม เท ยา ทา หู เปเป้', 'แม่เม ทา ยา เบา เบา']
             },
             {
-                id: 'st_5', diff: 2, title: 'บทที่ ๕ ไปดูปู', emoji: '🌾🦀🐍',
-                lines: ['อา จะ ไป นา', 'มานี ไป ดู ปู', 'จะ ดู ปู ใน รู งู', 'มา ดี ดี เดา ดู ที']
+                id: 'st_5', diff: 2, title: 'บทที่ ๕ ไปดูมะลิ', emoji: '🌾🦀🐍',
+                lines: ['แม่เม จะ ไป นา', 'แม่เม ไป ดู มะลิ', 'จะ ดู มะลิ ใน รู งู', 'มา ดี ดี เดา ดู ที']
             },
             {
-                id: 'st_6', diff: 2, title: 'บทที่ ๖ ในนาเรา', emoji: '🐮🌾🐦‍⬛',
-                lines: ['ใน นา มี กา', 'กา ดู ปูนา', 'อา ไถ นา ไว ไว', 'เรา เอา ใจ อา']
+                id: 'st_6', diff: 2, title: 'บทที่ ๖ ในนาแม่เม', emoji: '🐮🌾🐦‍⬛',
+                lines: ['ใน นา มี กา', 'กา ดู มะลิ', 'แม่เม ไถ นา ไว ไว', 'เรา เอา ใจ แม่เม']
             },
             {
-                id: 'st_7', diff: 3, title: 'บทที่ ๗ บ้านของมานี', emoji: '🏡👨‍👩‍👧',
-                lines: ['พ่อ แม่ อยู่ ที่ บ้าน', 'ป้า ซื้อ เสื้อ ผ้า ใหม่', 'มานี ไหว้ พ่อ แม่', 'แม่ จ๋า มานี รัก แม่']
+                id: 'st_7', diff: 3, title: 'บทที่ ๗ บ้านของแม่เม', emoji: '🏡👨‍👩‍👧',
+                lines: ['พ่อ แม่ อยู่ ที่ บ้าน', 'พ่อต้ำ ซื้อ เสื้อ ผ้า ใหม่', 'แม่เม ไหว้ พ่อ แม่', 'แม่เม จ๋า แม่เม รัก แม่']
             },
             {
                 id: 'st_8', diff: 3, title: 'บทที่ ๘ เพื่อนรัก', emoji: '👦👧🐴',
-                lines: ['ปิติ ขี่ ม้า เจ้า แก่', 'ชูใจ เลี้ยง แมว สี เทา', 'มานะ วิ่ง เล่น กับ โต', 'ทุก คน หัวเราะ ดี ใจ']
+                lines: ['มะลิ ขี่ ม้า เจ้า แก่', 'สุนัขเปเป้ เลี้ยง แมว สี เทา', 'แม่เม วิ่ง เล่น กับ เปเป้', 'ทุก คน หัวเราะ ดี ใจ']
             }
         ];
 
@@ -1200,13 +1206,48 @@
         let currentConsonantIndex = 0;
         let currentVowelIndex = 0;
         let currentToneSetIndex = 0;
+        let toneHardMode = false;
         let currentStoryDiff = 1;
         let currentStoryIndex = 0;
+
+        const toneSetsHigh = [
+            { id: 'ts_h_ขา', base: 'ขา', words: ['ขา', 'ข่า', 'ข้า', null, null], ttsAll: 'ขา, ข่า, ข้า', sampleWord: 'ขา', emoji: '🦵', targetWord: 'ขา' },
+            { id: 'ts_h_ผา', base: 'ผา', words: ['ผา', 'ผ่า', 'ผ้า', null, null], ttsAll: 'ผา, ผ่า, ผ้า', sampleWord: 'ผ้า', emoji: '👕', targetWord: 'ผ้า' },
+            { id: 'ts_h_ฝา', base: 'ฝา', words: ['ฝา', 'ฝ่า', 'ฝ้า', null, null], ttsAll: 'ฝา, ฝ่า, ฝ้า', sampleWord: 'ฝา', emoji: '🫙', targetWord: 'ฝา' }
+        ];
+
+        const toneSetsLow = [
+            { id: 'ts_l_คา', base: 'คา', words: ['คา', 'ค่า', 'ค้า', null, null], ttsAll: 'คา, ค่า, ค้า', sampleWord: 'ค่า', emoji: '💰', targetWord: 'ค่า' },
+            { id: 'ts_l_ทา', base: 'ทา', words: ['ทา', 'ท่า', 'ท้า', null, null], ttsAll: 'ทา, ท่า, ท้า', sampleWord: 'ท่าเรือ', emoji: '⚓', targetWord: 'ท่า' },
+            { id: 'ts_l_ลา', base: 'ลา', words: ['ลา', 'ล่า', 'ล้า', null, null], ttsAll: 'ลา, ล่า, ล้า', sampleWord: 'ลา', emoji: '🫏', targetWord: 'ลา' }
+        ];
+
+        function getActiveToneSets() {
+            return toneHardMode ? toneSets.concat(toneSetsHigh, toneSetsLow) : toneSets;
+        }
+
+        function setToneHardMode(enabled) {
+            toneHardMode = enabled;
+            currentToneSetIndex = 0;
+            playPopSound();
+            stopAllSpeech();
+            renderStage();
+        }
 
         let blendPoolMode = 'easy';
         let blendHistory = [];
         let blendHistoryIndex = -1;
         let easyWordsGeneratedCount = 0;
+        let blendHardMode = false;
+
+        function toggleBlendHardMode() {
+            blendHardMode = !blendHardMode;
+            playPopSound();
+            stopAllSpeech();
+            blendHistory.push(generateRandomBlendWord());
+            blendHistoryIndex = blendHistory.length - 1;
+            renderStage();
+        }
 
         let quizQuestionNumber = 1;
         let currentInstructionTts = 'แตะที่กล่องบัตรคำ เพื่อฟังเสียงอ่านนะจ๊ะ';
@@ -1224,6 +1265,7 @@
                 if (easyWordsGeneratedCount >= 5) maxTier = 2;
                 if (easyWordsGeneratedCount >= 12) maxTier = 3;
                 let candidates = curatedBlendWords.filter(w => w.tier <= maxTier && w.word !== lastWord);
+                if (candidates.length === 0) candidates = curatedBlendWords.filter(w => w.word !== lastWord);
                 if (candidates.length === 0) candidates = curatedBlendWords;
                 const pick = candidates[Math.floor(Math.random() * candidates.length)];
                 const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
@@ -1231,13 +1273,20 @@
                 easyWordsGeneratedCount++;
                 return buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
             } else {
-                const cPool = consonants.filter(c => c.easy);
-                const vPool = vowels.filter(v => v.easy);
-                const cObj = cPool[Math.floor(Math.random() * cPool.length)];
-                const vObj = vPool[Math.floor(Math.random() * vPool.length)];
-                const matchCurated = curatedBlendWords.find(w => w.cChar === cObj.char && w.vId === vObj.id);
-                if (matchCurated) return buildBlendObject(cObj, vObj, matchCurated.meaning, matchCurated.emoji);
-                return buildBlendObject(cObj, vObj, `ฝึกสะกดคำ`, cObj.emoji);
+                const cPool = blendHardMode ? consonants : consonants.filter(c => c.easy);
+                const vPool = blendHardMode ? vowels : vowels.filter(v => v.easy);
+                let cObj, vObj, result;
+                let attempts = 0;
+                do {
+                    cObj = cPool[Math.floor(Math.random() * cPool.length)];
+                    vObj = vPool[Math.floor(Math.random() * vPool.length)];
+                    const matchCurated = curatedBlendWords.find(w => w.cChar === cObj.char && w.vId === vObj.id);
+                    result = matchCurated
+                        ? buildBlendObject(cObj, vObj, matchCurated.meaning, matchCurated.emoji)
+                        : buildBlendObject(cObj, vObj, `ฝึกสะกดคำ`, cObj.emoji);
+                    attempts++;
+                } while (result.word === lastWord && attempts < 10 && (cPool.length * vPool.length) > 1);
+                return result;
             }
         }
 
@@ -1252,6 +1301,31 @@
         let db;
         const recordedKeys = new Set();
         let activeRecordedAudioUrl = null;
+
+        let __speechUnlocked = false;
+        function unlockAudioForKidsApp() {
+            if (__speechUnlocked) return;
+            __speechUnlocked = true;
+            try {
+                if ('speechSynthesis' in window) {
+                    const warmup = new SpeechSynthesisUtterance(' ');
+                    warmup.volume = 0;
+                    window.speechSynthesis.speak(warmup);
+                    window.speechSynthesis.cancel();
+                }
+            } catch (e) {}
+            try {
+                const player = document.getElementById('tts-audio-player');
+                if (player) {
+                    const p = player.play();
+                    if (p && p.catch) p.catch(() => {});
+                    player.pause();
+                }
+            } catch (e) {}
+        }
+        document.addEventListener('pointerdown', unlockAudioForKidsApp, { once: true, capture: true });
+        document.addEventListener('click', unlockAudioForKidsApp, { once: true, capture: true });
+        document.addEventListener('touchstart', unlockAudioForKidsApp, { once: true, capture: true });
 
         function revokeActiveRecordedAudioUrl() {
             if (!activeRecordedAudioUrl) return;
@@ -1728,6 +1802,10 @@
                     <button class="filter-chip ${blendPoolMode === 'free' ? 'active' : ''}" onclick="setBlendPoolMode('free')">
                         🎲 สุ่มอิสระ (พยัญชนะ+สระ)
                     </button>
+                    ${blendPoolMode === 'free' ? `
+                    <button class="filter-chip ${blendHardMode ? 'active' : ''}" onclick="toggleBlendHardMode()">
+                        🔥 เพิ่มคำยาก (พยัญชนะ-สระทุกตัว)
+                    </button>` : ''}
                 </div>
 
                 <div class="equation-box">
@@ -1851,17 +1929,20 @@
         /* ==================== 11. ด่านที่ 5: วรรณยุกต์หรรษา & การผัน 5 เสียง ==================== */
         function renderLevel5Learn(container) {
             setInstruction('🎵 แตะที่รูปวรรณยุกต์ด้านบน หรือแตะกล่องทั้ง 5 ช่องเพื่อฝึกผันวรรณยุกต์จ้า', 'แตะที่รูปวรรณยุกต์ หรือแตะกล่องเพื่อฝึกผันเสียงวรรณยุกต์จ้า');
-            const set = toneSets[currentToneSetIndex];
+            const pool = getActiveToneSets();
+            if (currentToneSetIndex >= pool.length) currentToneSetIndex = 0;
+            const set = pool[currentToneSetIndex];
             const toneLabels = ['สามัญ', 'ไม้เอก (◌่)', 'ไม้โท (◌้)', 'ไม้ตรี (◌๊)', 'ไม้จัตวา (◌๋)'];
 
             const wrapper = document.createElement('div');
             wrapper.className = 'blend-stage';
 
             let marksHtml = '';
-            toneMarks.forEach(m => {
+            toneMarks.forEach((m, i) => {
+                const applicable = set.words[i + 1] !== null && set.words[i + 1] !== undefined;
                 marksHtml += `
-                    <div class="tone-mark-pill" onclick="speakSmart('${m.id}', '${m.tts}')">
-                        <div style="font-size:2rem; font-weight:700; color:#F15BB5;">${m.mark}</div>
+                    <div class="tone-mark-pill ${applicable ? '' : 'disabled'}" ${applicable ? `onclick="speakSmart('${m.id}', '${m.tts}')"` : ''}>
+                        <div style="font-size:2rem; font-weight:700; color:${applicable ? '#F15BB5' : '#ccc'};">${m.mark}</div>
                         <div style="font-size:0.9rem; font-weight:700;">${m.name}</div>
                     </div>
                 `;
@@ -1869,25 +1950,39 @@
 
             let stepsHtml = '';
             set.words.forEach((w, idx) => {
-                stepsHtml += `
-                    <div class="tone-step-card" id="tone-step-${idx}" onclick="speakSingleToneStep(${idx})">
-                        <div class="tone-word-big">${w}</div>
-                        <div class="tone-label-small">${toneLabels[idx]}</div>
-                    </div>
-                `;
+                if (w === null || w === undefined) {
+                    stepsHtml += `
+                        <div class="tone-step-card disabled" id="tone-step-${idx}">
+                            <div class="tone-word-big">–</div>
+                            <div class="tone-label-small">${toneLabels[idx]} (ผันไม่ได้)</div>
+                        </div>
+                    `;
+                } else {
+                    stepsHtml += `
+                        <div class="tone-step-card" id="tone-step-${idx}" onclick="speakSingleToneStep(${idx})">
+                            <div class="tone-word-big">${w}</div>
+                            <div class="tone-label-small">${toneLabels[idx]}</div>
+                        </div>
+                    `;
+                }
             });
 
             wrapper.innerHTML = `
                 <div class="tone-marks-bar">${marksHtml}</div>
-                <div class="card-progress">ชุดผันเสียงที่ ${currentToneSetIndex + 1} / ${toneSets.length} (${showImages ? set.emoji + ' ' + set.sampleWord : set.base})</div>
+                <div class="card-progress">ชุดผันเสียงที่ ${currentToneSetIndex + 1} / ${pool.length} (${showImages ? set.emoji + ' ' + set.sampleWord : set.base})</div>
                 <div class="tone-steps-row">${stepsHtml}</div>
                 <div class="phonetic-banner" onclick="playAllToneSteps()">
-                    📢 แตะเพื่อผัน 5 เสียง: "${set.words.join(' - ')}" ${recordedKeys.has(set.id) ? '🎙️' : ''}
+                    📢 แตะเพื่อผันเสียง: "${set.words.filter(Boolean).join(' - ')}" ${recordedKeys.has(set.id) ? '🎙️' : ''}
                 </div>
                 <div class="word-nav">
                     <button class="action-btn btn-prev" onclick="stepToneSet(-1)">⬅️ คำก่อนหน้า</button>
-                    <button class="action-btn btn-speak-all" onclick="playAllToneSteps()">🔊 ผันครบ 5 เสียง</button>
+                    <button class="action-btn btn-speak-all" onclick="playAllToneSteps()">🔊 ผันครบทุกเสียง</button>
                     <button class="action-btn btn-next" onclick="stepToneSet(1)">คำถัดไป ➡️</button>
+                </div>
+                <div class="word-nav" style="margin-top:8px;">
+                    <button class="filter-chip ${toneHardMode ? 'active' : ''}" onclick="setToneHardMode(${!toneHardMode})">
+                        🔥 โหมดยาก (เสียงสูง-ต่ำ)
+                    </button>
                 </div>
             `;
             container.appendChild(wrapper);
@@ -1895,40 +1990,41 @@
 
         function speakSingleToneStep(idx) {
             playPopSound();
-            const set = toneSets[currentToneSetIndex];
+            const set = getActiveToneSets()[currentToneSetIndex];
+            if (set.words[idx] === null || set.words[idx] === undefined) return;
             document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
             const card = document.getElementById(`tone-step-${idx}`);
             if (card) card.classList.add('highlight');
-            speakSmart(null, set.words[idx], () => {
+            speakSmart(`${set.id}_${idx}`, set.words[idx], () => {
                 if (card) card.classList.remove('highlight');
             });
         }
 
         function playAllToneSteps() {
             playPopSound();
-            const set = toneSets[currentToneSetIndex];
+            const set = getActiveToneSets()[currentToneSetIndex];
             document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
 
-            const step0 = document.getElementById('tone-step-0');
-            if (step0) step0.classList.add('highlight');
+            const validIndexes = [];
+            set.words.forEach((w, i) => { if (w !== null && w !== undefined) validIndexes.push(i); });
 
-            speakSmart(set.id, set.ttsAll, () => {
+            function playStep(pos) {
                 document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
-            });
+                if (pos >= validIndexes.length) return;
+                const idx = validIndexes[pos];
+                const el = document.getElementById(`tone-step-${idx}`);
+                if (el) el.classList.add('highlight');
+                speakSmart(`${set.id}_${idx}`, set.words[idx], () => playStep(pos + 1));
+            }
 
-            [1, 2, 3, 4].forEach(idx => {
-                activeTimers.push(setTimeout(() => {
-                    document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
-                    const el = document.getElementById(`tone-step-${idx}`);
-                    if (el) el.classList.add('highlight');
-                }, idx * 620));
-            });
+            playStep(0);
         }
 
         function stepToneSet(dir) {
             playPopSound();
             stopAllSpeech();
-            currentToneSetIndex = (currentToneSetIndex + dir + toneSets.length) % toneSets.length;
+            const pool = getActiveToneSets();
+            currentToneSetIndex = (currentToneSetIndex + dir + pool.length) % pool.length;
             renderStage();
         }
 
