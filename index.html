@@ -1261,6 +1261,12 @@
 
         function initDB() {
             return new Promise((resolve) => {
+                if (!('indexedDB' in window)) {
+                    db = null;
+                    recordedKeys.clear();
+                    return resolve();
+                }
+
                 const request = indexedDB.open('ThaiKidsVoiceDB', 1);
                 request.onupgradeneeded = (e) => {
                     const database = e.target.result;
@@ -1322,6 +1328,7 @@
         let speechSessionId = 0;
 
         function initAudio() {
+            if (!AudioContext) return;
             if (!audioCtx) audioCtx = new AudioContext();
             if (audioCtx.state === 'suspended') audioCtx.resume();
         }
@@ -2393,6 +2400,11 @@
         }
 
         async function toggleRecord(key) {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined') {
+                alert('เบราว์เซอร์นี้ไม่รองรับการอัดเสียงในหน้าเว็บนี้ กรุณาใช้เบราว์เซอร์ที่รองรับไมโครโฟนครับ');
+                return;
+            }
+
             if (currentlyRecordingKey === key && mediaRecorder && mediaRecorder.state === 'recording') {
                 mediaRecorder.stop();
                 return;
