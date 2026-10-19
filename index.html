@@ -1123,7 +1123,19 @@
             { cChar: 'ส', vId: 'v_เอือ', word: 'เสือ', emoji: '🐯', meaning: 'พี่เสือ', tier: 3 },
             { cChar: 'ฌ', vId: 'v_เอ', word: 'เฌอ', emoji: '🌳', meaning: 'ต้นไม้ (คำโบราณ)', tier: 4 },
             { cChar: 'ภ', vId: 'v_อู', word: 'ภู', emoji: '⛰️', meaning: 'ภูเขา', tier: 4 },
-            { cChar: 'ศ', vId: 'v_ออ', word: 'ศอ', emoji: '👤', meaning: 'คอ (คำโบราณ)', tier: 4 }
+            { cChar: 'ศ', vId: 'v_ออ', word: 'ศอ', emoji: '👤', meaning: 'คอ (คำโบราณ)', tier: 4 },
+            { cChar: 'ม', vId: 'v_เอ', word: 'เม', emoji: '👧', meaning: 'แม่เม', tier: 1 },
+            { cChar: 'พ', vId: 'v_เอีย', word: 'เพีย', emoji: '💖', meaning: 'น้องเพีย', tier: 1 },
+            { cChar: 'ป', vId: 'v_เอ', word: 'เป', emoji: '🐕', meaning: 'สุนัขเปเป้', tier: 1 },
+            { cChar: 'ต', vId: 'v_อำ', word: 'ตำ', emoji: '🌶️', meaning: 'ส้มตำ (พ่อตั้ม)', tier: 1 },
+            { cChar: 'ม', vId: 'v_อะ', word: 'มะ', emoji: '🌸', meaning: 'น้องมะลิ', tier: 1 },
+            { cChar: 'ล', vId: 'v_อิ', word: 'ลิ', emoji: '👧', meaning: 'น้องมะลิ', tier: 1 },
+            { cChar: 'ด', vId: 'v_แอ', word: 'แด', emoji: '☀️', meaning: 'แสงแดด', tier: 2 },
+            { cChar: 'ผ', vId: 'v_อี', word: 'ผี', emoji: '👻', meaning: 'คุณผี', tier: 2 },
+            { cChar: 'ช', vId: 'v_อี', word: 'ชี', emoji: '🪷', meaning: 'แม่ชี', tier: 2 },
+            { cChar: 'ค', vId: 'v_โอ', word: 'โค', emoji: '🐂', meaning: 'โค (วัว)', tier: 2 },
+            { cChar: 'ก', vId: 'v_แอ', word: 'แก', emoji: '👵', meaning: 'คนแก่', tier: 2 },
+            { cChar: 'ค', vId: 'v_ออ', word: 'คอ', emoji: '🦒', meaning: 'ลำคอ', tier: 2 }
         ];
 
         /* ==================== 3. ข้อมูลด่านที่ 5: วรรณยุกต์และการผันเสียง ==================== */
@@ -1135,6 +1147,9 @@
         ];
 
         const toneSets = [
+            { id: 'ts_เป', base: 'เป', words: ['เป', 'เป่', 'เป้', 'เป๊', 'เป๋'], ttsAll: 'เป, เป่, เป้, เป๊, เป๋', sampleWord: 'สุนัขเปเป้', emoji: '🐕', targetWord: 'เป้' },
+            { id: 'ts_ตำ', base: 'ตำ', words: ['ตำ', 'ต่ำ', 'ต้ำ', 'ต๊ำ', 'ต๋ำ'], ttsAll: 'ตำ, ต่ำ, ต้ำ, ต๊ำ, ต๋ำ', sampleWord: 'พ่อตั้ม', emoji: '👨', targetWord: 'ตำ' },
+            { id: 'ts_แด', base: 'แด', words: ['แด', 'แด่', 'แด้', 'แด๊', 'แด๋'], ttsAll: 'แด, แด่, แด้, แด๊, แด๋', sampleWord: 'แสงแดด', emoji: '☀️', targetWord: 'แด' },
             { id: 'ts_กา', base: 'กา', words: ['กา', 'ก่า', 'ก้า', 'ก๊า', 'ก๋า'], ttsAll: 'กา, ก่า, ก้า, ก๊า, ก๋า', sampleWord: 'อีกา', emoji: '🐦‍⬛', targetWord: 'กา' },
             { id: 'ts_ปา', base: 'ปา', words: ['ปา', 'ป่า', 'ป้า', 'ป๊า', 'ป๋า'], ttsAll: 'ปา, ป่า, ป้า, ป๊า, ป๋า', sampleWord: 'คุณป้า', emoji: '👵', targetWord: 'ป้า' },
             { id: 'ts_เตา', base: 'เตา', words: ['เตา', 'เต่า', 'เต้า', 'เต๊า', 'เต๋า'], ttsAll: 'เตา, เต่า, เต้า, เต๊า, เต๋า', sampleWord: 'ตอ เต่า', emoji: '🐢', targetWord: 'เต่า' },
@@ -1224,6 +1239,8 @@
         ];
 
         const toneSetsLow = [
+            { id: 'ts_l_เม', base: 'เม', words: ['เม', 'เม่', 'เม้', null, null], ttsAll: 'เม, เม่, เม้', sampleWord: 'แม่เม', emoji: '👧', targetWord: 'เม' },
+            { id: 'ts_l_เพีย', base: 'เพีย', words: ['เพีย', 'เพี่ย', 'เพี้ย', null, null], ttsAll: 'เพีย, เพี่ย, เพี้ย', sampleWord: 'น้องเพีย', emoji: '💖', targetWord: 'เพีย' },
             { id: 'ts_l_คา', base: 'คา', words: ['คา', 'ค่า', 'ค้า', null, null], ttsAll: 'คา, ค่า, ค้า', sampleWord: 'ค่า', emoji: '💰', targetWord: 'ค่า' },
             { id: 'ts_l_ทา', base: 'ทา', words: ['ทา', 'ท่า', 'ท้า', null, null], ttsAll: 'ทา, ท่า, ท้า', sampleWord: 'ท่าเรือ', emoji: '⚓', targetWord: 'ท่า' },
             { id: 'ts_l_ลา', base: 'ลา', words: ['ลา', 'ล่า', 'ล้า', null, null], ttsAll: 'ลา, ล่า, ล้า', sampleWord: 'ลา', emoji: '🫏', targetWord: 'ลา' },
@@ -1264,6 +1281,7 @@
 
         function generateRandomBlendWord() {
             const lastWord = blendHistoryIndex >= 0 ? blendHistory[blendHistoryIndex].word : '';
+
             if (blendPoolMode === 'easy') {
                 let maxTier = 1;
                 if (easyWordsGeneratedCount >= 5) maxTier = 2;
@@ -1277,12 +1295,16 @@
                 easyWordsGeneratedCount++;
                 return buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
             } else {
-                let candidates = curatedBlendWords.filter(w => w.word !== lastWord);
-                if (candidates.length === 0) candidates = curatedBlendWords;
-                const pick = candidates[Math.floor(Math.random() * candidates.length)];
-                const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
-                const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
-                return buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
+                const activeConsonants = consonants.filter(c => c.char !== 'ฃ' && c.char !== 'ฅ');
+
+                let cObj, vObj, generatedWord;
+                do {
+                    cObj = activeConsonants[Math.floor(Math.random() * activeConsonants.length)];
+                    vObj = vowels[Math.floor(Math.random() * vowels.length)];
+                    generatedWord = vObj.template.replace('{c}', cObj.char);
+                } while (generatedWord === lastWord);
+
+                return buildBlendObject(cObj, vObj, 'ฝึกอ่านออกเสียง', '❓');
             }
         }
 
@@ -2001,13 +2023,18 @@
             const validIndexes = [];
             set.words.forEach((w, i) => { if (w !== null && w !== undefined) validIndexes.push(i); });
 
+            const expectedLevel = currentLevel;
+            const expectedSetId = set.id;
             function playStep(pos) {
+                if (currentLevel !== expectedLevel || getActiveToneSets()[currentToneSetIndex]?.id !== expectedSetId) return;
                 document.querySelectorAll('.tone-step-card').forEach(el => el.classList.remove('highlight'));
                 if (pos >= validIndexes.length) return;
                 const idx = validIndexes[pos];
                 const el = document.getElementById(`tone-step-${idx}`);
                 if (el) el.classList.add('highlight');
-                speakSmart(`${set.id}_${idx}`, set.words[idx], () => playStep(pos + 1));
+                speakSmart(`${set.id}_${idx}`, set.words[idx], () => {
+                    activeTimers.push(setTimeout(() => playStep(pos + 1), 300));
+                });
             }
 
             playStep(0);
@@ -2098,19 +2125,23 @@
             if (lineEl) lineEl.classList.add('reading-now');
 
             const lineKey = `${story.id}_line_${idx}`;
-            const ttsText = story.lines[idx];
+            const ttsText = story.lines[idx].replace(/ /g, '');
             speakSmart(lineKey, ttsText, () => {
                 if (lineEl) lineEl.classList.remove('reading-now');
             });
         }
 
         function readFullStoryPage() {
+            stopAllSpeech();
             playPopSound();
             const story = getFilteredStories()[currentStoryIndex];
             if (!story) return;
 
+            const expectedLevel = currentLevel;
+            const expectedStoryId = story.id;
             let idx = 0;
             const readNext = () => {
+                if (currentLevel !== expectedLevel || getFilteredStories()[currentStoryIndex]?.id !== expectedStoryId) return;
                 if (idx >= story.lines.length) {
                     document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
                     return;
@@ -2120,7 +2151,7 @@
                 if (lineEl) lineEl.classList.add('reading-now');
 
                 const lineKey = `${story.id}_line_${idx}`;
-                const lineText = story.lines[idx];
+                const lineText = story.lines[idx].replace(/ /g, '');
                 idx++;
                 speakSmart(lineKey, lineText, () => {
                     activeTimers.push(setTimeout(readNext, 300));
@@ -2159,7 +2190,12 @@
             } else if (currentLevel === 6) {
                 setInstruction('🧩 จับคู่ประโยคสั้นๆ กับภาพเหตุการณ์ให้ตรงกันจ้า', 'จับคู่ประโยค กับภาพให้ตรงกันจ้า');
                 pool = [...stories].sort(() => 0.5 - Math.random()).slice(0, 4).map(s => ({
-                    id: s.id, leftText: s.lines[0], rightText: `${s.emoji} ${s.title.replace(/บทที่ \S+ /, '')}`, ttsLeft: s.lines[0], ttsRight: s.title.replace(/บทที่ \S+ /, ''), keyLeft: `${s.id}_line_0`
+                    id: s.id,
+                    leftText: s.lines[0],
+                    rightText: `${s.emoji} ${s.title.replace(/บทที่ \S+ /, '')}`,
+                    ttsLeft: s.lines[0].replace(/ /g, ''),
+                    ttsRight: s.title.replace(/บทที่ \S+ /, '').replace(/ /g, ''),
+                    keyLeft: `${s.id}_line_0`
                 }));
             } else {
                 setInstruction('🧩 จับคู่คำอ่านฝั่งซ้าย กับความหมายฝั่งขวาให้ตรงกันจ้า', 'จับคู่คำอ่าน กับความหมายให้ตรงกันจ้า');
@@ -2168,13 +2204,18 @@
                     const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
                     const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
                     const b = buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
+                    const isLv3 = currentLevel === 3;
+                    const matchTtsLeft = isLv3
+                        ? `${b.cTts} ${b.vTts} อ่านว่า ${b.cSound} ${b.vSound} ${b.word}`
+                        : `${b.cSound} ${b.vSound} ${b.word}`;
+                    const matchKeyLeft = isLv3 ? `${b.id}_lv3` : `${b.id}_lv4`;
                     return {
                         id: b.id,
                         leftText: b.word,
                         rightText: `${b.emoji} ${b.meaning}`,
-                        ttsLeft: `${b.cSound} ${b.vSound} ${b.word}`,
+                        ttsLeft: matchTtsLeft,
                         ttsRight: b.meaning,
-                        keyLeft: `${b.id}_lv4`
+                        keyLeft: matchKeyLeft
                     };
                 });
             }
@@ -2302,7 +2343,7 @@
                 choices = allLines.sort(() => 0.5 - Math.random()).slice(0, 3);
                 answer = choices[Math.floor(Math.random() * choices.length)];
                 displayQuestion = `ข้อที่ ${quizQuestionNumber}: ประโยคไหนอ่านว่า "${answer.text}" จ๊ะ?`;
-                ttsQuestion = answer.text;
+                ttsQuestion = answer.text.replace(/ /g, '');
                 voiceKeyToUse = answer.id;
             } else {
                 const pickedRaw = [...curatedBlendWords].sort(() => 0.5 - Math.random()).slice(0, 3);
