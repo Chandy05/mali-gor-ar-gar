@@ -1120,7 +1120,10 @@
             { cChar: 'ว', vId: 'v_อัว', word: 'วัว', emoji: '🐄', meaning: 'แม่วัว', tier: 3 },
             { cChar: 'ต', vId: 'v_เอา', word: 'เตา', emoji: '🍳', meaning: 'เตาไฟ', tier: 3 },
             { cChar: 'ร', vId: 'v_เอือ', word: 'เรือ', emoji: '⛵', meaning: 'เรือใบ', tier: 3 },
-            { cChar: 'ส', vId: 'v_เอือ', word: 'เสือ', emoji: '🐯', meaning: 'พี่เสือ', tier: 3 }
+            { cChar: 'ส', vId: 'v_เอือ', word: 'เสือ', emoji: '🐯', meaning: 'พี่เสือ', tier: 3 },
+            { cChar: 'ฌ', vId: 'v_เอ', word: 'เฌอ', emoji: '🌳', meaning: 'ต้นไม้ (คำโบราณ)', tier: 4 },
+            { cChar: 'ภ', vId: 'v_อู', word: 'ภู', emoji: '⛰️', meaning: 'ภูเขา', tier: 4 },
+            { cChar: 'ศ', vId: 'v_ออ', word: 'ศอ', emoji: '👤', meaning: 'คอ (คำโบราณ)', tier: 4 }
         ];
 
         /* ==================== 3. ข้อมูลด่านที่ 5: วรรณยุกต์และการผันเสียง ==================== */
@@ -1139,7 +1142,8 @@
             { id: 'ts_จา', base: 'จา', words: ['จา', 'จ่า', 'จ้า', 'จ๊า', 'จ๋า'], ttsAll: 'จา, จ่า, จ้า, จ๊า, จ๋า', sampleWord: 'แม่จ๋า', emoji: '👩‍👧', targetWord: 'จ๋า' },
             { id: 'ts_บาน', base: 'บาน', words: ['บาน', 'บ่าน', 'บ้าน', 'บ๊าน', 'บ๋าน'], ttsAll: 'บาน, บ่าน, บ้าน, บ๊าน, บ๋าน', sampleWord: 'บ้านของเรา', emoji: '🏡', targetWord: 'บ้าน' },
             { id: 'ts_ไก', base: 'ไก', words: ['ไก', 'ไก่', 'ไก้', 'ไก๊', 'ไก๋'], ttsAll: 'ไก, ไก่, ไก้, ไก๊, ไก๋', sampleWord: 'แม่ไก่', emoji: '🐔', targetWord: 'ไก่' },
-            { id: 'ts_เปา', base: 'เปา', words: ['เปา', 'เป่า', 'เป้า', 'เป๊า', 'เป๋า'], ttsAll: 'เปา, เป่า, เป้า, เป๊า, เป๋า', sampleWord: 'กระเป๋า', emoji: '🎒', targetWord: 'เป๋า' }
+            { id: 'ts_เปา', base: 'เปา', words: ['เปา', 'เป่า', 'เป้า', 'เป๊า', 'เป๋า'], ttsAll: 'เปา, เป่า, เป้า, เป๊า, เป๋า', sampleWord: 'กระเป๋า', emoji: '🎒', targetWord: 'เป๋า' },
+            { id: 'ts_อา', base: 'อา', words: ['อา', 'อ่า', 'อ้า', 'อ๊า', 'อ๋า'], ttsAll: 'อา, อ่า, อ้า, อ๊า, อ๋า', sampleWord: 'อ้าปาก', emoji: '👄', targetWord: 'อ้า' }
         ];
 
         /* ==================== 4. ข้อมูลด่านที่ 6: หัดอ่านประโยค สไตล์ มานะ-มานี ==================== */
@@ -1213,13 +1217,23 @@
         const toneSetsHigh = [
             { id: 'ts_h_ขา', base: 'ขา', words: ['ขา', 'ข่า', 'ข้า', null, null], ttsAll: 'ขา, ข่า, ข้า', sampleWord: 'ขา', emoji: '🦵', targetWord: 'ขา' },
             { id: 'ts_h_ผา', base: 'ผา', words: ['ผา', 'ผ่า', 'ผ้า', null, null], ttsAll: 'ผา, ผ่า, ผ้า', sampleWord: 'ผ้า', emoji: '👕', targetWord: 'ผ้า' },
-            { id: 'ts_h_ฝา', base: 'ฝา', words: ['ฝา', 'ฝ่า', 'ฝ้า', null, null], ttsAll: 'ฝา, ฝ่า, ฝ้า', sampleWord: 'ฝา', emoji: '🫙', targetWord: 'ฝา' }
+            { id: 'ts_h_ฝา', base: 'ฝา', words: ['ฝา', 'ฝ่า', 'ฝ้า', null, null], ttsAll: 'ฝา, ฝ่า, ฝ้า', sampleWord: 'ฝา', emoji: '🫙', targetWord: 'ฝา' },
+            { id: 'ts_h_หาม', base: 'หาม', words: ['หาม', 'ห่าม', 'ห้าม', null, null], ttsAll: 'หาม, ห่าม, ห้าม', sampleWord: 'ห้ามวิ่ง', emoji: '🚫', targetWord: 'ห้าม' },
+            { id: 'ts_h_ไข', base: 'ไข', words: ['ไข', 'ไข่', 'ไข้', null, null], ttsAll: 'ไข, ไข่, ไข้', sampleWord: 'ไข่ไก่', emoji: '🥚', targetWord: 'ไข่' },
+            { id: 'ts_h_สอง', base: 'สอง', words: ['สอง', 'ส่อง', null, null, null], ttsAll: 'สอง, ส่อง', sampleWord: 'เลขสอง', emoji: '2️⃣', targetWord: 'สอง' }
         ];
 
         const toneSetsLow = [
             { id: 'ts_l_คา', base: 'คา', words: ['คา', 'ค่า', 'ค้า', null, null], ttsAll: 'คา, ค่า, ค้า', sampleWord: 'ค่า', emoji: '💰', targetWord: 'ค่า' },
             { id: 'ts_l_ทา', base: 'ทา', words: ['ทา', 'ท่า', 'ท้า', null, null], ttsAll: 'ทา, ท่า, ท้า', sampleWord: 'ท่าเรือ', emoji: '⚓', targetWord: 'ท่า' },
-            { id: 'ts_l_ลา', base: 'ลา', words: ['ลา', 'ล่า', 'ล้า', null, null], ttsAll: 'ลา, ล่า, ล้า', sampleWord: 'ลา', emoji: '🫏', targetWord: 'ลา' }
+            { id: 'ts_l_ลา', base: 'ลา', words: ['ลา', 'ล่า', 'ล้า', null, null], ttsAll: 'ลา, ล่า, ล้า', sampleWord: 'ลา', emoji: '🫏', targetWord: 'ลา' },
+            { id: 'ts_l_นา', base: 'นา', words: ['นา', 'น่า', 'น้า', null, null], ttsAll: 'นา, น่า, น้า', sampleWord: 'น้าสาว', emoji: '🧑', targetWord: 'น้า' },
+            { id: 'ts_l_มา', base: 'มา', words: ['มา', null, 'ม้า', null, null], ttsAll: 'มา, ม้า', sampleWord: 'ม้าแข่ง', emoji: '🐎', targetWord: 'ม้า' },
+            { id: 'ts_l_ยา', base: 'ยา', words: ['ยา', 'ย่า', null, null, null], ttsAll: 'ยา, ย่า', sampleWord: 'คุณย่า', emoji: '👵', targetWord: 'ย่า' },
+            { id: 'ts_l_วา', base: 'วา', words: ['วา', 'ว่า', 'ว้า', null, null], ttsAll: 'วา, ว่า, ว้า', sampleWord: 'ยาวหนึ่งวา', emoji: '📏', targetWord: 'วา' },
+            { id: 'ts_l_ชา', base: 'ชา', words: ['ชา', null, 'ช้า', null, null], ttsAll: 'ชา, ช้า', sampleWord: 'เดินช้าๆ', emoji: '🐌', targetWord: 'ช้า' },
+            { id: 'ts_l_ฮา', base: 'ฮา', words: ['ฮา', 'ฮ่า', null, null, null], ttsAll: 'ฮา, ฮ่า', sampleWord: 'ตลกฮา', emoji: '😂', targetWord: 'ฮา' },
+            { id: 'ts_l_ซา', base: 'ซา', words: ['ซา', 'ซ่า', null, null, null], ttsAll: 'ซา, ซ่า', sampleWord: 'น้ำอัดลมซ่า', emoji: '🥤', targetWord: 'ซ่า' }
         ];
 
         function getActiveToneSets() {
@@ -1238,16 +1252,6 @@
         let blendHistory = [];
         let blendHistoryIndex = -1;
         let easyWordsGeneratedCount = 0;
-        let blendHardMode = false;
-
-        function toggleBlendHardMode() {
-            blendHardMode = !blendHardMode;
-            playPopSound();
-            stopAllSpeech();
-            blendHistory.push(generateRandomBlendWord());
-            blendHistoryIndex = blendHistory.length - 1;
-            renderStage();
-        }
 
         let quizQuestionNumber = 1;
         let currentInstructionTts = 'แตะที่กล่องบัตรคำ เพื่อฟังเสียงอ่านนะจ๊ะ';
@@ -1265,7 +1269,7 @@
                 if (easyWordsGeneratedCount >= 5) maxTier = 2;
                 if (easyWordsGeneratedCount >= 12) maxTier = 3;
                 let candidates = curatedBlendWords.filter(w => w.tier <= maxTier && w.word !== lastWord);
-                if (candidates.length === 0) candidates = curatedBlendWords.filter(w => w.word !== lastWord);
+                if (candidates.length === 0) candidates = curatedBlendWords.filter(w => w.tier <= maxTier);
                 if (candidates.length === 0) candidates = curatedBlendWords;
                 const pick = candidates[Math.floor(Math.random() * candidates.length)];
                 const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
@@ -1273,20 +1277,12 @@
                 easyWordsGeneratedCount++;
                 return buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
             } else {
-                const cPool = blendHardMode ? consonants : consonants.filter(c => c.easy);
-                const vPool = blendHardMode ? vowels : vowels.filter(v => v.easy);
-                let cObj, vObj, result;
-                let attempts = 0;
-                do {
-                    cObj = cPool[Math.floor(Math.random() * cPool.length)];
-                    vObj = vPool[Math.floor(Math.random() * vPool.length)];
-                    const matchCurated = curatedBlendWords.find(w => w.cChar === cObj.char && w.vId === vObj.id);
-                    result = matchCurated
-                        ? buildBlendObject(cObj, vObj, matchCurated.meaning, matchCurated.emoji)
-                        : buildBlendObject(cObj, vObj, `ฝึกสะกดคำ`, cObj.emoji);
-                    attempts++;
-                } while (result.word === lastWord && attempts < 10 && (cPool.length * vPool.length) > 1);
-                return result;
+                let candidates = curatedBlendWords.filter(w => w.word !== lastWord);
+                if (candidates.length === 0) candidates = curatedBlendWords;
+                const pick = candidates[Math.floor(Math.random() * candidates.length)];
+                const cObj = consonants.find(c => c.char === pick.cChar) || consonants[0];
+                const vObj = vowels.find(v => v.id === pick.vId) || vowels[1];
+                return buildBlendObject(cObj, vObj, pick.meaning, pick.emoji);
             }
         }
 
@@ -1311,7 +1307,6 @@
                     const warmup = new SpeechSynthesisUtterance(' ');
                     warmup.volume = 0;
                     window.speechSynthesis.speak(warmup);
-                    window.speechSynthesis.cancel();
                 }
             } catch (e) {}
             try {
@@ -1802,10 +1797,6 @@
                     <button class="filter-chip ${blendPoolMode === 'free' ? 'active' : ''}" onclick="setBlendPoolMode('free')">
                         🎲 สุ่มอิสระ (พยัญชนะ+สระ)
                     </button>
-                    ${blendPoolMode === 'free' ? `
-                    <button class="filter-chip ${blendHardMode ? 'active' : ''}" onclick="toggleBlendHardMode()">
-                        🔥 เพิ่มคำยาก (พยัญชนะ-สระทุกตัว)
-                    </button>` : ''}
                 </div>
 
                 <div class="equation-box">
@@ -1848,6 +1839,7 @@
         }
 
         function speakSinglePart(part) {
+            unlockAudioForKidsApp();
             playPopSound();
             const item = blendHistory[blendHistoryIndex];
             const slotC = document.getElementById('slot-c');
@@ -1870,6 +1862,7 @@
         }
 
         function playBlendEquation() {
+            unlockAudioForKidsApp();
             playPopSound();
             const item = blendHistory[blendHistoryIndex];
             const slotC = document.getElementById('slot-c');
