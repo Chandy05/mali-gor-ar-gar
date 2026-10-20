@@ -1051,6 +1051,7 @@
                 <button class="mode-btn active" id="btn-mode-learn" onclick="setMode('learn')">📖 โหมดเรียนรู้</button>
                 <button class="mode-btn" id="btn-mode-match" onclick="setMode('match')">🧩 โหมดจับคู่</button>
                 <button class="mode-btn" id="btn-mode-quiz" onclick="setMode('quiz')">🎮 โหมดทายเสียง</button>
+                <button class="mode-btn" id="btn-mode-extra" onclick="setMode('extra')" style="display:none;">🗂️ บัตรคำ</button>
             </div>
             <div class="score-box">⭐ ดาวคนเก่ง: <span id="star-count">0</span></div>
         </div>
@@ -1317,6 +1318,11 @@
         let currentStoryIndex = 0;
         let currentCustomStoryId = null;
         let currentCustomStoryPage = 0;
+        let jigsawTarget = [];
+        let jigsawPool = [];
+        let jigsawSelected = [];
+        let detectiveTarget = null;
+        let detectiveAnswered = false;
         let editingCustomStoryId = null;
         let editingCustomStoryCover = '';
         let tempCustomStoryPages = [];
@@ -1779,7 +1785,14 @@
                 document.getElementById('btn-mode-learn').classList.add('active');
                 document.getElementById('btn-mode-match').classList.remove('active');
                 document.getElementById('btn-mode-quiz').classList.remove('active');
+                document.getElementById('btn-mode-extra').classList.remove('active');
             }
+
+            jigsawTarget = [];
+            jigsawPool = [];
+            jigsawSelected = [];
+            detectiveTarget = null;
+            detectiveAnswered = false;
 
             if (lv === 3 || lv === 4) ensureInitialBlendWord();
 
@@ -1791,15 +1804,19 @@
             const btnLearn = document.getElementById('btn-mode-learn');
             const btnMatch = document.getElementById('btn-mode-match');
             const btnQuiz = document.getElementById('btn-mode-quiz');
-            
+            const btnExtra = document.getElementById('btn-mode-extra');
+
             if (lv === 7) {
                 btnLearn.innerText = '📖 อ่านนิทาน';
-                btnMatch.innerText = '🧩 หัดสะกด (กอ-อา-กา)'; // Like Level 3
-                btnQuiz.innerText = '🎮 ฝึกอ่านคำ (กอ-อา-กา)'; // Like Level 4
+                btnMatch.innerText = '🧩 ต่อจิ๊กซอว์';
+                btnQuiz.innerText = '🔍 นักสืบหาคำ';
+                btnExtra.innerText = '🗂️ แฟลชการ์ด';
+                btnExtra.style.display = 'block';
             } else {
                 btnLearn.innerText = '📖 โหมดเรียนรู้';
                 btnMatch.innerText = '🧩 โหมดจับคู่';
                 btnQuiz.innerText = '🎮 โหมดทายเสียง';
+                btnExtra.style.display = 'none';
             }
 
             renderStage();
@@ -1814,6 +1831,13 @@
             document.getElementById('btn-mode-learn').classList.toggle('active', mode === 'learn');
             document.getElementById('btn-mode-match').classList.toggle('active', mode === 'match');
             document.getElementById('btn-mode-quiz').classList.toggle('active', mode === 'quiz');
+            document.getElementById('btn-mode-extra').classList.toggle('active', mode === 'extra');
+
+            jigsawTarget = [];
+            jigsawPool = [];
+            jigsawSelected = [];
+            detectiveTarget = null;
+            detectiveAnswered = false;
             renderStage();
         }
 
@@ -1864,11 +1888,13 @@
                 else if (currentLevel === 6) renderLevel6Learn(container);
                 else if (currentLevel === 7) renderLevel7Learn(container);
             } else if (currentMode === 'match') {
-                if (currentLevel === 7) renderLevel7SpellingMode(container, 3);
+                if (currentLevel === 7) renderLevel7JigsawMode(container);
                 else renderMatchGame(container);
             } else if (currentMode === 'quiz') {
-                if (currentLevel === 7) renderLevel7SpellingMode(container, 4);
+                if (currentLevel === 7) renderLevel7DetectiveMode(container);
                 else renderQuiz(container);
+            } else if (currentMode === 'extra' && currentLevel === 7) {
+                renderLevel7FlashcardMode(container);
             }
         }
 
@@ -2468,6 +2494,11 @@
             playPopSound();
             currentCustomStoryId = id;
             currentCustomStoryPage = 0;
+            jigsawTarget = [];
+            jigsawPool = [];
+            jigsawSelected = [];
+            detectiveTarget = null;
+            detectiveAnswered = false;
             renderStage();
         }
 
@@ -2476,6 +2507,11 @@
             stopAllSpeech();
             currentCustomStoryId = null;
             currentCustomStoryPage = 0;
+            jigsawTarget = [];
+            jigsawPool = [];
+            jigsawSelected = [];
+            detectiveTarget = null;
+            detectiveAnswered = false;
             renderStage();
         }
 
@@ -2485,7 +2521,318 @@
             const story = customStories.find(s => s.id === currentCustomStoryId);
             if (!story || !story.pages.length) return;
             currentCustomStoryPage = (currentCustomStoryPage + dir + story.pages.length) % story.pages.length;
+            jigsawTarget = [];
+            jigsawPool = [];
+            jigsawSelected = [];
+            detectiveTarget = null;
+            detectiveAnswered = false;
             renderStage();
+        }
+
+        function getLevel7Words(page) {
+            const lines = Array.isArray(page.lines) ? page.lines : [page.text || ''];
+            return lines.join(' ').split(/\s+/).filter(word => word.trim().length > 0);
+        }
+
+        function showLevel7Empty(container, message, emoji = '👈', updateInstruction = true) {
+            if (updateInstruction) {
+                setInstruction('กลับไปเลือกนิทานที่โหมด "อ่านนิทาน" ก่อนนะจ๊ะ', 'กลับไปเลือกนิทานก่อนนะจ๊ะ');
+            }
+            const screen = document.createElement('div');
+            screen.className = 'transition-screen';
+            const icon = document.createElement('div');
+            icon.className = 'transition-emoji';
+            icon.textContent = emoji;
+            const text = document.createElement('div');
+            text.className = 'transition-text';
+            text.textContent = message || 'กรุณาเลือกนิทานในโหมดอ่านนิทานก่อนครับ';
+            screen.append(icon, text);
+            container.appendChild(screen);
+        }
+
+        function getLevel7StoryPage(container) {
+            if (!currentCustomStoryId) {
+                showLevel7Empty(container);
+                return null;
+            }
+
+            const story = customStories.find(item => item.id === currentCustomStoryId);
+            const page = story && Array.isArray(story.pages) ? story.pages[currentCustomStoryPage] : null;
+            if (!story || !page) {
+                showLevel7Empty(container, 'นิทานนี้ยังไม่มีหน้าให้ฝึกอ่าน', '📖');
+                return null;
+            }
+            return { story, page };
+        }
+
+        function createLevel7PageNav() {
+            const nav = document.createElement('div');
+            nav.className = 'word-nav';
+            const previous = document.createElement('button');
+            previous.className = 'action-btn btn-prev';
+            previous.textContent = '⬅️ หน้าก่อนหน้า';
+            previous.onclick = () => stepCustomBookPage(-1);
+            const next = document.createElement('button');
+            next.className = 'action-btn btn-next';
+            next.textContent = 'หน้าถัดไป ➡️';
+            next.onclick = () => stepCustomBookPage(1);
+            nav.append(previous, next);
+            return nav;
+        }
+
+        function renderLevel7FlashcardMode(container) {
+            const current = getLevel7StoryPage(container);
+            if (!current) return;
+            const { story, page } = current;
+            const words = getLevel7Words(page);
+            setInstruction('🗂️ แตะที่บัตรคำศัพท์ เพื่อฟังเสียงอ่านคำจ้า', 'แตะที่บัตรคำศัพท์ เพื่อฟังเสียงอ่านคำจ้า');
+
+            const stage = document.createElement('div');
+            stage.className = 'story-stage';
+            const book = document.createElement('div');
+            book.className = 'story-book';
+            book.style.alignItems = 'center';
+            const header = document.createElement('div');
+            header.className = 'story-header';
+            header.style.cssText = 'width:100%; justify-content:center; border-bottom:none;';
+            const title = document.createElement('span');
+            title.className = 'story-title';
+            title.style.color = '#9B5DE5';
+            title.textContent = `🗂️ บัตรคำ: ${story.title} (หน้าที่ ${currentCustomStoryPage + 1})`;
+            header.appendChild(title);
+            const choices = document.createElement('div');
+            choices.className = 'quiz-choices';
+            choices.style.marginTop = '10px';
+
+            if (words.length === 0) {
+                const empty = document.createElement('div');
+                empty.style.cssText = 'color:#747D8C; text-align:center; padding:20px;';
+                empty.textContent = 'หน้านี้ไม่มีคำศัพท์ (คุณแม่อาจจะลืมเว้นวรรคคำจ้า)';
+                choices.appendChild(empty);
+            } else {
+                words.forEach((word, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'choice-card';
+                    card.id = `flash-word-${index}`;
+                    card.style.cssText = 'width:160px; min-height:130px; border-color:#9B5DE5; box-shadow:0 6px 0 #9B5DE5;';
+                    const label = document.createElement('div');
+                    label.style.cssText = 'font-size:3.2rem; font-weight:700; color:#2C3E50;';
+                    label.textContent = word;
+                    const hint = document.createElement('div');
+                    hint.style.cssText = 'font-size:0.95rem; font-weight:700; color:#747D8C; margin-top:12px; background:#F1F2F6; padding:4px 12px; border-radius:12px;';
+                    hint.textContent = '🔊 ฟังเสียง';
+                    card.append(label, hint);
+                    card.onclick = () => playFlashcardWord(word, index);
+                    choices.appendChild(card);
+                });
+            }
+
+            book.append(header, choices);
+            stage.append(book, createLevel7PageNav());
+            container.appendChild(stage);
+        }
+
+        function playFlashcardWord(word, wIdx) {
+            playPopSound();
+            const card = document.getElementById(`flash-word-${wIdx}`);
+            if (card) {
+                card.style.transform = 'scale(1.06) translateY(-5px)';
+                card.style.borderColor = '#FF4757';
+                card.style.background = '#FFEAA7';
+                card.style.boxShadow = '0 6px 0 #FF4757';
+            }
+            const cleanWord = word.replace(/[\s.,]/g, '');
+            playNativeSpeechDirect(cleanWord, speechSessionId, () => {
+                if (card) {
+                    card.style.transform = '';
+                    card.style.borderColor = '#9B5DE5';
+                    card.style.background = '';
+                    card.style.boxShadow = '0 6px 0 #9B5DE5';
+                }
+            });
+        }
+
+        function renderLevel7JigsawMode(container) {
+            const current = getLevel7StoryPage(container);
+            if (!current) return;
+            const words = getLevel7Words(current.page);
+            if (words.length < 2) {
+                setInstruction('🧩 หน้านี้ประโยคสั้นไปจ้า ลองหาหน้าที่ยาวกว่านี้นะ', 'หน้านี้ประโยคสั้นไปจ้า');
+                showLevel7Empty(container, 'ต้องมีอย่างน้อย 2 คำขึ้นไปถึงจะเล่นได้จ้า', '🧩', false);
+                container.appendChild(createLevel7PageNav());
+                return;
+            }
+
+            const targetMatches = jigsawTarget.length === words.length &&
+                jigsawTarget.every((word, index) => word === words[index]);
+            if (!targetMatches) {
+                jigsawTarget = [...words];
+                jigsawPool = [...words].sort(() => Math.random() - 0.5);
+                jigsawSelected = [];
+            }
+            setInstruction('🧩 แตะคำศัพท์ด้านล่าง เรียงให้เป็นประโยคที่ถูกต้องจ้า', 'เรียงคำศัพท์ให้เป็นประโยคที่ถูกต้องจ้า');
+
+            const stage = document.createElement('div');
+            stage.className = 'story-stage';
+            const book = document.createElement('div');
+            book.className = 'story-book';
+            book.style.alignItems = 'center';
+            const slotsTitle = document.createElement('div');
+            slotsTitle.style.cssText = 'font-size:1.1rem; color:#747D8C; margin-bottom:10px;';
+            slotsTitle.textContent = '👇 ช่องใส่คำศัพท์ (แตะเพื่อเอาออกได้)';
+            const slots = document.createElement('div');
+            slots.style.cssText = 'display:flex; flex-wrap:wrap; gap:10px; justify-content:center; background:#F8F9FA; padding:20px; border-radius:20px; width:100%; border:3px solid #DFE4EA;';
+            jigsawTarget.forEach((word, index) => {
+                const slot = document.createElement('div');
+                slot.className = `filter-chip${jigsawSelected[index] ? ' active' : ''}`;
+                slot.style.cssText = `font-size:1.5rem; padding:10px 20px; ${jigsawSelected[index] ? 'border-color:#2ED573; background:#7BED9F;' : 'border-style:dashed; color:#A4B0BE;'}`;
+                slot.textContent = jigsawSelected[index] || '?';
+                if (jigsawSelected[index]) slot.onclick = () => undoJigsaw(index);
+                slots.appendChild(slot);
+            });
+            const poolTitle = document.createElement('div');
+            poolTitle.style.cssText = 'font-size:1.1rem; color:#FF9F1C; margin-top:20px; margin-bottom:10px;';
+            poolTitle.textContent = '👇 แตะคำศัพท์เพื่อนำไปเรียง';
+            const choices = document.createElement('div');
+            choices.className = 'quiz-choices';
+            choices.style.marginTop = '0';
+            jigsawPool.forEach((word, index) => {
+                const card = document.createElement('div');
+                card.className = 'choice-card';
+                card.style.cssText = 'width:auto; min-height:80px; padding:10px 25px; flex-direction:row;';
+                const label = document.createElement('div');
+                label.style.cssText = 'font-size:2rem; font-weight:700; color:#2C3E50;';
+                label.textContent = word;
+                card.appendChild(label);
+                card.onclick = () => selectJigsaw(index);
+                choices.appendChild(card);
+            });
+            if (jigsawPool.length === 0) {
+                const complete = document.createElement('div');
+                complete.style.cssText = 'color:#2ED573; font-size:1.5rem; font-weight:bold;';
+                complete.textContent = 'เรียงครบแล้ว! 🎉';
+                choices.appendChild(complete);
+            }
+            const nav = document.createElement('div');
+            nav.className = 'word-nav';
+            const previous = document.createElement('button');
+            previous.className = 'action-btn btn-prev';
+            previous.textContent = '⬅️ หน้าก่อน';
+            previous.onclick = () => stepCustomBookPage(-1);
+            const reset = document.createElement('button');
+            reset.className = 'action-btn btn-speak-all';
+            reset.textContent = '🔄 เริ่มเรียงใหม่';
+            reset.onclick = () => {
+                jigsawPool = [...jigsawTarget].sort(() => Math.random() - 0.5);
+                jigsawSelected = [];
+                renderStage();
+            };
+            const next = document.createElement('button');
+            next.className = 'action-btn btn-next';
+            next.textContent = 'หน้าถัดไป ➡️';
+            next.onclick = () => stepCustomBookPage(1);
+            nav.append(previous, reset, next);
+            book.append(slotsTitle, slots, poolTitle, choices);
+            stage.append(book, nav);
+            container.appendChild(stage);
+        }
+
+        function selectJigsaw(pIdx) {
+            playPopSound();
+            const word = jigsawPool.splice(pIdx, 1)[0];
+            if (word === undefined) return;
+            jigsawSelected.push(word);
+
+            if (jigsawPool.length === 0) {
+                const isCorrect = jigsawSelected.length === jigsawTarget.length &&
+                    jigsawSelected.every((selectedWord, index) => selectedWord === jigsawTarget[index]);
+                if (isCorrect) {
+                    playSuccessSound();
+                    addStar();
+                    showTransitionScreen('เรียงประโยคถูกต้อง เก่งมากจ้า!', () => {
+                        jigsawPool = [];
+                        jigsawSelected = [];
+                        stepCustomBookPage(1);
+                    });
+                } else {
+                    playWrongSound();
+                    speakSmart('sys_wrong', 'เรียงผิดจ้า ลองใหม่นะ', () => {
+                        jigsawPool = [...jigsawTarget].sort(() => Math.random() - 0.5);
+                        jigsawSelected = [];
+                        renderStage();
+                    });
+                }
+                return;
+            }
+            renderStage();
+        }
+
+        function undoJigsaw(sIdx) {
+            playPopSound();
+            const [word] = jigsawSelected.splice(sIdx, 1);
+            if (word !== undefined) jigsawPool.push(word);
+            renderStage();
+        }
+
+        function renderLevel7DetectiveMode(container) {
+            const current = getLevel7StoryPage(container);
+            if (!current) return;
+            const uniqueWords = [...new Set(getLevel7Words(current.page))];
+            if (uniqueWords.length < 2) {
+                setInstruction('🔍 หน้านี้คำศัพท์น้อยไปจ้า ลองหาหน้าที่ยาวกว่านี้นะ', 'หน้านี้คำศัพท์น้อยไปจ้า');
+                showLevel7Empty(container, 'ต้องมีคำศัพท์อย่างน้อย 2 คำต่างกันถึงจะเล่นได้จ้า', '🔍', false);
+                container.appendChild(createLevel7PageNav());
+                return;
+            }
+            if (!uniqueWords.includes(detectiveTarget)) {
+                detectiveTarget = uniqueWords[Math.floor(Math.random() * uniqueWords.length)];
+                detectiveAnswered = false;
+            }
+            setInstruction(`🔍 แตะที่คำว่า "${detectiveTarget}" จ้า`, `แตะที่คำว่า ${detectiveTarget} จ้า`);
+
+            const stage = document.createElement('div');
+            stage.className = 'quiz-area';
+            const sound = document.createElement('button');
+            sound.className = 'sound-prompt-btn';
+            sound.textContent = '🔊';
+            const cleanTarget = detectiveTarget.replace(/[\s.,]/g, '');
+            sound.onclick = () => playNativeSpeechDirect(cleanTarget, speechSessionId, () => {});
+            const choices = document.createElement('div');
+            choices.className = 'quiz-choices';
+            [...uniqueWords].sort(() => Math.random() - 0.5).forEach(word => {
+                const card = document.createElement('div');
+                card.className = 'choice-card';
+                const label = document.createElement('div');
+                label.style.cssText = 'font-size:2.8rem; font-weight:700; color:#2C3E50;';
+                label.textContent = word;
+                card.appendChild(label);
+                card.onclick = () => handleDetectiveChoice(card, word);
+                choices.appendChild(card);
+            });
+            stage.append(sound, choices, createLevel7PageNav());
+            container.appendChild(stage);
+            playNativeSpeechDirect(cleanTarget, speechSessionId, () => {});
+        }
+
+        function handleDetectiveChoice(cardEl, word) {
+            if (detectiveAnswered) return;
+            if (word === detectiveTarget) {
+                detectiveAnswered = true;
+                playSuccessSound();
+                addStar();
+                showTransitionScreen('หาเจอแล้ว เก่งมากเลย!', () => {
+                    detectiveTarget = null;
+                    detectiveAnswered = false;
+                    renderStage();
+                });
+            } else {
+                if (cardEl.classList.contains('wrong')) return;
+                cardEl.classList.add('wrong');
+                playWrongSound();
+                speakSmart('sys_wrong', 'ลองดูใหม่อีกทีนะจ๊ะ', () => {
+                    setTimeout(() => cardEl.classList.remove('wrong'), 400);
+                });
+            }
         }
 
         function readCustomStoryLine(lIdx) {
@@ -2503,114 +2850,6 @@
             const ttsText = lineText.replace(/ /g, '');
             speakSmart(lineVoiceKey, ttsText, () => {
                 if (lineEl) lineEl.classList.remove('reading-now');
-            });
-        }
-
-        // Engine to Auto-Spell User Generated Words
-        function buildSpellingTts(word, type) {
-            if (!word) return '';
-            
-            // Find Consonant (Look for the first character that matches Thai Consonants)
-            let cObj = null;
-            for (let i=0; i<word.length; i++) {
-                const char = word[i];
-                const found = consonants.find(c => c.char === char);
-                if (found) { cObj = found; break; }
-            }
-            if (!cObj) cObj = consonants.find(c => c.char === 'อ'); // Fallback
-            
-            // Find Vowel (Very basic heuristic: assume anything not the consonant is vowel part)
-            // Note: Complex words with tone marks or final consonants might sound strange,
-            // but this fits the "Simple C+V" rule requested.
-            let vStr = word.replace(cObj.char, '').replace(/่|้|๊|๋/g, ''); // strip tones for spelling
-            if (!vStr) vStr = 'อะ'; // Fallback if no vowel found
-
-            const cSound = cObj.sound; // "กอ"
-            const cTtsFull = cObj.name; // "กอ ไก่"
-            const vSound = vStr; // "อา"
-            
-            // Try to map extracted vowel to known vowel name for Level 3
-            const vObjMatch = vowels.find(v => v.template.replace('{c}','') === vStr || v.sound === vStr);
-            const vTtsFull = vObjMatch ? vObjMatch.name : `สระ ${vStr}`; // "สระ อา"
-
-            if (type === 3) {
-                // Like Level 3: ปอ ปลา สระ ไอ อ่านว่า ปอ ไอ ไป
-                return `${cTtsFull} ${vTtsFull} อ่านว่า ${cSound} ${vSound} ${word}`;
-            } else {
-                // Like Level 4: ปอ ไอ ไป
-                return `${cSound} ${vSound} ${word}`;
-            }
-        }
-
-        function renderLevel7SpellingMode(container, type) {
-            if (!currentCustomStoryId) {
-                setInstruction('กลับไปเลือกนิทานที่โหมด "อ่านนิทาน" ก่อนนะจ๊ะ', 'กลับไปเลือกนิทานที่โหมด อ่านนิทาน ก่อนนะจ๊ะ');
-                container.innerHTML = `<div class="transition-screen"><div class="transition-emoji">👈</div><div class="transition-text">กรุณาเลือกนิทานในโหมดอ่านนิทานก่อนครับ</div></div>`;
-                return;
-            }
-
-            const story = customStories.find(s => s.id === currentCustomStoryId);
-            if (!story || !story.pages || !story.pages[currentCustomStoryPage]) {
-                setInstruction('นิทานนี้ไม่มีหน้าให้ฝึกสะกดนะจ๊ะ', 'นิทานนี้ไม่มีหน้าให้ฝึกสะกดนะจ๊ะ');
-                container.innerHTML = `<div class="transition-screen"><div class="transition-emoji">📖</div><div class="transition-text">นิทานนี้ยังไม่มีหน้าให้ฝึกสะกด</div></div>`;
-                return;
-            }
-
-            const page = story.pages[currentCustomStoryPage];
-            const allWordsRaw = (page.lines || [page.text || '']).join(' ').split(/\s+/).filter(w => w.trim().length > 0);
-            
-            if (type === 3) setInstruction('🧩 แตะที่คำศัพท์ เพื่อฟังเสียงหัดสะกดจ้า', 'แตะที่คำศัพท์ เพื่อฟังเสียงหัดสะกดจ้า');
-            else setInstruction('🎮 แตะที่คำศัพท์ เพื่อฟังเสียงอ่านรวมคำจ้า', 'แตะที่คำศัพท์ เพื่อฟังเสียงอ่านรวมคำจ้า');
-
-            const stage = document.createElement('div');
-            stage.className = 'story-stage';
-            
-            let wordsHtml = '';
-            allWordsRaw.forEach((word, wIdx) => {
-                wordsHtml += `
-                    <div class="choice-card" id="spell-word-${wIdx}" onclick="playAutoSpelling('${word}', ${wIdx}, ${type})" style="width:160px; min-height:120px;">
-                        <div style="font-size:3rem; font-weight:700; color:#FF4757;">${word}</div>
-                        <div style="font-size:0.9rem; color:#747D8C; margin-top:8px;">แตะเพื่อฟัง</div>
-                    </div>
-                `;
-            });
-
-            stage.innerHTML = `
-                <div class="story-book" style="align-items:center;">
-                    <div class="story-header" style="width:100%; justify-content:center;">
-                        <span class="story-title">📖 นิทานเรื่อง: ${story.title} (หน้าที่ ${currentCustomStoryPage + 1})</span>
-                    </div>
-                    ${page.img && showImages ? `<img src="${page.img}" class="story-img-preview" style="max-height:150px;">` : ''}
-                    <div class="quiz-choices" style="margin-top:10px;">
-                        ${allWordsRaw.length > 0 ? wordsHtml : '<div style="color:#747D8C;">หน้านี้ยังไม่มีคำศัพท์จ้า</div>'}
-                    </div>
-                </div>
-                <div class="word-nav">
-                    <button class="action-btn btn-prev" onclick="stepCustomBookPage(-1)">⬅️ หน้าก่อนหน้า</button>
-                    <button class="action-btn btn-next" onclick="stepCustomBookPage(1)">หน้าถัดไป ➡️</button>
-                </div>
-            `;
-            container.appendChild(stage);
-        }
-
-        function playAutoSpelling(word, wIdx, type) {
-            playPopSound();
-            document.querySelectorAll('.choice-card').forEach(el => el.classList.remove('highlight'));
-            const card = document.getElementById(`spell-word-${wIdx}`);
-            if (card) {
-                card.style.transform = 'scale(1.05)';
-                card.style.borderColor = '#FFA502';
-                card.style.background = '#FFF9E6';
-            }
-
-            const ttsText = buildSpellingTts(word, type);
-            // Force using native TTS since these are dynamic words
-            playNativeSpeechDirect(ttsText, speechSessionId, () => {
-                if (card) {
-                    card.style.transform = '';
-                    card.style.borderColor = '';
-                    card.style.background = '';
-                }
             });
         }
 
