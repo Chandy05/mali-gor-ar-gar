@@ -1,4 +1,4 @@
-const CACHE_NAME = 'thai-reading-app-v3';
+const CACHE_NAME = 'thai-reading-app-v4';
 const APP_SHELL = ['./', './index.html'];
 const AUDIO_CACHE_BATCH_SIZE = 8;
 
