@@ -1306,6 +1306,11 @@
         let toneHardMode = false;
         let currentStoryDiff = 1;
         let currentStoryIndex = 0;
+        let currentCustomStoryId = null;
+        let currentCustomStoryPage = 0;
+        let editingCustomStoryId = null;
+        let editingCustomStoryCover = '';
+        let tempCustomStoryPages = [];
 
         const toneSetsHigh = [
             { id: 'ts_h_ขา', base: 'ขา', words: ['ขา', 'ข่า', 'ข้า', null, null], ttsAll: 'ขา, ข่า, ข้า', sampleWord: 'ขา', emoji: '🦵', targetWord: 'ขา' },
@@ -1470,7 +1475,11 @@
         }
 
         function saveCustomStoryDB(storyObj) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
+                if (!db) {
+                    reject(new Error('IndexedDB is unavailable'));
+                    return;
+                }
                 const tx = db.transaction('stories', 'readwrite');
                 tx.objectStore('stories').put(storyObj);
                 tx.oncomplete = () => {
@@ -1479,17 +1488,25 @@
                     else customStories.push(storyObj);
                     resolve();
                 };
+                tx.onerror = () => reject(tx.error || new Error('Unable to save custom story'));
+                tx.onabort = () => reject(tx.error || new Error('Custom story save was aborted'));
             });
         }
 
         function deleteCustomStoryDB(id) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
+                if (!db) {
+                    reject(new Error('IndexedDB is unavailable'));
+                    return;
+                }
                 const tx = db.transaction('stories', 'readwrite');
                 tx.objectStore('stories').delete(id);
                 tx.oncomplete = () => {
                     customStories = customStories.filter(s => s.id !== id);
                     resolve();
                 };
+                tx.onerror = () => reject(tx.error || new Error('Unable to delete custom story'));
+                tx.onabort = () => reject(tx.error || new Error('Custom story deletion was aborted'));
             });
         }
 
@@ -1508,10 +1525,16 @@
         }
 
         function saveVoiceBlob(key, blob) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
+                if (!db) {
+                    reject(new Error('IndexedDB is unavailable'));
+                    return;
+                }
                 const tx = db.transaction('voices', 'readwrite');
                 tx.objectStore('voices').put(blob, key);
                 tx.oncomplete = () => { recordedKeys.add(key); resolve(); };
+                tx.onerror = () => reject(tx.error || new Error('Unable to save voice recording'));
+                tx.onabort = () => reject(tx.error || new Error('Voice recording save was aborted'));
             });
         }
 
@@ -1526,10 +1549,16 @@
         }
 
         function deleteVoiceBlob(key) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
+                if (!db) {
+                    reject(new Error('IndexedDB is unavailable'));
+                    return;
+                }
                 const tx = db.transaction('voices', 'readwrite');
                 tx.objectStore('voices').delete(key);
                 tx.oncomplete = () => { recordedKeys.delete(key); resolve(); };
+                tx.onerror = () => reject(tx.error || new Error('Unable to delete voice recording'));
+                tx.onabort = () => reject(tx.error || new Error('Voice recording deletion was aborted'));
             });
         }
 
@@ -1733,6 +1762,7 @@
             stopAllSpeech();
             currentLevel = lv;
             quizQuestionNumber = 1;
+            if (lv !== 7) currentCustomStoryId = null;
 
             if (lv === 3 || lv === 4) ensureInitialBlendWord();
 
@@ -1800,6 +1830,7 @@
                 else if (currentLevel === 4) renderLevel3And4Learn(container, 4);
                 else if (currentLevel === 5) renderLevel5Learn(container);
                 else if (currentLevel === 6) renderLevel6Learn(container);
+                else if (currentLevel === 7) renderLevel7Learn(container);
             } else if (currentMode === 'match') {
                 renderMatchGame(container);
             } else if (currentMode === 'quiz') {
@@ -2281,6 +2312,160 @@
             readNext();
         }
 
+        /* ==================== 12.5 ด่านที่ 7: นิทานของฉัน (Custom Stories) ==================== */
+        function renderLevel7Learn(container) {
+            const stage = document.createElement('div');
+            stage.style.width = '100%';
+
+            if (!currentCustomStoryId) {
+                setInstruction('🎨 เลือกนิทานที่อยากอ่าน หรือให้คุณพ่อคุณแม่กดปุ่ม "สร้างนิทาน" ด้านบนจ้า', 'เลือกนิทานที่อยากอ่าน หรือให้คุณพ่อคุณแม่สร้างให้ใหม่นะจ๊ะ');
+                if (customStories.length === 0) {
+                    stage.innerHTML = '<div class="transition-screen"><div class="transition-emoji">📭</div><div class="transition-text" style="color:#747D8C;">ยังไม่มีนิทานเลย<br>ให้คุณพ่อคุณแม่สร้างให้ใหม่นะจ๊ะ!</div></div>';
+                } else {
+                    const grid = document.createElement('div');
+                    grid.className = 'bookshelf-grid';
+                    customStories.forEach(story => {
+                        const card = document.createElement('div');
+                        card.className = 'custom-book-card';
+                        card.onclick = () => openCustomBook(story.id);
+
+                        if (showImages && story.cover) {
+                            const cover = document.createElement('img');
+                            cover.src = story.cover;
+                            cover.className = 'custom-book-cover';
+                            cover.alt = '';
+                            card.appendChild(cover);
+                        } else {
+                            const cover = document.createElement('div');
+                            cover.className = 'custom-book-cover';
+                            cover.style.display = 'flex';
+                            cover.style.alignItems = 'center';
+                            cover.style.justifyContent = 'center';
+                            cover.style.fontSize = '3rem';
+                            cover.textContent = '📖';
+                            card.appendChild(cover);
+                        }
+
+                        const title = document.createElement('div');
+                        title.className = 'custom-book-title';
+                        title.textContent = story.title;
+                        card.appendChild(title);
+
+                        const pageCount = document.createElement('div');
+                        pageCount.style.cssText = 'font-size:0.8rem; color:#747D8C;';
+                        pageCount.textContent = `${story.pages.length} หน้า`;
+                        card.appendChild(pageCount);
+                        grid.appendChild(card);
+                    });
+                    stage.appendChild(grid);
+                }
+                container.appendChild(stage);
+                return;
+            }
+
+            const story = customStories.find(s => s.id === currentCustomStoryId);
+            if (!story || !Array.isArray(story.pages) || story.pages.length === 0) {
+                currentCustomStoryId = null;
+                currentCustomStoryPage = 0;
+                renderStage();
+                return;
+            }
+            if (currentCustomStoryPage >= story.pages.length) currentCustomStoryPage = 0;
+
+            const page = story.pages[currentCustomStoryPage];
+            const pageVoiceKey = `cs_${story.id}_p_${currentCustomStoryPage}`;
+            setInstruction(`📖 นิทานเรื่อง: ${story.title}`, `นิทานเรื่อง ${story.title}`);
+
+            stage.className = 'story-stage';
+            stage.innerHTML = `
+                <div class="story-book">
+                    <div class="story-header">
+                        <button class="util-btn" id="custom-book-back">⬅️ กลับชั้นหนังสือ</button>
+                        <span class="card-progress" id="custom-book-progress"></span>
+                    </div>
+                    <div class="story-lines-box" id="custom-story-lines"></div>
+                </div>
+                <div class="word-nav">
+                    <button class="action-btn btn-prev" id="custom-book-prev">⬅️ หน้าก่อนหน้า</button>
+                    <button class="action-btn btn-speak-all" id="custom-book-read">🔊 อ่านให้ฟัง</button>
+                    <button class="action-btn btn-next" id="custom-book-next">หน้าถัดไป ➡️</button>
+                </div>
+            `;
+
+            stage.querySelector('#custom-book-progress').textContent = `หน้าที่ ${currentCustomStoryPage + 1} / ${story.pages.length}`;
+            stage.querySelector('#custom-book-back').onclick = closeCustomBook;
+            stage.querySelector('#custom-book-prev').onclick = () => stepCustomBookPage(-1);
+            stage.querySelector('#custom-book-read').onclick = readCustomStoryPage;
+            stage.querySelector('#custom-book-next').onclick = () => stepCustomBookPage(1);
+
+            if (showImages && page.img) {
+                const image = document.createElement('img');
+                image.src = page.img;
+                image.className = 'story-img-preview';
+                image.alt = '';
+                stage.querySelector('.story-book').insertBefore(image, stage.querySelector('#custom-story-lines'));
+            }
+
+            const line = document.createElement('div');
+            line.className = 'story-line';
+            line.id = 'cs-line-0';
+            line.onclick = readCustomStoryPage;
+            const soundIcon = document.createElement('span');
+            soundIcon.textContent = '🔊';
+            const text = document.createElement('span');
+            text.textContent = page.text || '';
+            line.append(soundIcon, text);
+            if (recordedKeys.has(pageVoiceKey)) {
+                const recordedIcon = document.createElement('span');
+                recordedIcon.style.fontSize = '1rem';
+                recordedIcon.textContent = '🎙️';
+                line.appendChild(recordedIcon);
+            }
+            stage.querySelector('#custom-story-lines').appendChild(line);
+            container.appendChild(stage);
+        }
+
+        function openCustomBook(id) {
+            playPopSound();
+            currentCustomStoryId = id;
+            currentCustomStoryPage = 0;
+            renderStage();
+        }
+
+        function closeCustomBook() {
+            playPopSound();
+            stopAllSpeech();
+            currentCustomStoryId = null;
+            currentCustomStoryPage = 0;
+            renderStage();
+        }
+
+        function stepCustomBookPage(dir) {
+            playPopSound();
+            stopAllSpeech();
+            const story = customStories.find(s => s.id === currentCustomStoryId);
+            if (!story || !story.pages.length) return;
+            currentCustomStoryPage = (currentCustomStoryPage + dir + story.pages.length) % story.pages.length;
+            renderStage();
+        }
+
+        function readCustomStoryPage() {
+            stopAllSpeech();
+            playPopSound();
+            const story = customStories.find(s => s.id === currentCustomStoryId);
+            if (!story || !story.pages[currentCustomStoryPage]) return;
+            const page = story.pages[currentCustomStoryPage];
+            const pageVoiceKey = `cs_${story.id}_p_${currentCustomStoryPage}`;
+
+            document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+            const lineEl = document.getElementById('cs-line-0');
+            if (lineEl) lineEl.classList.add('reading-now');
+
+            speakSmart(pageVoiceKey, (page.text || '').replace(/ /g, ''), () => {
+                if (lineEl) lineEl.classList.remove('reading-now');
+            });
+        }
+
         /* ==================== 13. โหมดจับคู่ ==================== */
         let selectedLeft = null;
         let selectedRight = null;
@@ -2615,6 +2800,328 @@
             return list;
         }
 
+        /* ==================== 15.5 สตูดิโอสร้างนิทาน (Custom Story Maker) ==================== */
+        function openStoryStudio() {
+            stopAllSpeech();
+            document.getElementById('story-studio-modal').classList.add('show');
+            renderStoryStudioList();
+        }
+
+        function closeStoryStudio() {
+            if (mediaRecorder && mediaRecorder.state === 'recording' && currentlyRecordingKey?.startsWith('cs_')) {
+                mediaRecorder.stop();
+            }
+            document.getElementById('story-studio-modal').classList.remove('show');
+            if (currentLevel === 7) renderStage();
+        }
+
+        function renderStoryStudioList() {
+            const container = document.getElementById('story-studio-content');
+            container.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <h3 style="margin:0; color:#2C3E50;">📚 นิทานของคุณ</h3>
+                    <button class="action-btn btn-speak-all" style="padding:6px 12px;" id="new-custom-story">+ สร้างเรื่องใหม่</button>
+                </div>
+            `;
+            container.querySelector('#new-custom-story').onclick = () => editCustomStory(null);
+
+            if (customStories.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.cssText = 'text-align:center; padding:20px; color:#747D8C;';
+                emptyMessage.textContent = 'ยังไม่มีนิทานเลย กดสร้างเรื่องใหม่ได้เลยครับ!';
+                container.appendChild(emptyMessage);
+                return;
+            }
+
+            customStories.forEach(story => {
+                const row = document.createElement('div');
+                row.className = 'voice-item';
+                const details = document.createElement('div');
+                details.style.cssText = 'display:flex; align-items:center; gap:10px;';
+                if (story.cover) {
+                    const cover = document.createElement('img');
+                    cover.src = story.cover;
+                    cover.style.cssText = 'width:40px; height:40px; object-fit:cover; border-radius:8px;';
+                    cover.alt = '';
+                    details.appendChild(cover);
+                } else {
+                    details.append('📖');
+                }
+                const title = document.createElement('strong');
+                title.textContent = story.title;
+                details.appendChild(title);
+                details.append(` (${story.pages.length} หน้า)`);
+
+                const controls = document.createElement('div');
+                controls.className = 'voice-controls';
+                const editButton = document.createElement('button');
+                editButton.className = 'rec-btn play';
+                editButton.textContent = '✏️ แก้ไข';
+                editButton.onclick = () => editCustomStory(story.id);
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'rec-btn delete';
+                deleteButton.textContent = '🗑️ ลบ';
+                deleteButton.onclick = () => deleteCustomStory(story.id);
+                controls.append(editButton, deleteButton);
+                row.append(details, controls);
+                container.appendChild(row);
+            });
+        }
+
+        function editCustomStory(id) {
+            const story = id
+                ? customStories.find(s => s.id === id)
+                : { id: `story_${Date.now()}`, title: '', cover: '', pages: [{ img: '', text: '' }] };
+            if (!story) {
+                alert('ไม่พบนิทานเรื่องนี้แล้ว');
+                renderStoryStudioList();
+                return;
+            }
+
+            editingCustomStoryId = story.id;
+            editingCustomStoryCover = story.cover || '';
+            tempCustomStoryPages = JSON.parse(JSON.stringify(story.pages));
+
+            const container = document.getElementById('story-studio-content');
+            container.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <button class="util-btn" id="back-custom-stories">⬅️ ย้อนกลับ</button>
+                    <button class="action-btn btn-speak-all" id="save-custom-story">💾 บันทึกนิทาน</button>
+                </div>
+                <div class="studio-page-block" style="border-color:#FDCB6E; background:#FFFDF7;">
+                    <label for="edit-cs-title"><strong>ชื่อนิทาน:</strong></label>
+                    <input type="text" id="edit-cs-title" class="studio-input" placeholder="เช่น นิทานของน้องเม...">
+                    <label for="edit-cs-cover"><strong>ภาพปกนิทาน:</strong></label>
+                    <input type="file" id="edit-cs-cover" accept="image/*">
+                    <img id="preview-cs-cover" class="story-img-preview" alt="">
+                </div>
+                <h4 style="margin:10px 0;">เนื้อหานิทานทีละหน้า:</h4>
+                <div id="cs-pages-editor"></div>
+                <button class="action-btn btn-next" id="add-custom-story-page" style="width:100%; margin-top:10px;">+ เพิ่มหน้าใหม่</button>
+            `;
+            container.querySelector('#edit-cs-title').value = story.title || '';
+            container.querySelector('#back-custom-stories').onclick = renderStoryStudioList;
+            container.querySelector('#save-custom-story').onclick = () => saveCustomStory(story.id);
+            container.querySelector('#add-custom-story-page').onclick = addCustomStoryPageUI;
+            container.querySelector('#edit-cs-cover').onchange = event => encodeImageBase64(event.currentTarget, 'preview-cs-cover');
+            const coverPreview = container.querySelector('#preview-cs-cover');
+            if (editingCustomStoryCover) {
+                coverPreview.src = editingCustomStoryCover;
+            } else {
+                coverPreview.style.display = 'none';
+            }
+            renderCustomStoryPagesUI();
+        }
+
+        function renderCustomStoryPagesUI() {
+            const box = document.getElementById('cs-pages-editor');
+            if (!box) return;
+            box.innerHTML = '';
+
+            tempCustomStoryPages.forEach((page, idx) => {
+                const voiceKey = `cs_${editingCustomStoryId}_p_${idx}`;
+                const block = document.createElement('div');
+                block.className = 'studio-page-block';
+                const header = document.createElement('div');
+                header.style.cssText = 'display:flex; justify-content:space-between;';
+                const pageTitle = document.createElement('strong');
+                pageTitle.textContent = `หน้าที่ ${idx + 1}`;
+                const removeButton = document.createElement('button');
+                removeButton.className = 'rec-btn delete';
+                removeButton.textContent = '❌ ลบหน้านี้';
+                removeButton.onclick = () => removeCustomStoryPageUI(idx);
+                header.append(pageTitle, removeButton);
+
+                const imageInput = document.createElement('input');
+                imageInput.type = 'file';
+                imageInput.accept = 'image/*';
+                imageInput.onchange = event => encodeImageBase64(event.currentTarget, `preview-cs-p-${idx}`, idx);
+                const imagePreview = document.createElement('img');
+                imagePreview.id = `preview-cs-p-${idx}`;
+                imagePreview.className = 'story-img-preview';
+                imagePreview.alt = '';
+                if (page.img) imagePreview.src = page.img;
+                else imagePreview.style.display = 'none';
+
+                const textInput = document.createElement('textarea');
+                textInput.className = 'studio-input';
+                textInput.id = `text-cs-p-${idx}`;
+                textInput.rows = 2;
+                textInput.placeholder = 'พิมพ์ประโยคของหน้านี้... (เช่น เปเป้ กิน ข้าว)';
+                textInput.value = page.text || '';
+                textInput.oninput = () => { tempCustomStoryPages[idx].text = textInput.value; };
+
+                const voiceControls = document.createElement('div');
+                voiceControls.className = 'voice-controls';
+                voiceControls.style.marginTop = '6px';
+                const voiceLabel = document.createElement('span');
+                voiceLabel.style.cssText = 'font-size:0.85rem; color:#747D8C;';
+                voiceLabel.textContent = 'พากย์เสียงหน้านี้:';
+                const recordButton = document.createElement('button');
+                recordButton.id = `rec-btn-${voiceKey}`;
+                recordButton.className = currentlyRecordingKey === voiceKey ? 'rec-btn recording' : 'rec-btn record';
+                recordButton.textContent = currentlyRecordingKey === voiceKey ? '⏹️ กำลังอัด... (กดเพื่อหยุด)' : '🎙️ อัดเสียง';
+                recordButton.onclick = () => toggleRecordStoryPage(voiceKey);
+                const playButton = document.createElement('button');
+                playButton.className = 'rec-btn play';
+                playButton.textContent = '🔊 ฟัง';
+                playButton.onclick = () => speakSmart(voiceKey, textInput.value);
+                voiceControls.append(voiceLabel, recordButton, playButton);
+                if (recordedKeys.has(voiceKey)) {
+                    const recordedLabel = document.createElement('span');
+                    recordedLabel.textContent = '✅ มีเสียงพากย์แล้ว';
+                    voiceControls.appendChild(recordedLabel);
+                }
+
+                block.append(header, imageInput, imagePreview, textInput, voiceControls);
+                box.appendChild(block);
+            });
+        }
+
+        function addCustomStoryPageUI() {
+            tempCustomStoryPages.push({ img: '', text: '' });
+            renderCustomStoryPagesUI();
+        }
+
+        function removeCustomStoryPageUI(idx) {
+            if (tempCustomStoryPages.length <= 1) {
+                alert('ต้องมีอย่างน้อย 1 หน้านะครับ');
+                return;
+            }
+            tempCustomStoryPages.splice(idx, 1);
+            renderCustomStoryPagesUI();
+        }
+
+        function encodeImageBase64(inputEl, previewId, pageIdx = -1) {
+            const file = inputEl.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                alert('กรุณาเลือกไฟล์รูปภาพ');
+                inputEl.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = event => {
+                if (typeof event.target.result !== 'string') {
+                    alert('อ่านไฟล์รูปภาพไม่สำเร็จ');
+                    return;
+                }
+                const preview = document.getElementById(previewId);
+                if (!preview) return;
+                preview.src = event.target.result;
+                preview.style.display = '';
+                if (pageIdx === -1) editingCustomStoryCover = event.target.result;
+                else if (tempCustomStoryPages[pageIdx]) tempCustomStoryPages[pageIdx].img = event.target.result;
+            };
+            reader.onerror = () => alert('อ่านไฟล์รูปภาพไม่สำเร็จ');
+            reader.readAsDataURL(file);
+        }
+
+        async function saveCustomStory(id) {
+            const titleInput = document.getElementById('edit-cs-title');
+            if (!titleInput) return;
+            const title = titleInput.value.trim();
+            if (!title) {
+                alert('กรุณาตั้งชื่อนิทานด้วยครับ');
+                return;
+            }
+            if (!tempCustomStoryPages.length) {
+                alert('นิทานต้องมีอย่างน้อย 1 หน้านะครับ');
+                return;
+            }
+            tempCustomStoryPages.forEach((page, idx) => {
+                const textInput = document.getElementById(`text-cs-p-${idx}`);
+                if (textInput) page.text = textInput.value.trim();
+            });
+
+            const storyObj = {
+                id,
+                title,
+                cover: editingCustomStoryCover,
+                pages: tempCustomStoryPages
+            };
+            try {
+                await saveCustomStoryDB(storyObj);
+                alert('บันทึกนิทานเรียบร้อยแล้ว!');
+                renderStoryStudioList();
+            } catch (error) {
+                console.error('Unable to save custom story:', error);
+                alert('บันทึกนิทานไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บในเบราว์เซอร์แล้วลองอีกครั้ง');
+            }
+        }
+
+        async function deleteCustomStory(id) {
+            if (!confirm('แน่ใจหรือไม่ว่าต้องการลบนิทานเรื่องนี้?')) return;
+            try {
+                const story = customStories.find(item => item.id === id);
+                await deleteCustomStoryDB(id);
+                if (currentCustomStoryId === id) {
+                    currentCustomStoryId = null;
+                    currentCustomStoryPage = 0;
+                    renderStage();
+                }
+                if (story) {
+                    const voiceKeys = story.pages.map((_, idx) => `cs_${id}_p_${idx}`);
+                    await Promise.all(voiceKeys.filter(key => recordedKeys.has(key)).map(deleteVoiceBlob));
+                }
+                renderStoryStudioList();
+            } catch (error) {
+                console.error('Unable to delete custom story:', error);
+                alert('ลบนิทานไม่สำเร็จ กรุณาลองอีกครั้ง');
+            }
+        }
+
+        async function toggleRecordStoryPage(key) {
+            if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+                alert('เบราว์เซอร์นี้ไม่รองรับการอัดเสียง กรุณาใช้เบราว์เซอร์ที่รองรับไมโครโฟนครับ');
+                return;
+            }
+            if (currentlyRecordingKey === key && mediaRecorder?.state === 'recording') {
+                mediaRecorder.stop();
+                return;
+            }
+            if (currentlyRecordingKey) {
+                alert('กรุณาหยุดการอัดเสียงที่กำลังทำงานอยู่ก่อน');
+                return;
+            }
+
+            let stream;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const recorder = new MediaRecorder(stream);
+                mediaRecorder = recorder;
+                audioChunks = [];
+                currentlyRecordingKey = key;
+                renderCustomStoryPagesUI();
+
+                recorder.ondataavailable = event => {
+                    if (event.data.size > 0) audioChunks.push(event.data);
+                };
+                recorder.onstop = async () => {
+                    const blob = new Blob(audioChunks, { type: recorder.mimeType || 'audio/webm' });
+                    try {
+                        await saveVoiceBlob(key, blob);
+                    } catch (error) {
+                        console.error('Unable to save story voice recording:', error);
+                        alert('บันทึกเสียงพากย์ไม่สำเร็จ กรุณาลองอีกครั้ง');
+                    } finally {
+                        stream.getTracks().forEach(track => track.stop());
+                        currentlyRecordingKey = null;
+                        if (mediaRecorder === recorder) mediaRecorder = null;
+                        renderCustomStoryPagesUI();
+                    }
+                };
+                recorder.start();
+            } catch (error) {
+                if (stream) stream.getTracks().forEach(track => track.stop());
+                console.error('Unable to record story voice:', error);
+                alert('ไม่สามารถเข้าถึงไมโครโฟนได้ครับ');
+                currentlyRecordingKey = null;
+                if (mediaRecorder?.state !== 'recording') mediaRecorder = null;
+                renderCustomStoryPagesUI();
+            }
+        }
+
         function openVoiceStudio() {
             stopAllSpeech();
             document.getElementById('voice-modal').classList.add('show');
@@ -2670,10 +3177,16 @@
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
                 mediaRecorder.onstop = async () => {
                     const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-                    await saveVoiceBlob(key, blob);
-                    stream.getTracks().forEach(t => t.stop());
-                    currentlyRecordingKey = null;
-                    renderVoiceStudioList();
+                    try {
+                        await saveVoiceBlob(key, blob);
+                    } catch (error) {
+                        console.error('Unable to save voice recording:', error);
+                        alert('บันทึกเสียงไม่สำเร็จ กรุณาลองอีกครั้ง');
+                    } finally {
+                        stream.getTracks().forEach(t => t.stop());
+                        currentlyRecordingKey = null;
+                        renderVoiceStudioList();
+                    }
                 };
                 mediaRecorder.start();
             } catch (err) {
@@ -2697,8 +3210,13 @@
         }
 
         async function removeRecording(key) {
-            await deleteVoiceBlob(key);
-            renderVoiceStudioList();
+            try {
+                await deleteVoiceBlob(key);
+                renderVoiceStudioList();
+            } catch (error) {
+                console.error('Unable to delete voice recording:', error);
+                alert('ลบเสียงบันทึกไม่สำเร็จ กรุณาลองอีกครั้ง');
+            }
         }
 
         /* ==================== 16. พลุกระดาษ (CONFETTI) ==================== */
