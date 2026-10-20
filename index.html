@@ -1680,8 +1680,8 @@
 
             const player = document.getElementById('tts-audio-player');
             const normalizedKey = voiceKey.normalize('NFC');
-            // Add a cache buster so updated GitHub Pages audio files are fetched.
-            player.src = `audio/${encodeURIComponent(normalizedKey)}.mp3?v=1.0`;
+            // Keep the URL query-free so the Service Worker can match cached audio.
+            player.src = `audio/${encodeURIComponent(normalizedKey)}.mp3`;
             player.onended = () => {
                 playbackSettled = true;
                 safeCallback();
