@@ -1,0 +1,24 @@
+```json
+{
+  "name": "เกมหรรษา ภาษาไทย",
+  "short_name": "เกมหรรษา",
+  "description": "เว็บแอปสำหรับเล่นเกมภาษาไทย ฝึกผสมคำ ผันวรรณยุกต์ และแต่งนิทาน",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#a8edea",
+  "theme_color": "#FF6B6B",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

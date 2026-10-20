@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>เกมหรรษา พยัญชนะ สระ วรรณยุกต์ และหัดอ่านมานะ-มานี</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#FF6B6B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="เกมหรรษา">
+    <link rel="apple-touch-icon" href="./icon-192.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1764,11 +1773,34 @@
             quizQuestionNumber = 1;
             if (lv !== 7) currentCustomStoryId = null;
 
+            // Revert back to learn mode when switching levels to avoid confusion
+            if (currentMode !== 'learn') {
+                currentMode = 'learn';
+                document.getElementById('btn-mode-learn').classList.add('active');
+                document.getElementById('btn-mode-match').classList.remove('active');
+                document.getElementById('btn-mode-quiz').classList.remove('active');
+            }
+
             if (lv === 3 || lv === 4) ensureInitialBlendWord();
 
             document.querySelectorAll('.level-btn').forEach((btn, idx) => {
                 btn.classList.toggle('active', idx + 1 === lv);
             });
+
+            // Update Mode Button Labels dynamically for Level 7
+            const btnLearn = document.getElementById('btn-mode-learn');
+            const btnMatch = document.getElementById('btn-mode-match');
+            const btnQuiz = document.getElementById('btn-mode-quiz');
+            
+            if (lv === 7) {
+                btnLearn.innerText = '📖 อ่านนิทาน';
+                btnMatch.innerText = '🧩 หัดสะกด (กอ-อา-กา)'; // Like Level 3
+                btnQuiz.innerText = '🎮 ฝึกอ่านคำ (กอ-อา-กา)'; // Like Level 4
+            } else {
+                btnLearn.innerText = '📖 โหมดเรียนรู้';
+                btnMatch.innerText = '🧩 โหมดจับคู่';
+                btnQuiz.innerText = '🎮 โหมดทายเสียง';
+            }
 
             renderStage();
         }
@@ -1832,9 +1864,11 @@
                 else if (currentLevel === 6) renderLevel6Learn(container);
                 else if (currentLevel === 7) renderLevel7Learn(container);
             } else if (currentMode === 'match') {
-                renderMatchGame(container);
+                if (currentLevel === 7) renderLevel7SpellingMode(container, 3);
+                else renderMatchGame(container);
             } else if (currentMode === 'quiz') {
-                renderQuiz(container);
+                if (currentLevel === 7) renderLevel7SpellingMode(container, 4);
+                else renderQuiz(container);
             }
         }
 
@@ -2469,6 +2503,114 @@
             const ttsText = lineText.replace(/ /g, '');
             speakSmart(lineVoiceKey, ttsText, () => {
                 if (lineEl) lineEl.classList.remove('reading-now');
+            });
+        }
+
+        // Engine to Auto-Spell User Generated Words
+        function buildSpellingTts(word, type) {
+            if (!word) return '';
+            
+            // Find Consonant (Look for the first character that matches Thai Consonants)
+            let cObj = null;
+            for (let i=0; i<word.length; i++) {
+                const char = word[i];
+                const found = consonants.find(c => c.char === char);
+                if (found) { cObj = found; break; }
+            }
+            if (!cObj) cObj = consonants.find(c => c.char === 'อ'); // Fallback
+            
+            // Find Vowel (Very basic heuristic: assume anything not the consonant is vowel part)
+            // Note: Complex words with tone marks or final consonants might sound strange,
+            // but this fits the "Simple C+V" rule requested.
+            let vStr = word.replace(cObj.char, '').replace(/่|้|๊|๋/g, ''); // strip tones for spelling
+            if (!vStr) vStr = 'อะ'; // Fallback if no vowel found
+
+            const cSound = cObj.sound; // "กอ"
+            const cTtsFull = cObj.name; // "กอ ไก่"
+            const vSound = vStr; // "อา"
+            
+            // Try to map extracted vowel to known vowel name for Level 3
+            const vObjMatch = vowels.find(v => v.template.replace('{c}','') === vStr || v.sound === vStr);
+            const vTtsFull = vObjMatch ? vObjMatch.name : `สระ ${vStr}`; // "สระ อา"
+
+            if (type === 3) {
+                // Like Level 3: ปอ ปลา สระ ไอ อ่านว่า ปอ ไอ ไป
+                return `${cTtsFull} ${vTtsFull} อ่านว่า ${cSound} ${vSound} ${word}`;
+            } else {
+                // Like Level 4: ปอ ไอ ไป
+                return `${cSound} ${vSound} ${word}`;
+            }
+        }
+
+        function renderLevel7SpellingMode(container, type) {
+            if (!currentCustomStoryId) {
+                setInstruction('กลับไปเลือกนิทานที่โหมด "อ่านนิทาน" ก่อนนะจ๊ะ', 'กลับไปเลือกนิทานที่โหมด อ่านนิทาน ก่อนนะจ๊ะ');
+                container.innerHTML = `<div class="transition-screen"><div class="transition-emoji">👈</div><div class="transition-text">กรุณาเลือกนิทานในโหมดอ่านนิทานก่อนครับ</div></div>`;
+                return;
+            }
+
+            const story = customStories.find(s => s.id === currentCustomStoryId);
+            if (!story || !story.pages || !story.pages[currentCustomStoryPage]) {
+                setInstruction('นิทานนี้ไม่มีหน้าให้ฝึกสะกดนะจ๊ะ', 'นิทานนี้ไม่มีหน้าให้ฝึกสะกดนะจ๊ะ');
+                container.innerHTML = `<div class="transition-screen"><div class="transition-emoji">📖</div><div class="transition-text">นิทานนี้ยังไม่มีหน้าให้ฝึกสะกด</div></div>`;
+                return;
+            }
+
+            const page = story.pages[currentCustomStoryPage];
+            const allWordsRaw = (page.lines || [page.text || '']).join(' ').split(/\s+/).filter(w => w.trim().length > 0);
+            
+            if (type === 3) setInstruction('🧩 แตะที่คำศัพท์ เพื่อฟังเสียงหัดสะกดจ้า', 'แตะที่คำศัพท์ เพื่อฟังเสียงหัดสะกดจ้า');
+            else setInstruction('🎮 แตะที่คำศัพท์ เพื่อฟังเสียงอ่านรวมคำจ้า', 'แตะที่คำศัพท์ เพื่อฟังเสียงอ่านรวมคำจ้า');
+
+            const stage = document.createElement('div');
+            stage.className = 'story-stage';
+            
+            let wordsHtml = '';
+            allWordsRaw.forEach((word, wIdx) => {
+                wordsHtml += `
+                    <div class="choice-card" id="spell-word-${wIdx}" onclick="playAutoSpelling('${word}', ${wIdx}, ${type})" style="width:160px; min-height:120px;">
+                        <div style="font-size:3rem; font-weight:700; color:#FF4757;">${word}</div>
+                        <div style="font-size:0.9rem; color:#747D8C; margin-top:8px;">แตะเพื่อฟัง</div>
+                    </div>
+                `;
+            });
+
+            stage.innerHTML = `
+                <div class="story-book" style="align-items:center;">
+                    <div class="story-header" style="width:100%; justify-content:center;">
+                        <span class="story-title">📖 นิทานเรื่อง: ${story.title} (หน้าที่ ${currentCustomStoryPage + 1})</span>
+                    </div>
+                    ${page.img && showImages ? `<img src="${page.img}" class="story-img-preview" style="max-height:150px;">` : ''}
+                    <div class="quiz-choices" style="margin-top:10px;">
+                        ${allWordsRaw.length > 0 ? wordsHtml : '<div style="color:#747D8C;">หน้านี้ยังไม่มีคำศัพท์จ้า</div>'}
+                    </div>
+                </div>
+                <div class="word-nav">
+                    <button class="action-btn btn-prev" onclick="stepCustomBookPage(-1)">⬅️ หน้าก่อนหน้า</button>
+                    <button class="action-btn btn-next" onclick="stepCustomBookPage(1)">หน้าถัดไป ➡️</button>
+                </div>
+            `;
+            container.appendChild(stage);
+        }
+
+        function playAutoSpelling(word, wIdx, type) {
+            playPopSound();
+            document.querySelectorAll('.choice-card').forEach(el => el.classList.remove('highlight'));
+            const card = document.getElementById(`spell-word-${wIdx}`);
+            if (card) {
+                card.style.transform = 'scale(1.05)';
+                card.style.borderColor = '#FFA502';
+                card.style.background = '#FFF9E6';
+            }
+
+            const ttsText = buildSpellingTts(word, type);
+            // Force using native TTS since these are dynamic words
+            playNativeSpeechDirect(ttsText, speechSessionId, () => {
+                if (card) {
+                    card.style.transform = '';
+                    card.style.borderColor = '';
+                    card.style.background = '';
+                }
             });
         }
 
