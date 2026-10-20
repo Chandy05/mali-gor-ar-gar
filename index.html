@@ -3140,7 +3140,7 @@
                 renderStoryStudioList();
             } catch (error) {
                 console.error('Unable to save custom story:', error);
-                alert('เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง หรือรูปล่าสุดอาจจะมีปัญหาครับ');
+                alert('ระบบแจ้งเตือน (Huawei Debug):\n' + ((error && (error.message || error.name)) || 'Unknown Error') + '\n\nลองลบรูปภาพออกแล้วบันทึกเฉพาะข้อความดูก่อนครับ');
             }
         }
 
