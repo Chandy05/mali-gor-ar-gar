@@ -1009,7 +1009,7 @@
 
     <header>
         <div class="header-top">
-            <h1 class="game-title">🎈 ภาษาไทยหรรษา & หัดอ่านมานะ-มานี</h1>
+            <h1 class="game-title">🎈 ภาษาไทย น้องมะลิ</h1>
             <div class="utility-btns">
                 <button class="util-btn active-toggle" id="btn-toggle-view" onclick="toggleCardViewMode()">
                     🗂️ ดูทีละใบ
@@ -2387,7 +2387,7 @@
                 </div>
                 <div class="word-nav">
                     <button class="action-btn btn-prev" id="custom-book-prev">⬅️ หน้าก่อนหน้า</button>
-                    <button class="action-btn btn-speak-all" id="custom-book-read">🔊 อ่านให้ฟัง</button>
+                    <button class="action-btn btn-speak-all" id="custom-book-read">🔊 อ่านให้ฟังทั้งหน้า</button>
                     <button class="action-btn btn-next" id="custom-book-next">หน้าถัดไป ➡️</button>
                 </div>
             `;
@@ -2395,7 +2395,7 @@
             stage.querySelector('#custom-book-progress').textContent = `หน้าที่ ${currentCustomStoryPage + 1} / ${story.pages.length}`;
             stage.querySelector('#custom-book-back').onclick = closeCustomBook;
             stage.querySelector('#custom-book-prev').onclick = () => stepCustomBookPage(-1);
-            stage.querySelector('#custom-book-read').onclick = readCustomStoryPage;
+            stage.querySelector('#custom-book-read').onclick = readCustomStoryPageFull;
             stage.querySelector('#custom-book-next').onclick = () => stepCustomBookPage(1);
 
             if (showImages && page.img) {
@@ -2406,22 +2406,27 @@
                 stage.querySelector('.story-book').insertBefore(image, stage.querySelector('#custom-story-lines'));
             }
 
-            const line = document.createElement('div');
-            line.className = 'story-line';
-            line.id = 'cs-line-0';
-            line.onclick = readCustomStoryPage;
-            const soundIcon = document.createElement('span');
-            soundIcon.textContent = '🔊';
-            const text = document.createElement('span');
-            text.textContent = page.text || '';
-            line.append(soundIcon, text);
-            if (recordedKeys.has(pageVoiceKey)) {
-                const recordedIcon = document.createElement('span');
-                recordedIcon.style.fontSize = '1rem';
-                recordedIcon.textContent = '🎙️';
-                line.appendChild(recordedIcon);
-            }
-            stage.querySelector('#custom-story-lines').appendChild(line);
+            const lines = page.lines || [page.text || ''];
+            lines.forEach((lineText, lIdx) => {
+                const line = document.createElement('div');
+                line.className = 'story-line';
+                line.id = `cs-line-${lIdx}`;
+                line.onclick = () => readCustomStoryLine(lIdx);
+                const soundIcon = document.createElement('span');
+                soundIcon.textContent = '🔊';
+                const text = document.createElement('span');
+                text.textContent = lineText;
+                line.append(soundIcon, text);
+
+                const lineVoiceKey = `cs_${story.id}_p_${currentCustomStoryPage}_l_${lIdx}`;
+                if (recordedKeys.has(lineVoiceKey)) {
+                    const recordedIcon = document.createElement('span');
+                    recordedIcon.style.fontSize = '1rem';
+                    recordedIcon.textContent = '🎙️';
+                    line.appendChild(recordedIcon);
+                }
+                stage.querySelector('#custom-story-lines').appendChild(line);
+            });
             container.appendChild(stage);
         }
 
@@ -2449,21 +2454,56 @@
             renderStage();
         }
 
-        function readCustomStoryPage() {
+        function readCustomStoryLine(lIdx) {
+            playPopSound();
+            const story = customStories.find(s => s.id === currentCustomStoryId);
+            if (!story) return;
+            const page = story.pages[currentCustomStoryPage];
+            const lineText = (page.lines || [])[lIdx] || '';
+            const lineVoiceKey = `cs_${story.id}_p_${currentCustomStoryPage}_l_${lIdx}`;
+
+            document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+            const lineEl = document.getElementById(`cs-line-${lIdx}`);
+            if (lineEl) lineEl.classList.add('reading-now');
+
+            const ttsText = lineText.replace(/ /g, '');
+            speakSmart(lineVoiceKey, ttsText, () => {
+                if (lineEl) lineEl.classList.remove('reading-now');
+            });
+        }
+
+        function readCustomStoryPageFull() {
             stopAllSpeech();
             playPopSound();
             const story = customStories.find(s => s.id === currentCustomStoryId);
-            if (!story || !story.pages[currentCustomStoryPage]) return;
+            if (!story) return;
+
             const page = story.pages[currentCustomStoryPage];
-            const pageVoiceKey = `cs_${story.id}_p_${currentCustomStoryPage}`;
+            const lines = page.lines || [];
+            let lIdx = 0;
+            const expectedStoryId = story.id;
+            const expectedPage = currentCustomStoryPage;
 
-            document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
-            const lineEl = document.getElementById('cs-line-0');
-            if (lineEl) lineEl.classList.add('reading-now');
+            const readNext = () => {
+                if (currentCustomStoryId !== expectedStoryId || currentCustomStoryPage !== expectedPage) return;
+                if (lIdx >= lines.length) {
+                    document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+                    return;
+                }
 
-            speakSmart(pageVoiceKey, (page.text || '').replace(/ /g, ''), () => {
-                if (lineEl) lineEl.classList.remove('reading-now');
-            });
+                document.querySelectorAll('.story-line').forEach(el => el.classList.remove('reading-now'));
+                const lineEl = document.getElementById(`cs-line-${lIdx}`);
+                if (lineEl) lineEl.classList.add('reading-now');
+
+                const lineVoiceKey = `cs_${story.id}_p_${currentCustomStoryPage}_l_${lIdx}`;
+                const ttsText = lines[lIdx].replace(/ /g, '');
+                lIdx++;
+
+                speakSmart(lineVoiceKey, ttsText, () => {
+                    activeTimers.push(setTimeout(readNext, 300));
+                });
+            };
+            readNext();
         }
 
         /* ==================== 13. โหมดจับคู่ ==================== */
@@ -2869,127 +2909,154 @@
         }
 
         function editCustomStory(id) {
-            const story = id
-                ? customStories.find(s => s.id === id)
-                : { id: `story_${Date.now()}`, title: '', cover: '', pages: [{ img: '', text: '' }] };
+            const isNew = !id;
+            let story = isNew ? { id: `story_${Date.now()}`, title: '', cover: '', pages: [{ img: '', lines: [''] }] } : customStories.find(s => s.id === id);
             if (!story) {
                 alert('ไม่พบนิทานเรื่องนี้แล้ว');
                 renderStoryStudioList();
                 return;
             }
 
+            story.pages = (story.pages || []).map(page => {
+                if (!page) return { img: '', lines: [''] };
+                if (!Array.isArray(page.lines)) page.lines = [page.text || ''];
+                return page;
+            });
+
             editingCustomStoryId = story.id;
             editingCustomStoryCover = story.cover || '';
             tempCustomStoryPages = JSON.parse(JSON.stringify(story.pages));
+            window._tempPages = tempCustomStoryPages;
 
             const container = document.getElementById('story-studio-content');
             container.innerHTML = `
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                     <button class="util-btn" id="back-custom-stories">⬅️ ย้อนกลับ</button>
-                    <button class="action-btn btn-speak-all" id="save-custom-story">💾 บันทึกนิทาน</button>
                 </div>
+
                 <div class="studio-page-block" style="border-color:#FDCB6E; background:#FFFDF7;">
-                    <label for="edit-cs-title"><strong>ชื่อนิทาน:</strong></label>
-                    <input type="text" id="edit-cs-title" class="studio-input" placeholder="เช่น นิทานของน้องเม...">
-                    <label for="edit-cs-cover"><strong>ภาพปกนิทาน:</strong></label>
+                    <label><strong>ชื่อนิทาน:</strong></label>
+                    <input type="text" id="edit-cs-title" class="studio-input" placeholder="เช่น นิทานของน้องเม..." value="${story.title}">
+
+                    <label style="margin-top:8px;"><strong>ภาพปกนิทาน:</strong></label>
                     <input type="file" id="edit-cs-cover" accept="image/*">
-                    <img id="preview-cs-cover" class="story-img-preview" alt="">
+                    <img id="preview-cs-cover" class="story-img-preview" style="${story.cover ? '' : 'display:none;'}" src="${story.cover}">
                 </div>
+
                 <h4 style="margin:10px 0;">เนื้อหานิทานทีละหน้า:</h4>
                 <div id="cs-pages-editor"></div>
-                <button class="action-btn btn-next" id="add-custom-story-page" style="width:100%; margin-top:10px;">+ เพิ่มหน้าใหม่</button>
+
+                <button class="action-btn btn-next" id="add-custom-story-page" style="width:100%; margin-top:10px; background:#00BBF9;">📄 + เพิ่มหน้าใหม่</button>
+                <hr style="border:1px dashed #DFE4EA; margin:15px 0;">
+                <button class="action-btn btn-speak-all" id="save-custom-story" style="width:100%; font-size:1.2rem; padding:12px;">💾 บันทึกนิทานทั้งหมด</button>
             `;
-            container.querySelector('#edit-cs-title').value = story.title || '';
+
             container.querySelector('#back-custom-stories').onclick = renderStoryStudioList;
             container.querySelector('#save-custom-story').onclick = () => saveCustomStory(story.id);
             container.querySelector('#add-custom-story-page').onclick = addCustomStoryPageUI;
             container.querySelector('#edit-cs-cover').onchange = event => encodeImageBase64(event.currentTarget, 'preview-cs-cover');
-            const coverPreview = container.querySelector('#preview-cs-cover');
-            if (editingCustomStoryCover) {
-                coverPreview.src = editingCustomStoryCover;
-            } else {
-                coverPreview.style.display = 'none';
-            }
-            renderCustomStoryPagesUI();
+            renderCustomStoryPagesUI(story.id);
         }
 
-        function renderCustomStoryPagesUI() {
+        function renderCustomStoryPagesUI(storyId = editingCustomStoryId) {
             const box = document.getElementById('cs-pages-editor');
             if (!box) return;
             box.innerHTML = '';
 
-            tempCustomStoryPages.forEach((page, idx) => {
-                const voiceKey = `cs_${editingCustomStoryId}_p_${idx}`;
-                const block = document.createElement('div');
-                block.className = 'studio-page-block';
-                const header = document.createElement('div');
-                header.style.cssText = 'display:flex; justify-content:space-between;';
-                const pageTitle = document.createElement('strong');
-                pageTitle.textContent = `หน้าที่ ${idx + 1}`;
-                const removeButton = document.createElement('button');
-                removeButton.className = 'rec-btn delete';
-                removeButton.textContent = '❌ ลบหน้านี้';
-                removeButton.onclick = () => removeCustomStoryPageUI(idx);
-                header.append(pageTitle, removeButton);
+            tempCustomStoryPages = (tempCustomStoryPages || []).map(page => {
+                if (!page) return { img: '', lines: [''] };
+                if (!Array.isArray(page.lines)) page.lines = [page.text || ''];
+                return page;
+            });
+            window._tempPages = tempCustomStoryPages;
 
-                const imageInput = document.createElement('input');
-                imageInput.type = 'file';
-                imageInput.accept = 'image/*';
-                imageInput.onchange = event => encodeImageBase64(event.currentTarget, `preview-cs-p-${idx}`, idx);
-                const imagePreview = document.createElement('img');
-                imagePreview.id = `preview-cs-p-${idx}`;
-                imagePreview.className = 'story-img-preview';
-                imagePreview.alt = '';
-                if (page.img) imagePreview.src = page.img;
-                else imagePreview.style.display = 'none';
+            window._tempPages.forEach((p, pIdx) => {
+                let linesHtml = '';
+                p.lines.forEach((lineText, lIdx) => {
+                    const voiceKey = `cs_${storyId}_p_${pIdx}_l_${lIdx}`;
+                    const hasVoice = recordedKeys.has(voiceKey);
+                    const safeLineText = (lineText || '').replace(/"/g, '&quot;');
 
-                const textInput = document.createElement('textarea');
-                textInput.className = 'studio-input';
-                textInput.id = `text-cs-p-${idx}`;
-                textInput.rows = 2;
-                textInput.placeholder = 'พิมพ์ประโยคของหน้านี้... (เช่น เปเป้ กิน ข้าว)';
-                textInput.value = page.text || '';
-                textInput.oninput = () => { tempCustomStoryPages[idx].text = textInput.value; };
+                    linesHtml += `
+                        <div style="background:#FFF; padding:10px; border-radius:12px; border:2px solid #DFE4EA; margin-top:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <span style="font-size:0.9rem; font-weight:700; color:#9B5DE5;">บรรทัดที่ ${lIdx + 1}</span>
+                                ${p.lines.length > 1 ? `<button class="rec-btn delete" style="padding:4px 8px; font-size:0.75rem;" onclick="removeStoryLineUI(${pIdx}, ${lIdx}, '${storyId}')">ลบบรรทัดนี้</button>` : ''}
+                            </div>
+                            <input type="text" class="studio-input" id="input-cs-p${pIdx}-l${lIdx}" placeholder="พิมพ์ประโยค..." value="${safeLineText}" onchange="window._tempPages[${pIdx}].lines[${lIdx}] = this.value">
 
-                const voiceControls = document.createElement('div');
-                voiceControls.className = 'voice-controls';
-                voiceControls.style.marginTop = '6px';
-                const voiceLabel = document.createElement('span');
-                voiceLabel.style.cssText = 'font-size:0.85rem; color:#747D8C;';
-                voiceLabel.textContent = 'พากย์เสียงหน้านี้:';
-                const recordButton = document.createElement('button');
-                recordButton.id = `rec-btn-${voiceKey}`;
-                recordButton.className = currentlyRecordingKey === voiceKey ? 'rec-btn recording' : 'rec-btn record';
-                recordButton.textContent = currentlyRecordingKey === voiceKey ? '⏹️ กำลังอัด... (กดเพื่อหยุด)' : '🎙️ อัดเสียง';
-                recordButton.onclick = () => toggleRecordStoryPage(voiceKey);
-                const playButton = document.createElement('button');
-                playButton.className = 'rec-btn play';
-                playButton.textContent = '🔊 ฟัง';
-                playButton.onclick = () => speakSmart(voiceKey, textInput.value);
-                voiceControls.append(voiceLabel, recordButton, playButton);
-                if (recordedKeys.has(voiceKey)) {
-                    const recordedLabel = document.createElement('span');
-                    recordedLabel.textContent = '✅ มีเสียงพากย์แล้ว';
-                    voiceControls.appendChild(recordedLabel);
-                }
+                            <div class="voice-controls" style="margin-top:8px; background:#F8F9FA; padding:6px; border-radius:8px;">
+                                <button class="rec-btn record" id="rec-btn-${voiceKey}" onclick="toggleRecordStoryPage('${voiceKey}', '${storyId}')">🎙️ อัดเสียงบรรทัดนี้</button>
+                                <button class="rec-btn play" onclick="speakSmart('${voiceKey}', document.getElementById('input-cs-p${pIdx}-l${lIdx}').value)">🔊 ฟัง</button>
+                                ${hasVoice ? '<span style="font-size:0.8rem; color:#2ED573;">✅ อัดแล้ว</span>' : ''}
+                            </div>
+                        </div>
+                    `;
+                });
 
-                block.append(header, imageInput, imagePreview, textInput, voiceControls);
-                box.appendChild(block);
+                box.innerHTML += `
+                    <div class="studio-page-block">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong style="color:#FF4757;">หน้าที่ ${pIdx + 1}</strong>
+                            <button class="rec-btn delete" onclick="removeCustomStoryPageUI(${pIdx}, '${storyId}')">❌ ลบหน้านี้</button>
+                        </div>
+                        <input type="file" accept="image/*" onchange="encodeImageBase64(this, 'preview-cs-p-${pIdx}', ${pIdx})">
+                        <img id="preview-cs-p-${pIdx}" class="story-img-preview" style="${p.img ? '' : 'display:none;'}" src="${p.img || ''}">
+
+                        <div style="margin-top:10px;">
+                            ${linesHtml}
+                            <button class="action-btn btn-random" style="width:100%; margin-top:8px; font-size:0.9rem;" onclick="addStoryLineUI(${pIdx}, '${storyId}')">➕ เพิ่มบรรทัดในหน้านี้</button>
+                        </div>
+                    </div>
+                `;
             });
         }
 
-        function addCustomStoryPageUI() {
-            tempCustomStoryPages.push({ img: '', text: '' });
-            renderCustomStoryPagesUI();
+        function syncTempInputs() {
+            if (!window._tempPages) window._tempPages = tempCustomStoryPages;
+            window._tempPages.forEach((p, pIdx) => {
+                if (!Array.isArray(p.lines)) p.lines = [p.text || ''];
+                p.lines.forEach((_, lIdx) => {
+                    const el = document.getElementById(`input-cs-p${pIdx}-l${lIdx}`);
+                    if (el) window._tempPages[pIdx].lines[lIdx] = el.value;
+                });
+            });
+            tempCustomStoryPages = window._tempPages;
         }
 
-        function removeCustomStoryPageUI(idx) {
+        function addStoryLineUI(pIdx, storyId) {
+            syncTempInputs();
+            window._tempPages[pIdx].lines.push('');
+            renderCustomStoryPagesUI(storyId);
+        }
+
+        function removeStoryLineUI(pIdx, lIdx, storyId) {
+            syncTempInputs();
+            if (window._tempPages[pIdx].lines.length <= 1) {
+                alert('ต้องมีอย่างน้อย 1 บรรทัดต่อหน้า');
+                return;
+            }
+            window._tempPages[pIdx].lines.splice(lIdx, 1);
+            renderCustomStoryPagesUI(storyId);
+        }
+
+        function addCustomStoryPageUI() {
+            syncTempInputs();
+            const newPage = { img: '', lines: [''] };
+            tempCustomStoryPages.push(newPage);
+            window._tempPages = tempCustomStoryPages;
+            renderCustomStoryPagesUI(editingCustomStoryId);
+        }
+
+        function removeCustomStoryPageUI(idx, storyId = editingCustomStoryId) {
+            syncTempInputs();
             if (tempCustomStoryPages.length <= 1) {
                 alert('ต้องมีอย่างน้อย 1 หน้านะครับ');
                 return;
             }
             tempCustomStoryPages.splice(idx, 1);
-            renderCustomStoryPagesUI();
+            window._tempPages = tempCustomStoryPages;
+            renderCustomStoryPagesUI(storyId);
         }
 
         function encodeImageBase64(inputEl, previewId, pageIdx = -1) {
@@ -3000,18 +3067,41 @@
                 inputEl.value = '';
                 return;
             }
+
             const reader = new FileReader();
             reader.onload = event => {
                 if (typeof event.target.result !== 'string') {
                     alert('อ่านไฟล์รูปภาพไม่สำเร็จ');
                     return;
                 }
-                const preview = document.getElementById(previewId);
-                if (!preview) return;
-                preview.src = event.target.result;
-                preview.style.display = '';
-                if (pageIdx === -1) editingCustomStoryCover = event.target.result;
-                else if (tempCustomStoryPages[pageIdx]) tempCustomStoryPages[pageIdx].img = event.target.result;
+
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width;
+                    let h = img.height;
+                    const MAX_WIDTH = 800;
+                    if (w > MAX_WIDTH) {
+                        h *= MAX_WIDTH / w;
+                        w = MAX_WIDTH;
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const compressed = canvas.toDataURL('image/jpeg', 0.8);
+
+                    const imgEl = document.getElementById(previewId);
+                    if (!imgEl) return;
+                    imgEl.src = compressed;
+                    imgEl.style.display = 'block';
+                    imgEl.setAttribute('data-b64', compressed);
+
+                    if (pageIdx === -1) editingCustomStoryCover = compressed;
+                    else if (tempCustomStoryPages[pageIdx]) tempCustomStoryPages[pageIdx].img = compressed;
+                    window._tempPages = tempCustomStoryPages;
+                };
+                img.src = event.target.result;
             };
             reader.onerror = () => alert('อ่านไฟล์รูปภาพไม่สำเร็จ');
             reader.readAsDataURL(file);
@@ -3025,28 +3115,32 @@
                 alert('กรุณาตั้งชื่อนิทานด้วยครับ');
                 return;
             }
+
+            syncTempInputs();
             if (!tempCustomStoryPages.length) {
                 alert('นิทานต้องมีอย่างน้อย 1 หน้านะครับ');
                 return;
             }
-            tempCustomStoryPages.forEach((page, idx) => {
-                const textInput = document.getElementById(`text-cs-p-${idx}`);
-                if (textInput) page.text = textInput.value.trim();
-            });
 
+            const coverEl = document.getElementById('preview-cs-cover');
+            const coverB64 = coverEl ? coverEl.getAttribute('data-b64') || coverEl.src || '' : '';
             const storyObj = {
                 id,
                 title,
-                cover: editingCustomStoryCover,
-                pages: tempCustomStoryPages
+                cover: coverB64.startsWith('data:') ? coverB64 : '',
+                pages: tempCustomStoryPages.map(p => ({
+                    ...p,
+                    img: p.img || '',
+                    lines: Array.isArray(p.lines) && p.lines.length ? p.lines : [p.text || '']
+                }))
             };
             try {
                 await saveCustomStoryDB(storyObj);
-                alert('บันทึกนิทานเรียบร้อยแล้ว!');
+                alert('💾 บันทึกนิทานเรียบร้อยแล้ว!');
                 renderStoryStudioList();
             } catch (error) {
                 console.error('Unable to save custom story:', error);
-                alert('บันทึกนิทานไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บในเบราว์เซอร์แล้วลองอีกครั้ง');
+                alert('เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง หรือรูปล่าสุดอาจจะมีปัญหาครับ');
             }
         }
 
@@ -3061,8 +3155,11 @@
                     renderStage();
                 }
                 if (story) {
-                    const voiceKeys = story.pages.map((_, idx) => `cs_${id}_p_${idx}`);
-                    await Promise.all(voiceKeys.filter(key => recordedKeys.has(key)).map(deleteVoiceBlob));
+                    const lineKeys = story.pages.flatMap((page, pIdx) => {
+                        if (!Array.isArray(page.lines)) return [`cs_${id}_p_${pIdx}`];
+                        return page.lines.map((_, lIdx) => `cs_${id}_p_${pIdx}_l_${lIdx}`);
+                    });
+                    await Promise.all(lineKeys.filter(key => recordedKeys.has(key)).map(deleteVoiceBlob));
                 }
                 renderStoryStudioList();
             } catch (error) {
@@ -3071,13 +3168,24 @@
             }
         }
 
-        async function toggleRecordStoryPage(key) {
-            if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
-                alert('เบราว์เซอร์นี้ไม่รองรับการอัดเสียง กรุณาใช้เบราว์เซอร์ที่รองรับไมโครโฟนครับ');
+        async function toggleRecordStoryPage(key, storyId = editingCustomStoryId) {
+            const btn = document.getElementById(`rec-btn-${key}`);
+            if (currentlyRecordingKey === key && mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                if (btn) {
+                    btn.classList.remove('recording');
+                    btn.classList.add('record');
+                    btn.innerText = '🎙️ อัดเสียงใหม่';
+                }
+                setTimeout(() => {
+                    syncTempInputs();
+                    renderCustomStoryPagesUI(storyId);
+                }, 500);
                 return;
             }
-            if (currentlyRecordingKey === key && mediaRecorder?.state === 'recording') {
-                mediaRecorder.stop();
+
+            if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+                alert('เบราว์เซอร์นี้ไม่รองรับการอัดเสียง กรุณาใช้เบราว์เซอร์ที่รองรับไมโครโฟนครับ');
                 return;
             }
             if (currentlyRecordingKey) {
@@ -3085,20 +3193,22 @@
                 return;
             }
 
-            let stream;
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const recorder = new MediaRecorder(stream);
-                mediaRecorder = recorder;
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
                 audioChunks = [];
                 currentlyRecordingKey = key;
-                renderCustomStoryPagesUI();
+                if (btn) {
+                    btn.classList.remove('record');
+                    btn.classList.add('recording');
+                    btn.innerText = '⏹️ กำลังอัด... (กดเพื่อหยุด)';
+                }
 
-                recorder.ondataavailable = event => {
+                mediaRecorder.ondataavailable = event => {
                     if (event.data.size > 0) audioChunks.push(event.data);
                 };
-                recorder.onstop = async () => {
-                    const blob = new Blob(audioChunks, { type: recorder.mimeType || 'audio/webm' });
+                mediaRecorder.onstop = async () => {
+                    const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
                     try {
                         await saveVoiceBlob(key, blob);
                     } catch (error) {
@@ -3107,18 +3217,16 @@
                     } finally {
                         stream.getTracks().forEach(track => track.stop());
                         currentlyRecordingKey = null;
-                        if (mediaRecorder === recorder) mediaRecorder = null;
-                        renderCustomStoryPagesUI();
+                        if (mediaRecorder && mediaRecorder.state !== 'recording') mediaRecorder = null;
+                        setTimeout(() => {
+                            syncTempInputs();
+                            renderCustomStoryPagesUI(storyId);
+                        }, 150);
                     }
                 };
-                recorder.start();
-            } catch (error) {
-                if (stream) stream.getTracks().forEach(track => track.stop());
-                console.error('Unable to record story voice:', error);
-                alert('ไม่สามารถเข้าถึงไมโครโฟนได้ครับ');
-                currentlyRecordingKey = null;
-                if (mediaRecorder?.state !== 'recording') mediaRecorder = null;
-                renderCustomStoryPagesUI();
+                mediaRecorder.start();
+            } catch (err) {
+                alert('ไม่สามารถเข้าถึงไมโครโฟนได้ กรุณาตรวจสอบการอนุญาตบนเบราว์เซอร์ครับ');
             }
         }
 
