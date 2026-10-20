@@ -110,7 +110,7 @@
 
         @media (min-width: 680px) {
             .level-nav {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -145,6 +145,64 @@
         .btn-lv4 { background-color: #9B5DE5; }
         .btn-lv5 { background-color: #F15BB5; }
         .btn-lv6 { background-color: #2ED573; }
+        .btn-lv7 { background-color: #0984E3; }
+
+        /* Custom Story Styles */
+        .bookshelf-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            width: 100%;
+            padding: 10px;
+        }
+        @media (min-width: 600px) { .bookshelf-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .custom-book-card {
+            background: #FFFDF7;
+            border: 4px solid #DDB892;
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #DDB892;
+            transition: 0.15s;
+        }
+        .custom-book-card:active { transform: translateY(4px); box-shadow: 0 2px 0 #DDB892; }
+        .custom-book-cover { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; background: #F1F2F6; }
+        .custom-book-title { font-weight: 700; color: #9C6644; text-align: center; font-size: 1.1rem; }
+
+        .story-img-preview {
+            width: 100%;
+            max-width: 400px;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 4px solid #DFE4EA;
+            margin-bottom: 10px;
+            background: #F1F2F6;
+        }
+
+        .studio-page-block {
+            background: #F8F9FA;
+            border: 3px dashed #CED6E0;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .studio-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #DFE4EA;
+            border-radius: 12px;
+            font-family: 'Mali', sans-serif;
+            font-size: 1rem;
+        }
 
         .stage-container {
             width: 95%;
@@ -962,15 +1020,19 @@
                 <button class="util-btn" onclick="openVoiceStudio()">
                     🎙️ คลังเสียง / อัดเสียง
                 </button>
+                <button class="util-btn" style="background:#FFEAA7; border-color:#FDCB6E;" onclick="openStoryStudio()">
+                    📝 สร้างนิทาน
+                </button>
             </div>
         </div>
         <nav class="level-nav">
             <button class="level-btn btn-lv1 active" onclick="selectLevel(1)">🐣 1. พยัญชนะ (44)</button>
             <button class="level-btn btn-lv2" onclick="selectLevel(2)">🌈 2. สระไทย (28)</button>
-            <button class="level-btn btn-lv3" onclick="selectLevel(3)">🧩 3. ผสมพยัญชนะ+สระ</button>
-            <button class="level-btn btn-lv4" onclick="selectLevel(4)">🚂 4. สะกดคำ (กอ-อา-กา)</button>
+            <button class="level-btn btn-lv3" onclick="selectLevel(3)">🧩 3. ผสมคำ</button>
+            <button class="level-btn btn-lv4" onclick="selectLevel(4)">🚂 4. สะกดคำ</button>
             <button class="level-btn btn-lv5" onclick="selectLevel(5)">🎵 5. ผันวรรณยุกต์</button>
-            <button class="level-btn btn-lv6" onclick="selectLevel(6)">📖 6. หัดอ่านประโยค</button>
+            <button class="level-btn btn-lv6" onclick="selectLevel(6)">📖 6. ประโยค</button>
+            <button class="level-btn btn-lv7" onclick="selectLevel(7)">🎨 7. นิทานของฉัน</button>
         </nav>
     </header>
 
@@ -990,6 +1052,22 @@
 
         <div id="game-content"></div>
     </main>
+
+    <!-- Modal สตูดิโอสร้างนิทาน -->
+    <div class="modal-overlay" id="story-studio-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h2 style="margin:0; font-size:1.25rem; color:#0984E3;">🎨 สตูดิโอสร้างนิทาน</h2>
+                    <small style="color:#57606F;">สร้างนิทานของครอบครัว พร้อมใส่รูปภาพและเสียงพากย์ได้เอง!</small>
+                </div>
+                <button class="util-btn" onclick="closeStoryStudio()">❌ ปิด</button>
+            </div>
+            <div class="modal-body" id="story-studio-content">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
 
     <!-- Modal สตูดิโออัดเสียงผู้ปกครอง -->
     <div class="modal-overlay" id="voice-modal">
@@ -1319,6 +1397,7 @@
         let db;
         const recordedKeys = new Set();
         let activeRecordedAudioUrl = null;
+        let customStories = []; // Cache for Level 7 stories
 
         let __speechUnlocked = false;
         function unlockAudioForKidsApp() {
@@ -1358,18 +1437,59 @@
                     return resolve();
                 }
 
-                const request = indexedDB.open('ThaiKidsVoiceDB', 1);
+                // Upgrade DB Version to 2 for Custom Stories
+                const request = indexedDB.open('ThaiKidsVoiceDB', 2);
                 request.onupgradeneeded = (e) => {
                     const database = e.target.result;
                     if (!database.objectStoreNames.contains('voices')) {
                         database.createObjectStore('voices');
                     }
+                    if (!database.objectStoreNames.contains('stories')) {
+                        database.createObjectStore('stories', { keyPath: 'id' });
+                    }
                 };
                 request.onsuccess = (e) => {
                     db = e.target.result;
-                    loadRecordedKeys().then(resolve);
+                    Promise.all([loadRecordedKeys(), loadCustomStories()]).then(resolve);
                 };
                 request.onerror = () => resolve();
+            });
+        }
+
+        function loadCustomStories() {
+            return new Promise((resolve) => {
+                if (!db) return resolve();
+                const tx = db.transaction('stories', 'readonly');
+                const req = tx.objectStore('stories').getAll();
+                req.onsuccess = () => {
+                    customStories = req.result || [];
+                    resolve();
+                };
+                req.onerror = () => resolve();
+            });
+        }
+
+        function saveCustomStoryDB(storyObj) {
+            return new Promise((resolve) => {
+                const tx = db.transaction('stories', 'readwrite');
+                tx.objectStore('stories').put(storyObj);
+                tx.oncomplete = () => {
+                    const idx = customStories.findIndex(s => s.id === storyObj.id);
+                    if (idx > -1) customStories[idx] = storyObj;
+                    else customStories.push(storyObj);
+                    resolve();
+                };
+            });
+        }
+
+        function deleteCustomStoryDB(id) {
+            return new Promise((resolve) => {
+                const tx = db.transaction('stories', 'readwrite');
+                tx.objectStore('stories').delete(id);
+                tx.oncomplete = () => {
+                    customStories = customStories.filter(s => s.id !== id);
+                    resolve();
+                };
             });
         }
 
