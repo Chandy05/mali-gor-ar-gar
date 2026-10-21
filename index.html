@@ -51,7 +51,7 @@
 
         header {
             width: 100%;
-            max-width: 980px;
+            max-width: 1200px;
             padding: 10px 14px 4px 14px;
             display: flex;
             flex-direction: column;
@@ -148,6 +148,20 @@
             outline: 3px solid #FF4757;
         }
 
+        /* Smart TV Focus States */
+        button:focus, .util-btn:focus, .level-btn:focus, .action-btn:focus {
+            outline: 5px solid #FF9F1C;
+            outline-offset: 2px;
+            transform: scale(1.05);
+        }
+
+        .char-card:focus, .flashcard-box:focus, .choice-card:focus, .tone-step-card:focus, .story-line:focus, .match-card:focus {
+            outline: 6px solid #FF9F1C;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
         .btn-lv1 { background-color: #FF6B6B; }
         .btn-lv2 { background-color: #4ECDC4; }
         .btn-lv3 { background-color: #FF9F1C; }
@@ -215,7 +229,7 @@
 
         .stage-container {
             width: 95%;
-            max-width: 940px;
+            max-width: 1200px;
             background: rgba(255, 255, 255, 0.96);
             border-radius: 28px;
             border: 5px solid var(--white);
@@ -1925,6 +1939,8 @@
                 consonants.forEach((item, idx) => {
                     const card = document.createElement('div');
                     card.className = 'char-card';
+                    card.setAttribute('tabindex', '0');
+                    card.onkeydown = (e) => { if(e.key === 'Enter') card.click(); };
                     card.innerHTML = `
                         <div class="char-big ${!showImages ? 'no-img-mode' : ''}">${item.char}</div>
                         ${showImages ? `<div class="char-emoji">${item.emoji}</div>` : ''}
@@ -1969,6 +1985,8 @@
                 vowels.forEach((item, idx) => {
                     const card = document.createElement('div');
                     card.className = 'char-card';
+                    card.setAttribute('tabindex', '0');
+                    card.onkeydown = (e) => { if(e.key === 'Enter') card.click(); };
                     card.innerHTML = `
                         <div class="char-big" style="color: #00A8FF;">${item.display}</div>
                         <div class="char-label" style="margin-top:8px;">${item.name}</div>
@@ -2964,6 +2982,8 @@
             leftItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'match-card';
+                card.setAttribute('tabindex', '0');
+                card.onkeydown = (e) => { if(e.key === 'Enter') card.click(); };
                 if (currentLevel === 6) card.style.fontSize = '1.25rem';
                 card.innerText = item.leftText;
                 card.onclick = () => selectMatchCard('left', card, item);
@@ -2973,6 +2993,8 @@
             rightItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'match-card';
+                card.setAttribute('tabindex', '0');
+                card.onkeydown = (e) => { if(e.key === 'Enter') card.click(); };
                 card.style.fontSize = '1.2rem';
                 card.innerText = item.rightText;
                 card.onclick = () => selectMatchCard('right', card, item);
@@ -3112,6 +3134,8 @@
             choices.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'choice-card';
+                card.setAttribute('tabindex', '0');
+                card.onkeydown = (e) => { if(e.key === 'Enter') card.click(); };
 
                 if (currentLevel === 1) {
                     card.innerHTML = `
