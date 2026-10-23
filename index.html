@@ -1079,9 +1079,9 @@
 <body>
 
     <div class="reward-overlay" id="reward-screen">
-        <div class="reward-trophy">🏆</div>
-        <h1 style="color:#FFEAA7; font-size:2.5rem; text-align:center; text-shadow:2px 2px 4px #000; margin-bottom:10px;">ยอดเยี่ยมมาก!</h1>
-        <p style="color:#FFF; font-size:1.5rem; text-align:center; margin-top:0;">หนูสะสมดาวได้เยอะมากเลย!</p>
+        <div class="reward-trophy" id="reward-trophy-container" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">🏆</div>
+        <h1 id="reward-title" style="color:#FFEAA7; font-size:2.5rem; text-align:center; text-shadow:2px 2px 4px #000; margin-bottom:10px;">ยอดเยี่ยมมาก!</h1>
+        <p id="reward-sub" style="color:#FFF; font-size:1.5rem; text-align:center; margin-top:0;">หนูสะสมดาวได้เยอะมากเลย!</p>
         <button class="action-btn btn-speak-all" style="font-size:1.5rem; padding:12px 30px; margin-top:20px; box-shadow:0 6px 0 #20bf6b;" onclick="closeReward()">เล่นต่อเลย! 🚀</button>
     </div>
 
@@ -1941,7 +1941,7 @@
             speakSmart(null, currentInstructionTts);
         }
 
-        const TARGET_SCORE = 50; // คุณพ่อสามารถเปลี่ยนคะแนนเป้าหมายตรงนี้ได้ครับ
+        const TARGET_SCORE = 50; // ฐานคะแนนเปลี่ยนเป็น 50
 
         function updateScoreUI() {
             const scoreText = document.getElementById('star-count');
@@ -1969,7 +1969,8 @@
             launchConfetti();
 
             if (stars > 0 && stars % TARGET_SCORE === 0) {
-                setTimeout(showReward, 800);
+                const multiplier = Math.floor(stars / TARGET_SCORE);
+                setTimeout(() => showReward(multiplier), 800);
             }
         }
 
@@ -1981,11 +1982,39 @@
             }
         }
 
-        function showReward() {
+        function showReward(level) {
             playPopSound();
-            speakSmart('sys_correct', 'ยอดเยี่ยมมาก หนูได้ถ้วยรางวัลแล้ว!');
+
+            let titleTxt = 'ยอดเยี่ยมมาก!';
+            let subTxt = `หนูสะสมครบ ${stars} ดาว ได้ 1 ถ้วยรางวัล!`;
+            let trophies = '🏆';
+            let ttsMessage = 'ยอดเยี่ยมมาก ได้ 1 ถ้วยรางวัล';
+
+            if (level === 2) {
+                titleTxt = 'เก่งสุดๆ ไปเลย!';
+                subTxt = `สะสมครบ ${stars} ดาว รับไปเลย 2 ถ้วยรางวัล!`;
+                trophies = '🏆 🏆';
+                ttsMessage = 'เก่งสุดๆไปเลย รับไปเลย 2 ถ้วยรางวัล';
+            } else if (level >= 3) {
+                titleTxt = 'อัจฉริยะน้อย!';
+                subTxt = `กวาดไปเลย ${level} ถ้วยรางวัล! 🎉`;
+                trophies = Array(level).fill('🏆').join(' ');
+                ttsMessage = `อัจฉริยะน้อย กวาดไปเลย ${level} ถ้วยรางวัล`;
+            }
+
+            document.getElementById('reward-title').innerText = titleTxt;
+            document.getElementById('reward-sub').innerText = subTxt;
+            document.getElementById('reward-trophy-container').innerText = trophies;
+
+            playNativeSpeechDirect(ttsMessage, speechSessionId, () => {});
             document.getElementById('reward-screen').classList.add('show');
-            for (let i = 0; i < 3; i++) setTimeout(launchConfetti, i * 400);
+
+            let burstCount = level * 3;
+            if (burstCount > 15) burstCount = 15;
+
+            for (let i = 0; i < burstCount; i++) {
+                setTimeout(launchConfetti, i * 300);
+            }
         }
 
         function closeReward() {
