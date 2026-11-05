@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>วิชาภาษาอังกฤษพาเพลิน - เมืองจำลองของหนู</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Mali', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #e0c3fc 0%, #8ec5fc 55%, #c2e9fb 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #2d3436;
+    }
+
+    /* Top Header & Shared Star Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-left-group, .nav-right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-btn {
+      background: #ffeaa7;
+      border: 3px solid #fdcb6e;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 #e1b12c;
+      flex-shrink: 0;
+      text-decoration: none;
+      color: #2d3436;
+    }
+    .icon-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .back-map-btn {
+      background: #ff7675;
+      color: #fff;
+      border: 3px solid #d63031;
+      border-radius: 22px;
+      padding: 6px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #b33939;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-map-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .star-progress-wrap {
+      flex: 1;
+      max-width: 420px;
+      min-width: 170px;
+      background: #dfe6e9;
+      border-radius: 25px;
+      height: 36px;
+      position: relative;
+      border: 3px solid #fff;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .star-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fdcb6e, #f39c12);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .star-progress-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      color: #2d3436;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+    }
+
+    .lang-switch-btn {
+      background: #6c5ce7;
+      color: #fff;
+      border: 3px solid #4834d4;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #30336b;
+    }
+    .lang-switch-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Quick Stage Switcher Bar */
+    .quick-stage-bar {
+      display: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 900px;
+      margin: 10px auto 0;
+      padding: 0 14px;
+    }
+    .quick-stage-bar.show { display: flex; }
+
+    /* Screen Container */
+    .screen {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 14px;
+      text-align: center;
+    }
+    .screen.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Hub Town Cards */
+    .town-title {
+      font-size: 28px;
+      color: #2d3436;
+      margin: 8px 0 4px;
+      text-shadow: 2px 2px 0 #fff;
+    }
+    .town-sub {
+      font-size: 16px;
+      color: #2d3436;
+      margin-bottom: 16px;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+    .town-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 540px) {
+      .town-grid { grid-template-columns: 1fr; }
+    }
+    .zone-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      cursor: pointer;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .zone-card:active { transform: translateY(4px); box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+    .zone-1 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+    .zone-2 { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+    .zone-3 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+    .zone-4 { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+    .zone-5 {
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      grid-column: 1 / -1;
+    }
+    .zone-emoji { font-size: 52px; margin-bottom: 6px; }
+    .zone-name { font-size: 21px; font-weight: 700; margin: 4px 0; color: #2d3436; }
+    .zone-tag {
+      background: rgba(255,255,255,0.88);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2d3436;
+    }
+
+    /* Mode Selector Pills */
+    .mode-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .pill-btn {
+      background: #fff;
+      border: 3px solid #b2bec3;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #2d3436;
+      transition: 0.15s;
+    }
+    .pill-btn:active { transform: translateY(2px); }
+    .pill-btn.active {
+      background: #6c5ce7;
+      color: #fff;
+      border-color: #4834d4;
+      box-shadow: 0 3px 0 #30336b;
+    }
+    .pill-sub.active {
+      background: #00b894;
+      color: #fff;
+      border-color: #00896f;
+      box-shadow: 0 3px 0 #006266;
+    }
+    .pill-warn.active {
+      background: #e17055;
+      color: #fff;
+      border-color: #d63031;
+      box-shadow: 0 3px 0 #b33939;
+    }
+
+    /* Prompt Box */
+    .prompt-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      border: 4px solid #6c5ce7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+    .prompt-text {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: left;
+      flex: 1;
+    }
+    .speak-btn {
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 0 #0652DD;
+    }
+    .speak-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Stage 1: ABC Phonics Flashcard & Grid */
+    .flashcard-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .abc-flashcard {
+      background: #fff;
+      border: 6px solid #6c5ce7;
+      border-radius: 30px;
+      padding: 20px;
+      width: 100%;
+      max-width: 360px;
+      min-height: 260px;
+      box-shadow: 0 10px 0 #4834d4, 0 15px 25px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s;
+    }
+    .abc-flashcard:active { transform: translateY(4px) scale(1.02); }
+    .abc-big-letters {
+      font-size: 76px;
+      font-weight: 700;
+      color: #6c5ce7;
+      line-height: 1.05;
+    }
+    .abc-emoji { font-size: 62px; margin: 6px 0; }
+    .abc-word { font-size: 28px; font-weight: 700; color: #2d3436; }
+    .abc-phonics-badge {
+      background: #ffeaa7;
+      border: 2px solid #fdcb6e;
+      color: #d35400;
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .abc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+      gap: 10px;
+    }
+    .abc-mini-card {
+      background: #fff;
+      border: 4px solid #74b9ff;
+      border-radius: 20px;
+      padding: 10px 6px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #0984e3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.12s;
+    }
+    .abc-mini-card:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Stage 2: Vocabulary Mart Grid */
+    .mart-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+      .mart-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    }
+    .mart-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 14px 8px;
+      border: 4px solid #dfe6e9;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #b2bec3;
+      min-height: 122px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, background 0.2s;
+    }
+    .mart-card:active { transform: translateY(3px); box-shadow: none; }
+    .mart-emoji { font-size: 46px; line-height: 1.1; }
+    .mart-label { font-size: 20px; font-weight: 700; margin-top: 6px; color: #2d3436; }
+    .mart-thai { font-size: 14px; font-weight: 700; color: #636e72; margin-top: 2px; }
+
+    /* Stage 3: CVC Word Blender */
+    .cvc-board {
+      background: rgba(255,255,255,0.92);
+      border-radius: 26px;
+      padding: 20px 14px;
+      border: 5px solid #fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+    }
+    .cvc-slots-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .cvc-slot {
+      width: 84px;
+      height: 100px;
+      background: #fff;
+      border: 5px solid #74b9ff;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      font-weight: 700;
+      color: #2d3436;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #0984e3;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .cvc-slot.vowel-slot {
+      border-color: #ff7675;
+      box-shadow: 0 6px 0 #d63031;
+      color: #d63031;
+    }
+    .cvc-slot.active-glow {
+      background: #ffeaa7;
+      transform: scale(1.1) translateY(-4px);
+    }
+    .cvc-word-card {
+      background: #fff9db;
+      border: 4px dashed #f39c12;
+      border-radius: 22px;
+      padding: 12px 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    /* Stage 4: Daily Conversation Cards */
+    .talk-scene-card {
+      background: #fff;
+      border: 5px solid #fd79a8;
+      border-radius: 26px;
+      padding: 18px;
+      max-width: 600px;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .speech-bubble {
+      background: #f1f2f6;
+      border: 3px solid #dfe6e9;
+      border-radius: 20px;
+      padding: 12px 18px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0984e3;
+      margin: 10px 0;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    /* Choices & Navigation Buttons */
+    .choices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    @media (max-width: 520px) {
+      .choices-grid { grid-template-columns: 1fr; }
+    }
+    .choice-btn {
+      background: #fff;
+      border: 4px solid #74b9ff;
+      border-radius: 22px;
+      padding: 14px 12px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #0984e3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .choice-btn:active { transform: translateY(4px); box-shadow: none; }
+
+    .nav-btn-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .action-btn {
+      background: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 10px 20px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #00896f;
+    }
+    .action-btn:active { transform: translateY(3px); box-shadow: none; }
+    .action-btn.prev-btn { background: #636e72; box-shadow: 0 5px 0 #2d3436; }
+    .action-btn.next-btn { background: #0984e3; box-shadow: 0 5px 0 #0652DD; }
+
+    /* Reward Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 14px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 22px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      border: 5px solid #fdcb6e;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    .shake { animation: shakeAnim 0.4s; }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Navigation Bar -->
+  <div class="top-bar">
+    <div class="nav-left-group">
+      <a href="index.html" class="icon-btn" title="กลับหน้าเมืองหลัก (Home)">🏠</a>
+      <button class="back-map-btn" id="btnBackEngHub" onclick="goEngHub()">🗺️ เลือกด่าน</button>
+    </div>
+
+    <div class="star-progress-wrap" onclick="openRewardModal()">
+      <div class="star-progress-fill" id="starFill"></div>
+      <div class="star-progress-text" id="starText">⭐ 0 / 50 ดาว</div>
+    </div>
+
+    <div class="nav-right-group">
+      <button class="lang-switch-btn" id="helperLangBtn" onclick="toggleHelperLang()">🇬🇧+🇹🇭 คำแปลไทย: เปิด</button>
+    </div>
+  </div>
+
+  <!-- Quick Stage Switcher Bar -->
+  <div class="quick-stage-bar" id="quickStageBar">
+    <button class="pill-btn" id="qTab1" onclick="openStage(1)">🦁 1. ABC Phonics</button>
+    <button class="pill-btn" id="qTab2" onclick="openStage(2)">🍎 2. คลังคำศัพท์</button>
+    <button class="pill-btn" id="qTab3" onclick="openStage(3)">🐝 3. ผสมคำ CVC</button>
+    <button class="pill-btn" id="qTab4" onclick="openStage(4)">💬 4. สนทนาพาเพลิน</button>
+    <button class="pill-btn" id="qTab5" onclick="openStage(5)">🎧 5. ทายเสียง Eng</button>
+  </div>
+
+  <!-- ENGLISH STAGE HUB SCREEN -->
+  <div id="hubScreen" class="screen active">
+    <h1 class="town-title">🇬🇧 วิชาภาษาอังกฤษพาเพลินของ <span id="childNameLabel">น้องมะลิ</span></h1>
+    <div class="town-sub">ฝึกฟัง-พูดสำเนียงภาษาอังกฤษ โฟนิกส์ A-Z ผสมคำศัพท์ และบทสนทนาในชีวิตประจำวัน!</div>
+
+    <div class="town-grid">
+      <div class="zone-card zone-1" onclick="openStage(1)">
+        <div class="zone-emoji">🦁</div>
+        <div class="zone-name">1. ABC Phonics Zoo</div>
+        <div class="zone-tag">ตัวอักษร A-Z พิมพ์ใหญ่-เล็ก + เสียงโฟนิกส์ + ทายตัวอักษร</div>
+      </div>
+
+      <div class="zone-card zone-2" onclick="openStage(2)">
+        <div class="zone-emoji">🍎</div>
+        <div class="zone-name">2. คลังคำศัพท์หรรษา (Magic Words)</div>
+        <div class="zone-tag">สัตว์ ผลไม้ สี ร่างกาย + โหมดซ่อนรูป + ปริศนาคำใบ้</div>
+      </div>
+
+      <div class="zone-card zone-3" onclick="openStage(3)">
+        <div class="zone-emoji">🐝</div>
+        <div class="zone-name">3. ผสมคำ CVC Words</div>
+        <div class="zone-tag">ฝึกสะกดคำ 3 ตัวอักษร (C-A-T, D-O-G, S-U-N) + เติมตัวอักษร</div>
+      </div>
+
+      <div class="zone-card zone-4" onclick="openStage(4)">
+        <div class="zone-emoji">💬</div>
+        <div class="zone-name">4. สนทนาพาเพลิน (Little Talk)</div>
+        <div class="zone-tag">ประโยคทักทาย ขอบคุณ ขอโทษ ในชีวิตประจำวัน</div>
+      </div>
+
+      <div class="zone-card zone-5" onclick="openStage(5)">
+        <div class="zone-emoji">🎧</div>
+        <div class="zone-name">5. ทายเสียงภาษาอังกฤษ (Listen & Catch)</div>
+        <div class="zone-tag">เกมฟังสำเนียงภาษาอังกฤษแล้วแตะเลือกคำตอบให้ไว!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 1: ABC PHONICS ZOO -->
+  <div id="stage1" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn active" id="s1ModeCard" onclick="setS1Mode('card')">🗂️ ดูทีละใบ (Flashcard)</button>
+      <button class="pill-btn" id="s1ModeGrid" onclick="setS1Mode('grid')">🪟 ตาราง A-Z (26 ตัว)</button>
+      <button class="pill-btn" id="s1ModeQuiz" onclick="setS1Mode('quiz')">🎯 ทายตัวอักษร A-Z</button>
+      <button class="pill-btn pill-sub active" id="s1PicBtn" onclick="toggleS1Pic()">🖼️ แสดงรูปภาพ</button>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-text" id="s1Prompt">แตะที่การ์ดเพื่อฟังเสียงอ่านตัวอักษรและโฟนิกส์ภาษาอังกฤษจ้า!</div>
+      <button class="speak-btn" onclick="speakS1Prompt()">🔊</button>
+    </div>
+
+    <div id="s1Content"></div>
+  </div>
+
+  <!-- STAGE 2: MAGIC WORDS MART -->
+  <div id="stage2" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn pill-sub active" id="s2CatAnimals" onclick="setS2Cat('animals')">🐶 สัตว์น่ารัก (Animals)</button>
+      <button class="pill-btn pill-sub" id="s2CatFruits" onclick="setS2Cat('fruits')">🍎 ผลไม้ & อาหาร (Food)</button>
+      <button class="pill-btn pill-sub" id="s2CatColors" onclick="setS2Cat('colors')">🎨 สี & ธรรมชาติ (Colors)</button>
+      <button class="pill-btn pill-sub" id="s2CatBody" onclick="setS2Cat('body')">👀 ร่างกาย & ของใช้ (Body)</button>
+    </div>
+    <div class="mode-bar">
+      <button class="pill-btn active" id="s2DiffEasy" onclick="setS2Diff('easy')">🌱 หาคำศัพท์ (6 ช่อง)</button>
+      <button class="pill-btn" id="s2DiffHard" onclick="setS2Diff('hard')">🧩 ทายจากคำใบ้ (9 ช่อง)</button>
+      <button class="pill-btn pill-warn" id="s2HidePicBtn" onclick="toggleS2ShowPic()">🔤 โหมดซ่อนรูปภาพ: ปิด</button>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-text" id="s2Prompt">Find the matching word!</div>
+      <button class="speak-btn" onclick="speakS2Prompt()">🔊</button>
+    </div>
+
+    <div class="mart-grid" id="s2Grid"></div>
+  </div>
+
+  <!-- STAGE 3: CVC WORD BLENDER -->
+  <div id="stage3" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn active" id="s3ModeLearn" onclick="setS3Mode('learn')">📖 ฝึกสะกดทีละตัว (Blend & Read)</button>
+      <button class="pill-btn" id="s3ModeQuiz" onclick="setS3Mode('quiz')">🧩 ตัวอักษรไหนหายไป? (Missing Letter)</button>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-text" id="s3Prompt">แตะที่ตัวอักษรแต่ละช่องเพื่อฝึกสะกดคำภาษาอังกฤษจ้า!</div>
+      <button class="speak-btn" onclick="speakS3Prompt()">🔊</button>
+    </div>
+
+    <div id="s3Content"></div>
+  </div>
+
+  <!-- STAGE 4: LITTLE TALK (DAILY CONVERSATIONS) -->
+  <div id="stage4" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn active" id="s4ModeLearn" onclick="setS4Mode('learn')">🗣️ ฝึกพูดตามสถานการณ์</button>
+      <button class="pill-btn" id="s4ModeQuiz" onclick="setS4Mode('quiz')">🎯 เลือกคำพูดให้ตรงเหตุการณ์</button>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-text" id="s4Prompt">แตะที่ประโยคเพื่อฟังสำเนียงภาษาอังกฤษและฝึกพูดตามนะจ๊ะ!</div>
+      <button class="speak-btn" onclick="speakS4Prompt()">🔊</button>
+    </div>
+
+    <div id="s4Content"></div>
+  </div>
+
+  <!-- STAGE 5: LISTEN & CATCH QUIZ -->
+  <div id="stage5" class="screen">
+    <div class="prompt-box">
+      <div class="prompt-text" id="s5Prompt">🎧 ฟังเสียงภาษาอังกฤษ แล้วแตะเลือกภาพที่ตรงกันให้ถูกต้องนะจ๊ะ!</div>
+      <button class="speak-btn" onclick="speakS5Prompt()">🔊</button>
+    </div>
+
+    <div style="margin: 14px 0;">
+      <button class="action-btn next-btn" style="font-size: 22px; padding: 14px 28px; border-radius: 30px;" onclick="speakS5Prompt()">
+        🔊 ฟังเสียงโจทย์อีกครั้ง (Listen Again)
+      </button>
+    </div>
+
+    <div class="choices-grid" id="s5Choices"></div>
+  </div>
+
+  <!-- REWARD MODAL -->
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal-card">
+      <div style="font-size:64px;">🏆🎉</div>
+      <h2 id="rewardModalTitle">เก่งที่สุดเลย!</h2>
+      <p id="rewardModalDesc" style="font-size:18px; font-weight:700;"></p>
+      <div style="background:#ffeaa7; padding:14px; border-radius:18px; border:3px dashed #e17055; margin:14px 0; font-size:20px; font-weight:700;" id="couponTextDisplay">
+        🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!
+      </div>
+      <button class="action-btn" onclick="closeRewardModal()">เล่นต่อเลย!</button>
+    </div>
+  </div>
+
+  <script>
+    // ======== 1. WEB AUDIO & SPEECH SYNTHESIS ENGINE ========
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state !== 'running') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function unlockMobileAudio() {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      if (src.start) src.start(0);
+    }
+    document.addEventListener('touchstart', unlockMobileAudio, { passive: true });
+    document.addEventListener('click', unlockMobileAudio, { passive: true });
+
+    function playSFX(type) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      if (type === 'pop') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(480, now);
+        osc.frequency.exponentialRampToValueAtTime(760, now + 0.08);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.095);
+      } else if (type === 'win') {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + i * 0.09);
+          gain.gain.setValueAtTime(0.28, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.09 + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.23);
+        });
+      } else if (type === 'wrong') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.26);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.27);
+      }
+    }
+
+    function speakEn(text, callback) {
+      if (!('speechSynthesis' in window)) {
+        if (callback) setTimeout(callback, 400);
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      utter.rate = 0.85;
+      utter.pitch = 1.05;
+      if (callback) {
+        utter.onend = callback;
+        utter.onerror = callback;
+      }
+      window.speechSynthesis.speak(utter);
+    }
+
+    function speakBilingual(enText, thText) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const uEn = new SpeechSynthesisUtterance(enText);
+      uEn.lang = 'en-US';
+      uEn.rate = 0.85;
+
+      if (showThaiHelper && thText) {
+        uEn.onend = () => {
+          const uTh = new SpeechSynthesisUtterance(thText);
+          uTh.lang = 'th-TH';
+          uTh.rate = 0.95;
+          window.speechSynthesis.speak(uTh);
+        };
+      }
+      window.speechSynthesis.speak(uEn);
+    }
+
+    // ======== 2. SHARED STAR PROGRESS (SYNCED WITH INDEX.HTML) ========
+    function getUnifiedStars() {
+      const s1 = parseInt(localStorage.getItem('mlst_stars') || '0', 10);
+      const s2 = parseInt(localStorage.getItem('kidsMath_totalStars') || '0', 10);
+      return Math.max(isNaN(s1) ? 0 : s1, isNaN(s2) ? 0 : s2);
+    }
+
+    let stars = getUnifiedStars();
+    let starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+    let childName = localStorage.getItem('mlst_name') || 'น้องมะลิ';
+    let couponText = localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!';
+    let showThaiHelper = true;
+
+    function updateStarUI() {
+      childName = localStorage.getItem('mlst_name') || 'น้องมะลิ';
+      starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+      document.getElementById('childNameLabel').textContent = childName;
+      document.getElementById('couponTextDisplay').textContent = couponText;
+
+      const pct = Math.min(100, Math.round(((stars % starGoal) / starGoal) * 100));
+      document.getElementById('starFill').style.width = (stars > 0 && stars % starGoal === 0 ? 100 : pct) + '%';
+      document.getElementById('starText').textContent = `⭐ ${stars} / ${starGoal} ดาว`;
+    }
+
+    function addStar(amount = 1) {
+      stars += amount;
+      localStorage.setItem('mlst_stars', String(stars));
+      localStorage.setItem('kidsMath_totalStars', String(stars));
+      updateStarUI();
+      launchConfetti();
+
+      if (stars >= starGoal && stars % starGoal === 0) {
+        document.getElementById('rewardModalTitle').textContent = `🎉 ครบ ${stars} ดาวแล้ว!`;
+        document.getElementById('rewardModalDesc').textContent = `${childName} เก่งภาษาอังกฤษมากๆ เลย นำหน้าจอนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลยจ้า!`;
+        document.getElementById('rewardModal').classList.add('show');
+      }
+    }
+
+    function toggleHelperLang() {
+      playSFX('pop');
+      showThaiHelper = !showThaiHelper;
+      document.getElementById('helperLangBtn').textContent = showThaiHelper
+        ? '🇬🇧+🇹🇭 คำแปลไทย: เปิด'
+        : '🇬🇧 English ล้วน';
+    }
+
+    function openRewardModal() {
+      playSFX('pop');
+      document.getElementById('rewardModalTitle').textContent = `⭐ สะสมได้ ${stars} / ${starGoal} ดาว`;
+      document.getElementById('rewardModalDesc').textContent =
+        stars >= starGoal
+          ? 'ครบตามเป้าหมายแล้ว! นำคูปองนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลย!'
+          : `อีกแค่ ${starGoal - (stars % starGoal)} ดาว จะได้รับคูปองรางวัลพิเศษแล้ว สู้ๆ นะจ๊ะ!`;
+      document.getElementById('rewardModal').classList.add('show');
+    }
+
+    function closeRewardModal() {
+      document.getElementById('rewardModal').classList.remove('show');
+    }
+
+    // ======== 3. NAVIGATION BETWEEN HUB & STAGES ========
+    let currentStage = 0;
+
+    function goEngHub() {
+      playSFX('pop');
+      currentStage = 0;
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('hubScreen').classList.add('active');
+      document.getElementById('btnBackEngHub').style.display = 'none';
+      document.getElementById('quickStageBar').classList.remove('show');
+    }
+
+    function openStage(num) {
+      playSFX('pop');
+      currentStage = num;
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('stage' + num).classList.add('active');
+      document.getElementById('btnBackEngHub').style.display = 'inline-flex';
+      document.getElementById('quickStageBar').classList.add('show');
+
+      [1, 2, 3, 4, 5].forEach(i => {
+        const tab = document.getElementById('qTab' + i);
+        if (tab) tab.classList.toggle('active', i === num);
+      });
+
+      if (num === 1) renderStage1();
+      if (num === 2) renderStage2();
+      if (num === 3) renderStage3();
+      if (num === 4) renderStage4();
+      if (num === 5) renderStage5();
+    }
+
+    // ======== 4. STAGE 1: ABC PHONICS ZOO (A-Z) ========
+    const abcData = [
+      { l: 'A', s: 'a', word: 'Apple', th: 'แอปเปิล', ph: 'แอะ (a)', speak: 'A, a, Apple', emoji: '🍎' },
+      { l: 'B', s: 'b', word: 'Bear', th: 'หมี', ph: 'เบอะ (b)', speak: 'B, b, Bear', emoji: '🐻' },
+      { l: 'C', s: 'c', word: 'Cat', th: 'แมว', ph: 'เคอะ (c)', speak: 'C, c, Cat', emoji: '🐱' },
+      { l: 'D', s: 'd', word: 'Dog', th: 'สุนัข', ph: 'เดอะ (d)', speak: 'D, d, Dog', emoji: '🐶' },
+      { l: 'E', s: 'e', word: 'Elephant', th: 'ช้าง', ph: 'เอะ (e)', speak: 'E, e, Elephant', emoji: '🐘' },
+      { l: 'F', s: 'f', word: 'Fish', th: 'ปลา', ph: 'เฟอะ (f)', speak: 'F, f, Fish', emoji: '🐟' },
+      { l: 'G', s: 'g', word: 'Grapes', th: 'องุ่น', ph: 'เกอะ (g)', speak: 'G, g, Grapes', emoji: '🍇' },
+      { l: 'H', s: 'h', word: 'Hat', th: 'หมวก', ph: 'เฮอะ (h)', speak: 'H, h, Hat', emoji: '👒' },
+      { l: 'I', s: 'i', word: 'Ice cream', th: 'ไอศกรีม', ph: 'อิ (i)', speak: 'I, i, Ice cream', emoji: '🍦' },
+      { l: 'J', s: 'j', word: 'Juice', th: 'น้ำผลไม้', ph: 'เจอะ (j)', speak: 'J, j, Juice', emoji: '🧃' },
+      { l: 'K', s: 'k', word: 'Kite', th: 'ว่าว', ph: 'เคอะ (k)', speak: 'K, k, Kite', emoji: '🪁' },
+      { l: 'L', s: 'l', word: 'Lion', th: 'สิงโต', ph: 'เลอะ (l)', speak: 'L, l, Lion', emoji: '🦁' },
+      { l: 'M', s: 'm', word: 'Monkey', th: 'ลิง', ph: 'เมอะ (m)', speak: 'M, m, Monkey', emoji: '🐵' },
+      { l: 'N', s: 'n', word: 'Nest', th: 'รังนก', ph: 'เนอะ (n)', speak: 'N, n, Nest', emoji: '🪺' },
+      { l: 'O', s: 'o', word: 'Orange', th: 'ส้ม', ph: 'เอาะ (o)', speak: 'O, o, Orange', emoji: '🍊' },
+      { l: 'P', s: 'p', word: 'Pig', th: 'หมู', ph: 'เพอะ (p)', speak: 'P, p, Pig', emoji: '🐷' },
+      { l: 'Q', s: 'q', word: 'Queen', th: 'พระราชินี', ph: 'เควอะ (qu)', speak: 'Q, q, Queen', emoji: '👑' },
+      { l: 'R', s: 'r', word: 'Rabbit', th: 'กระต่าย', ph: 'เรอะ (r)', speak: 'R, r, Rabbit', emoji: '🐰' },
+      { l: 'S', s: 's', word: 'Sun', th: 'พระอาทิตย์', ph: 'เซอะ (s)', speak: 'S, s, Sun', emoji: '☀️' },
+      { l: 'T', s: 't', word: 'Tiger', th: 'เสือ', ph: 'เทอะ (t)', speak: 'T, t, Tiger', emoji: '🐯' },
+      { l: 'U', s: 'u', word: 'Umbrella', th: 'ร่ม', ph: 'อะ (u)', speak: 'U, u, Umbrella', emoji: '☂️' },
+      { l: 'V', s: 'v', word: 'Van', th: 'รถตู้', ph: 'เวอะ (v)', speak: 'V, v, Van', emoji: '🚐' },
+      { l: 'W', s: 'w', word: 'Whale', th: 'วาฬ', ph: 'เวอะ (w)', speak: 'W, w, Whale', emoji: '🐳' },
+      { l: 'X', s: 'x', word: 'Xylophone', th: 'ระนาด', ph: 'คซ (x)', speak: 'X, x, Xylophone', emoji: '🎹' },
+      { l: 'Y', s: 'y', word: 'Yo-yo', th: 'ลูกดิ่งโยโย่', ph: 'เยอะ (y)', speak: 'Y, y, Yo-yo', emoji: '🪀' },
+      { l: 'Z', s: 'z', word: 'Zebra', th: 'ม้าลาย', ph: 'เซอะ (z)', speak: 'Z, z, Zebra', emoji: '🦓' }
+    ];
+
+    let s1Mode = 'card';
+    let s1Index = 0;
+    let s1ShowPic = true;
+    let s1QuizTarget = null;
+
+    function setS1Mode(mode) {
+      playSFX('pop');
+      s1Mode = mode;
+      document.getElementById('s1ModeCard').classList.toggle('active', mode === 'card');
+      document.getElementById('s1ModeGrid').classList.toggle('active', mode === 'grid');
+      document.getElementById('s1ModeQuiz').classList.toggle('active', mode === 'quiz');
+      renderStage1();
+    }
+
+    function toggleS1Pic() {
+      playSFX('pop');
+      s1ShowPic = !s1ShowPic;
+      const btn = document.getElementById('s1PicBtn');
+      btn.classList.toggle('active', s1ShowPic);
+      btn.textContent = s1ShowPic ? '🖼️ แสดงรูปภาพ' : '🔤 ซ่อนรูปภาพ';
+      renderStage1();
+    }
+
+    function renderStage1() {
+      const box = document.getElementById('s1Content');
+      box.innerHTML = '';
+
+      if (s1Mode === 'card') {
+        const item = abcData[s1Index];
+        document.getElementById('s1Prompt').textContent =
+          `ตัวอักษรที่ ${s1Index + 1} / 26: แตะที่การ์ดเพื่อฟังเสียง "${item.l} - ${item.word}"`;
+
+        box.innerHTML = `
+          <div class="flashcard-wrap">
+            <div class="abc-flashcard" onclick="speakBilingual('${item.speak}', '${item.th}')">
+              <div class="abc-big-letters">${item.l} ${item.s}</div>
+              ${s1ShowPic ? `<div class="abc-emoji">${item.emoji}</div>` : ''}
+              <div class="abc-word">${item.word} (${item.th})</div>
+              <div class="abc-phonics-badge">🔊 เสียงโฟนิกส์: ${item.ph}</div>
+            </div>
+            <div class="nav-btn-row">
+              <button class="action-btn prev-btn" onclick="stepS1(-1)">⬅️ ก่อนหน้า</button>
+              <button class="action-btn" onclick="speakBilingual('${item.speak}', '${item.th}')">🔊 ฟังเสียงอ่าน</button>
+              <button class="action-btn next-btn" onclick="stepS1(1)">ถัดไป ➡️</button>
+            </div>
+          </div>
+        `;
+        speakEn(item.speak);
+      } else if (s1Mode === 'grid') {
+        document.getElementById('s1Prompt').textContent = 'แตะตัวอักษร A ถึง Z ตัวไหนก็ได้เพื่อฟังเสียงอ่านจ้า!';
+        const grid = document.createElement('div');
+        grid.className = 'abc-grid';
+        abcData.forEach((item, idx) => {
+          const card = document.createElement('div');
+          card.className = 'abc-mini-card';
+          card.innerHTML = `
+            <div style="font-size: 32px; font-weight: 700; color: #6c5ce7;">${item.l}${item.s}</div>
+            ${s1ShowPic ? `<div style="font-size: 30px; margin: 2px 0;">${item.emoji}</div>` : ''}
+            <div style="font-size: 14px; font-weight: 700;">${item.word}</div>
+          `;
+          card.onclick = () => {
+            playSFX('pop');
+            s1Index = idx;
+            speakBilingual(item.speak, item.th);
+          };
+          grid.appendChild(card);
+        });
+        box.appendChild(grid);
+      } else if (s1Mode === 'quiz') {
+        const pool = [...abcData].sort(() => Math.random() - 0.5).slice(0, 3);
+        s1QuizTarget = pool[Math.floor(Math.random() * pool.length)];
+        document.getElementById('s1Prompt').textContent =
+          `🎯 Find the letter "${s1QuizTarget.l}" (${s1QuizTarget.word} - ${s1QuizTarget.th})!`;
+
+        const grid = document.createElement('div');
+        grid.className = 'choices-grid';
+        pool.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'choice-btn';
+          btn.innerHTML = `
+            <div style="font-size: 52px; color: #6c5ce7;">${opt.l} ${opt.s}</div>
+            ${s1ShowPic ? `<div style="font-size: 38px;">${opt.emoji}</div>` : ''}
+            <div style="font-size: 18px;">${opt.word}</div>
+          `;
+          btn.onclick = () => {
+            if (opt.l === s1QuizTarget.l) {
+              playSFX('win');
+              addStar(1);
+              speakBilingual(`Great job! ${opt.speak}`, `เก่งมากจ้า ${opt.th}`);
+              setTimeout(renderStage1, 1300);
+            } else {
+              playSFX('wrong');
+              btn.classList.add('shake');
+              setTimeout(() => btn.classList.remove('shake'), 400);
+              speakEn('Try again!');
+            }
+          };
+          grid.appendChild(btn);
+        });
+        box.appendChild(grid);
+        speakEn(`Find the letter ${s1QuizTarget.l}, ${s1QuizTarget.word}`);
+      }
+    }
+
+    function stepS1(dir) {
+      playSFX('pop');
+      s1Index = (s1Index + dir + abcData.length) % abcData.length;
+      renderStage1();
+    }
+
+    function speakS1Prompt() {
+      if (s1Mode === 'quiz' && s1QuizTarget) {
+        speakEn(`Find the letter ${s1QuizTarget.l}, ${s1QuizTarget.word}`);
+      } else {
+        const item = abcData[s1Index];
+        speakBilingual(item.speak, item.th);
+      }
+    }
+
+    // ======== 5. STAGE 2: MAGIC WORDS MART ========
+    const vocabCatalog = {
+      animals: [
+        { word: 'Dog', th: 'สุนัข', emoji: '🐶', riddleEn: 'Which animal says Woof Woof and loves bones?', riddleTh: 'สัตว์อะไรเอ่ย เห่าโฮ่งๆ ชอบแทะกระดูก?' },
+        { word: 'Cat', th: 'แมว', emoji: '🐱', riddleEn: 'Which cute pet says Meow and catches mice?', riddleTh: 'สัตว์อะไรเอ่ย ร้องเหมียวๆ ชอบจับหนู?' },
+        { word: 'Elephant', th: 'ช้าง', emoji: '🐘', riddleEn: 'Which big animal has a long trunk and big ears?', riddleTh: 'สัตว์อะไรเอ่ย ตัวใหญ่ มีงวงยาวๆ?' },
+        { word: 'Rabbit', th: 'กระต่าย', emoji: '🐰', riddleEn: 'Which animal has long ears and loves carrots?', riddleTh: 'สัตว์อะไรเอ่ย หูยาว ชอบกินแครอท?' },
+        { word: 'Monkey', th: 'ลิง', emoji: '🐵', riddleEn: 'Which funny animal climbs trees and eats bananas?', riddleTh: 'สัตว์อะไรเอ่ย ชอบปีนต้นไม้และกินกล้วย?' },
+        { word: 'Bird', th: 'นก', emoji: '🐦', riddleEn: 'Which animal has wings and flies in the sky?', riddleTh: 'สัตว์อะไรเอ่ย มีปีกบินได้บนท้องฟ้า?' },
+        { word: 'Duck', th: 'เป็ด', emoji: '🦆', riddleEn: 'Which animal swims in the pond and says Quack Quack?', riddleTh: 'สัตว์อะไรเอ่ย ว่ายน้ำและร้องก้าบๆ?' },
+        { word: 'Lion', th: 'สิงโต', emoji: '🦁', riddleEn: 'Which strong animal is the king of the jungle?', riddleTh: 'สัตว์อะไรเอ่ย เป็นเจ้าป่ามีแผงคอเท่ๆ?' },
+        { word: 'Fish', th: 'ปลา', emoji: '🐟', riddleEn: 'Which animal breathes underwater and has fins?', riddleTh: 'สัตว์อะไรเอ่ย ว่ายอยู่ในน้ำ มีครีบมีหาง?' }
+      ],
+      fruits: [
+        { word: 'Apple', th: 'แอปเปิล', emoji: '🍎', riddleEn: 'What fruit is red, round, and crunchy?', riddleTh: 'ผลไม้อะไรเอ่ย ลูกกลมสีแดง กรอบอร่อย?' },
+        { word: 'Banana', th: 'กล้วยหอม', emoji: '🍌', riddleEn: 'What long yellow fruit do monkeys love?', riddleTh: 'ผลไม้อะไรเอ่ย สีเหลืองยาวๆ ลิงชอบกิน?' },
+        { word: 'Orange', th: 'ส้ม', emoji: '🍊', riddleEn: 'What round juicy fruit has Vitamin C?', riddleTh: 'ผลไม้กลมๆ สีส้ม รสเปรี้ยวอมหวาน?' },
+        { word: 'Watermelon', th: 'แตงโม', emoji: '🍉', riddleEn: 'What big fruit is green outside and red inside?', riddleTh: 'ผลไม้ลูกใหญ่ เปลือกเขียว ข้างในสีแดงฉ่ำน้ำ?' },
+        { word: 'Strawberry', th: 'สตรอว์เบอร์รี', emoji: '🍓', riddleEn: 'What small sweet red fruit has tiny seeds outside?', riddleTh: 'ผลไม้ลูกสีแดงน่ารัก รสเปรี้ยวอมหวาน?' },
+        { word: 'Milk', th: 'นมสด', emoji: '🥛', riddleEn: 'What healthy white drink comes from a cow?', riddleTh: 'เครื่องดื่มสีขาวมีประโยชน์จากแม่วัว?' },
+        { word: 'Bread', th: 'ขนมปัง', emoji: '🍞', riddleEn: 'What soft food do we toast for breakfast?', riddleTh: 'อาหารนุ่มๆ ที่นำมาปิ้งทาแยมตอนเช้า?' },
+        { word: 'Egg', th: 'ไข่', emoji: '🥚', riddleEn: 'What oval food comes from a hen?', riddleTh: 'อะไรเอ่ย แม่ไก่ฟักออกมาเป็นฟองกลมรี?' },
+        { word: 'Cake', th: 'เค้ก', emoji: '🎂', riddleEn: 'What sweet dessert do we eat on a birthday?', riddleTh: 'ขนมหวานอะไรเอ่ย ปักเทียนเป่าในวันเกิด?' }
+      ],
+      colors: [
+        { word: 'Red', th: 'สีแดง', emoji: '🔴', riddleEn: 'What color is a fire truck and a ripe apple?', riddleTh: 'สีอะไรเอ่ย สีเหมือนผลแอปเปิลและรถดับเพลิง?' },
+        { word: 'Blue', th: 'สีฟ้า/น้ำเงิน', emoji: '🔵', riddleEn: 'What color is the clear sky and the ocean?', riddleTh: 'สีอะไรเอ่ย สีเหมือนท้องฟ้าและน้ำทะเล?' },
+        { word: 'Yellow', th: 'สีเหลือง', emoji: '🟡', riddleEn: 'What bright color is the sun and a banana?', riddleTh: 'สีอะไรเอ่ย สดใสเหมือนกล้วยหอมและดอกทานตะวัน?' },
+        { word: 'Green', th: 'สีเขียว', emoji: '🟢', riddleEn: 'What color are tree leaves and grass?', riddleTh: 'สีอะไรเอ่ย สีเหมือนใบไม้และต้นหญ้า?' },
+        { word: 'Pink', th: 'สีชมพู', emoji: '🩷', riddleEn: 'What sweet color is a flamingo and cotton candy?', riddleTh: 'สีอะไรเอ่ย หวานแหววเหมือนสายไหม?' },
+        { word: 'Purple', th: 'สีม่วง', emoji: '🟣', riddleEn: 'What color is a bunch of grapes?', riddleTh: 'สีอะไรเอ่ย สีเหมือนผลองุ่น?' },
+        { word: 'Sun', th: 'พระอาทิตย์', emoji: '☀️', riddleEn: 'What shines brightly in the daytime sky?', riddleTh: 'อะไรเอ่ย ส่องแสงสว่างบนท้องฟ้าตอนกลางวัน?' },
+        { word: 'Moon', th: 'พระจันทร์', emoji: '🌙', riddleEn: 'What shines gently in the night sky?', riddleTh: 'อะไรเอ่ย ส่องแสงนวลๆ บนท้องฟ้าตอนกลางคืน?' },
+        { word: 'Rainbow', th: 'รุ้งกินน้ำ', emoji: '🌈', riddleEn: 'What colorful arch appears in the sky after rain?', riddleTh: 'อะไรเอ่ย มี 7 สีสวยงามหลังฝนตก?' }
+      ],
+      body: [
+        { word: 'Eyes', th: 'ดวงตา', emoji: '👀', riddleEn: 'What part of your body helps you see?', riddleTh: 'อวัยวะใดเอ่ย ใช้มองดูสิ่งต่างๆ รอบตัว?' },
+        { word: 'Ears', th: 'หู', emoji: '👂', riddleEn: 'What part of your body helps you hear sounds?', riddleTh: 'อวัยวะใดเอ่ย ใช้ฟังเสียงเพลงและเสียงคุณแม่?' },
+        { word: 'Nose', th: 'จมูก', emoji: '👃', riddleEn: 'What part of your body helps you smell flowers?', riddleTh: 'อวัยวะใดเอ่ย ใช้ดมกลิ่นหอมของดอกไม้?' },
+        { word: 'Mouth', th: 'ปาก', emoji: '👄', riddleEn: 'What part of your body helps you eat and speak?', riddleTh: 'อวัยวะใดเอ่ย ใช้พูดคุยและกินอาหารอร่อยๆ?' },
+        { word: 'Hands', th: 'มือ', emoji: '👐', riddleEn: 'What do we wash with soap before eating?', riddleTh: 'อะไรเอ่ย ที่เราต้องล้างด้วยสบู่ก่อนกินข้าว?' },
+        { word: 'Feet', th: 'เท้า', emoji: '🦶', riddleEn: 'What part of your body wears socks and shoes?', riddleTh: 'อวัยวะใดเอ่ย ใช้สวมรองเท้าและเดินวิ่ง?' },
+        { word: 'Book', th: 'หนังสือ', emoji: '📘', riddleEn: 'What do we open and read stories from?', riddleTh: 'สิ่งของใดเอ่ย เปิดอ่านนิทานและเรียนหนังสือ?' },
+        { word: 'Car', th: 'รถยนต์', emoji: '🚗', riddleEn: 'What vehicle has four wheels and drives on the road?', riddleTh: 'ยานพาหนะใดเอ่ย มี 4 ล้อ วิ่งบนถนน?' },
+        { word: 'Airplane', th: 'เครื่องบิน', emoji: '✈️', riddleEn: 'What big vehicle flies high in the clouds?', riddleTh: 'ยานพาหนะใดเอ่ย บินอยู่บนท้องฟ้าเหนือเมฆ?' }
+      ]
+    };
+
+    let s2Cat = 'animals';
+    let s2Diff = 'easy';
+    let s2ShowPic = true;
+    let s2Answer = null;
+
+    function setS2Cat(cat) {
+      playSFX('pop');
+      s2Cat = cat;
+      document.getElementById('s2CatAnimals').classList.toggle('active', cat === 'animals');
+      document.getElementById('s2CatFruits').classList.toggle('active', cat === 'fruits');
+      document.getElementById('s2CatColors').classList.toggle('active', cat === 'colors');
+      document.getElementById('s2CatBody').classList.toggle('active', cat === 'body');
+      renderStage2();
+    }
+
+    function setS2Diff(diff) {
+      playSFX('pop');
+      s2Diff = diff;
+      document.getElementById('s2DiffEasy').classList.toggle('active', diff === 'easy');
+      document.getElementById('s2DiffHard').classList.toggle('active', diff === 'hard');
+      renderStage2();
+    }
+
+    function toggleS2ShowPic() {
+      playSFX('pop');
+      s2ShowPic = !s2ShowPic;
+      const btn = document.getElementById('s2HidePicBtn');
+      btn.classList.toggle('active', !s2ShowPic);
+      btn.textContent = s2ShowPic ? '🔤 โหมดซ่อนรูปภาพ: ปิด' : '🔤 โหมดซ่อนรูปภาพ: เปิด';
+      renderStage2();
+    }
+
+    function renderStage2() {
+      const pool = [...vocabCatalog[s2Cat]].sort(() => Math.random() - 0.5);
+      const count = s2Diff === 'easy' ? 6 : 9;
+      const choices = pool.slice(0, count);
+      s2Answer = choices[Math.floor(Math.random() * choices.length)];
+
+      if (s2Diff === 'easy') {
+        document.getElementById('s2Prompt').textContent = showThaiHelper
+          ? `🛒 Find "${s2Answer.word}" (${s2Answer.th})!`
+          : `🛒 Find "${s2Answer.word}" please!`;
+      } else {
+        document.getElementById('s2Prompt').textContent = showThaiHelper
+          ? `🧩 Riddle: ${s2Answer.riddleEn} (${s2Answer.riddleTh})`
+          : `🧩 Riddle: ${s2Answer.riddleEn}`;
+      }
+
+      const grid = document.getElementById('s2Grid');
+      grid.innerHTML = '';
+      choices.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'mart-card';
+        card.innerHTML = `
+          ${s2ShowPic ? `<div class="mart-emoji">${item.emoji}</div>` : ''}
+          <div class="mart-label" style="${!s2ShowPic ? 'font-size:26px; color:#0984e3;' : ''}">${item.word}</div>
+          ${showThaiHelper ? `<div class="mart-thai">${item.th}</div>` : ''}
+        `;
+        card.onclick = () => {
+          if (item.word === s2Answer.word) {
+            playSFX('win');
+            card.style.background = '#d4fc79';
+            addStar((s2Diff === 'hard' ? 2 : 1) + (s2ShowPic ? 0 : 1));
+            speakBilingual(`Awesome! ${item.word}`, `เก่งมากจ้า ${item.th}`);
+            setTimeout(renderStage2, 1200);
+          } else {
+            playSFX('wrong');
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 400);
+            speakEn(`That is ${item.word}. Try again!`);
+          }
+        };
+        grid.appendChild(card);
+      });
+
+      speakS2Prompt();
+    }
+
+    function speakS2Prompt() {
+      if (!s2Answer) return;
+      if (s2Diff === 'easy') {
+        speakBilingual(`Find ${s2Answer.word}`, showThaiHelper ? `หาคำว่า ${s2Answer.th} จ้า` : '');
+      } else {
+        speakBilingual(s2Answer.riddleEn, showThaiHelper ? s2Answer.riddleTh : '');
+      }
+    }
+
+    // ======== 6. STAGE 3: CVC WORD BLENDER (3-LETTER WORDS) ========
+    const cvcWords = [
+      { letters: ['C', 'A', 'T'], word: 'CAT', th: 'แมว', emoji: '🐱' },
+      { letters: ['D', 'O', 'G'], word: 'DOG', th: 'สุนัข', emoji: '🐶' },
+      { letters: ['S', 'U', 'N'], word: 'SUN', th: 'พระอาทิตย์', emoji: '☀️' },
+      { letters: ['P', 'I', 'G'], word: 'PIG', th: 'หมู', emoji: '🐷' },
+      { letters: ['B', 'U', 'S'], word: 'BUS', th: 'รถบัส', emoji: '🚌' },
+      { letters: ['H', 'A', 'T'], word: 'HAT', th: 'หมวก', emoji: '👒' },
+      { letters: ['B', 'E', 'D'], word: 'BED', th: 'เตียงนอน', emoji: '🛏️' },
+      { letters: ['C', 'U', 'P'], word: 'CUP', th: 'ถ้วยน้ำ', emoji: '☕' },
+      { letters: ['F', 'O', 'X'], word: 'FOX', th: 'สุนัขจิ้งจอก', emoji: '🦊' },
+      { letters: ['B', 'O', 'X'], word: 'BOX', th: 'กล่อง', emoji: '📦' },
+      { letters: ['P', 'E', 'N'], word: 'PEN', th: 'ปากกา', emoji: '🖊️' },
+      { letters: ['B', 'U', 'G'], word: 'BUG', th: 'แมลงเต่าทอง', emoji: '🐞' }
+    ];
+
+    let s3Mode = 'learn';
+    let s3Index = 0;
+    let s3MissingPos = 1;
+
+    function setS3Mode(mode) {
+      playSFX('pop');
+      s3Mode = mode;
+      document.getElementById('s3ModeLearn').classList.toggle('active', mode === 'learn');
+      document.getElementById('s3ModeQuiz').classList.toggle('active', mode === 'quiz');
+      renderStage3();
+    }
+
+    function renderStage3() {
+      const box = document.getElementById('s3Content');
+      box.innerHTML = '';
+      const item = cvcWords[s3Index];
+
+      if (s3Mode === 'learn') {
+        document.getElementById('s3Prompt').textContent =
+          `🐝 ฝึกสะกดคำ: ${item.letters.join(' - ')} = ${item.word} (${item.th})`;
+
+        box.innerHTML = `
+          <div class="cvc-board">
+            <div class="cvc-slots-row">
+              <div class="cvc-slot" id="cvcSlot0" onclick="speakSingleCVC(0)">${item.letters[0]}</div>
+              <div style="font-size:32px; font-weight:700;">+</div>
+              <div class="cvc-slot vowel-slot" id="cvcSlot1" onclick="speakSingleCVC(1)">${item.letters[1]}</div>
+              <div style="font-size:32px; font-weight:700;">+</div>
+              <div class="cvc-slot" id="cvcSlot2" onclick="speakSingleCVC(2)">${item.letters[2]}</div>
+            </div>
+
+            <div class="cvc-word-card" id="cvcResultCard" onclick="playFullCVCBlend()">
+              <span style="font-size: 56px;">${item.emoji}</span>
+              <div style="text-align:left;">
+                <div style="font-size: 36px; font-weight: 700; color: #d35400;">${item.word}</div>
+                <div style="font-size: 16px; font-weight: 700; color: #2d3436;">แปลว่า: ${item.th} (แตะเพื่อฟังสะกดคำ)</div>
+              </div>
+            </div>
+
+            <div class="nav-btn-row">
+              <button class="action-btn prev-btn" onclick="stepS3(-1)">⬅️ คำก่อนหน้า</button>
+              <button class="action-btn" onclick="playFullCVCBlend()">🔊 สะกดคำ (${item.letters.join('-')} = ${item.word})</button>
+              <button class="action-btn next-btn" onclick="stepS3(1)">คำถัดไป ➡️</button>
+            </div>
+          </div>
+        `;
+        playFullCVCBlend();
+      } else {
+        s3MissingPos = Math.floor(Math.random() * 3);
+        const correctLetter = item.letters[s3MissingPos];
+        document.getElementById('s3Prompt').textContent =
+          `🧩 ตัวอักษรไหนหายไปจากคำว่า "${item.word}" (${item.th}) จ๊ะ?`;
+
+        const slotsHtml = item.letters.map((ch, idx) => {
+          const isBlank = idx === s3MissingPos;
+          return `<div class="cvc-slot ${idx === 1 ? 'vowel-slot' : ''}" style="${isBlank ? 'background:#fff9db; border-style:dashed;' : ''}">${isBlank ? '❓' : ch}</div>`;
+        }).join('<div style="font-size:28px; font-weight:700;">+</div>');
+
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        let choiceLetters = [correctLetter];
+        while (choiceLetters.length < 3) {
+          const r = alphabet[Math.floor(Math.random() * alphabet.length)];
+          if (!choiceLetters.includes(r)) choiceLetters.push(r);
+        }
+        choiceLetters.sort(() => Math.random() - 0.5);
+
+        box.innerHTML = `
+          <div class="cvc-board">
+            <div style="font-size: 62px; margin-bottom: 6px;">${item.emoji}</div>
+            <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">${item.th}</div>
+            <div class="cvc-slots-row">${slotsHtml}</div>
+          </div>
+          <div class="choices-grid" id="s3QuizChoices"></div>
+        `;
+
+        const grid = document.getElementById('s3QuizChoices');
+        choiceLetters.forEach(letOpt => {
+          const btn = document.createElement('button');
+          btn.className = 'choice-btn';
+          btn.innerHTML = `<span style="font-size: 44px; color: #6c5ce7;">${letOpt}</span>`;
+          btn.onclick = () => {
+            if (letOpt === correctLetter) {
+              playSFX('win');
+              addStar(1);
+              speakBilingual(`${item.letters.join(', ')}, ${item.word}!`, `ถูกต้องจ้า ${item.th}`);
+              setTimeout(() => {
+                s3Index = (s3Index + 1) % cvcWords.length;
+                renderStage3();
+              }, 1400);
+            } else {
+              playSFX('wrong');
+              btn.classList.add('shake');
+              setTimeout(() => btn.classList.remove('shake'), 400);
+              speakEn('Try again!');
+            }
+          };
+          grid.appendChild(btn);
+        });
+
+        speakEn(`Spell the word ${item.word}`);
+      }
+    }
+
+    function speakSingleCVC(idx) {
+      playSFX('pop');
+      const item = cvcWords[s3Index];
+      const el = document.getElementById('cvcSlot' + idx);
+      if (el) {
+        el.classList.add('active-glow');
+        setTimeout(() => el.classList.remove('active-glow'), 500);
+      }
+      speakEn(item.letters[idx]);
+    }
+
+    function playFullCVCBlend() {
+      playSFX('pop');
+      const item = cvcWords[s3Index];
+      [0, 1, 2].forEach(i => {
+        setTimeout(() => {
+          const el = document.getElementById('cvcSlot' + i);
+          if (el) {
+            el.classList.add('active-glow');
+            setTimeout(() => el.classList.remove('active-glow'), 400);
+          }
+        }, i * 450);
+      });
+      speakBilingual(`${item.letters[0]}, ${item.letters[1]}, ${item.letters[2]}... ${item.word}`, item.th);
+    }
+
+    function stepS3(dir) {
+      playSFX('pop');
+      s3Index = (s3Index + dir + cvcWords.length) % cvcWords.length;
+      renderStage3();
+    }
+
+    function speakS3Prompt() {
+      const item = cvcWords[s3Index];
+      playFullCVCBlend();
+    }
+
+    // ======== 7. STAGE 4: LITTLE TALK (DAILY CONVERSATIONS) ========
+    const talkDialogues = [
+      {
+        sceneEmoji: '🌅🐓',
+        situationTh: 'ตื่นนอนตอนเช้าเจอกับคุณพ่อคุณแม่ เราควรทักทายว่าอย่างไร?',
+        phrase: 'Good morning!',
+        thMeaning: 'สวัสดีตอนเช้าครับ/ค่ะ',
+        wrong1: 'Good night!',
+        wrong2: 'Goodbye!'
+      },
+      {
+        sceneEmoji: '🎁😊',
+        situationTh: 'เมื่อคุณพ่อคุณแม่หรือเพื่อนให้ของขวัญ เราควรพูดว่าอย่างไร?',
+        phrase: 'Thank you!',
+        thMeaning: 'ขอบคุณครับ/ค่ะ',
+        wrong1: 'I am sorry!',
+        wrong2: 'Wake up!'
+      },
+      {
+        sceneEmoji: '🙊💔',
+        situationTh: 'เมื่อเราเผลอเดินชนเพื่อนหรือทำของตก เราควรพูดว่าอย่างไร?',
+        phrase: 'I am sorry!',
+        thMeaning: 'ขอโทษครับ/ค่ะ',
+        wrong1: 'Thank you!',
+        wrong2: 'Yummy!'
+      },
+      {
+        sceneEmoji: '🌙🛌',
+        situationTh: 'ก่อนเข้านอนตอนกลางคืน บอกฝันดีคุณพ่อคุณแม่ว่าอย่างไร?',
+        phrase: 'Good night!',
+        thMeaning: 'ราตรีสวัสดิ์ / ฝันดีครับ/ค่ะ',
+        wrong1: 'Good morning!',
+        wrong2: 'Hello!'
+      },
+      {
+        sceneEmoji: '👋🏫',
+        situationTh: 'โบกมือลาคุณครูและเพื่อนๆ ก่อนกลับบ้าน พูดว่าอย่างไร?',
+        phrase: 'Goodbye! See you!',
+        thMeaning: 'ลาก่อน แล้วพบกันใหม่นะ!',
+        wrong1: 'Good morning!',
+        wrong2: 'Sit down!'
+      },
+      {
+        sceneEmoji: '🤝✨',
+        situationTh: 'เมื่อมีคนพูดว่า Thank you (ขอบคุณ) กับเรา เราควรตอบกลับว่าอย่างไร?',
+        phrase: 'You are welcome!',
+        thMeaning: 'ด้วยความยินดีจ้า!',
+        wrong1: 'I am hungry!',
+        wrong2: 'Goodbye!'
+      }
+    ];
+
+    let s4Mode = 'learn';
+    let s4Index = 0;
+
+    function setS4Mode(mode) {
+      playSFX('pop');
+      s4Mode = mode;
+      document.getElementById('s4ModeLearn').classList.toggle('active', mode === 'learn');
+      document.getElementById('s4ModeQuiz').classList.toggle('active', mode === 'quiz');
+      renderStage4();
+    }
+
+    function renderStage4() {
+      const box = document.getElementById('s4Content');
+      box.innerHTML = '';
+      const d = talkDialogues[s4Index];
+
+      if (s4Mode === 'learn') {
+        document.getElementById('s4Prompt').textContent = `💬 สถานการณ์: ${d.situationTh}`;
+        box.innerHTML = `
+          <div class="talk-scene-card">
+            <div style="font-size: 64px;">${d.sceneEmoji}</div>
+            <div style="font-size: 17px; font-weight: 700; color: #636e72; margin-top: 6px;">${d.situationTh}</div>
+            <div class="speech-bubble" onclick="speakBilingual('${d.phrase}', '${d.thMeaning}')">
+              🔊 "${d.phrase}"
+            </div>
+            <div style="font-size: 20px; font-weight: 700; color: #00b894;">แปลว่า: ${d.thMeaning}</div>
+
+            <div class="nav-btn-row">
+              <button class="action-btn prev-btn" onclick="stepS4(-1)">⬅️ ก่อนหน้า</button>
+              <button class="action-btn" onclick="speakBilingual('${d.phrase}', '${d.thMeaning}')">🔊 ฟังเสียงพูด</button>
+              <button class="action-btn next-btn" onclick="stepS4(1)">ถัดไป ➡️</button>
+            </div>
+          </div>
+        `;
+        speakBilingual(d.phrase, d.thMeaning);
+      } else {
+        document.getElementById('s4Prompt').textContent = `🎯 ${d.situationTh}`;
+        const opts = [
+          { text: d.phrase, correct: true },
+          { text: d.wrong1, correct: false },
+          { text: d.wrong2, correct: false }
+        ].sort(() => Math.random() - 0.5);
+
+        box.innerHTML = `
+          <div class="talk-scene-card">
+            <div style="font-size: 64px;">${d.sceneEmoji}</div>
+            <div style="font-size: 19px; font-weight: 700; margin-top: 6px;">${d.situationTh}</div>
+          </div>
+          <div class="choices-grid" id="s4QuizGrid"></div>
+        `;
+
+        const grid = document.getElementById('s4QuizGrid');
+        opts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'choice-btn';
+          btn.innerHTML = `<span style="color:#0984e3; font-size:22px;">"${opt.text}"</span>`;
+          btn.onclick = () => {
+            if (opt.correct) {
+              playSFX('win');
+              addStar(1);
+              speakBilingual(`Great job! ${d.phrase}`, d.thMeaning);
+              setTimeout(() => {
+                s4Index = (s4Index + 1) % talkDialogues.length;
+                renderStage4();
+              }, 1400);
+            } else {
+              playSFX('wrong');
+              btn.classList.add('shake');
+              setTimeout(() => btn.classList.remove('shake'), 400);
+              speakEn('Try again!');
+            }
+          };
+          grid.appendChild(btn);
+        });
+
+        speakBilingual(d.phrase, d.situationTh);
+      }
+    }
+
+    function stepS4(dir) {
+      playSFX('pop');
+      s4Index = (s4Index + dir + talkDialogues.length) % talkDialogues.length;
+      renderStage4();
+    }
+
+    function speakS4Prompt() {
+      const d = talkDialogues[s4Index];
+      speakBilingual(d.phrase, d.thMeaning);
+    }
+
+    // ======== 8. STAGE 5: LISTEN & CATCH QUIZ ========
+    let s5Target = null;
+
+    function renderStage5() {
+      const allWords = [
+        ...vocabCatalog.animals,
+        ...vocabCatalog.fruits,
+        ...vocabCatalog.colors,
+        ...vocabCatalog.body
+      ];
+      const pool = allWords.sort(() => Math.random() - 0.5).slice(0, 3);
+      s5Target = pool[Math.floor(Math.random() * pool.length)];
+
+      document.getElementById('s5Prompt').textContent = showThaiHelper
+        ? `🎧 ฟังเสียงแล้วแตะภาพให้ตรงกับคำที่ได้ยินนะจ๊ะ!`
+        : `🎧 Listen carefully and tap the matching card!`;
+
+      const grid = document.getElementById('s5Choices');
+      grid.innerHTML = '';
+      pool.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerHTML = `
+          <div style="font-size: 56px;">${item.emoji}</div>
+          <div style="font-size: 22px; color: #2d3436;">${item.word}</div>
+          ${showThaiHelper ? `<div style="font-size: 14px; color: #636e72;">${item.th}</div>` : ''}
+        `;
+        btn.onclick = () => {
+          if (item.word === s5Target.word) {
+            playSFX('win');
+            addStar(1);
+            speakBilingual(`Fantastic! ${item.word}`, `ถูกต้องจ้า ${item.th}`);
+            setTimeout(renderStage5, 1300);
+          } else {
+            playSFX('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 400);
+            speakEn(`That is ${item.word}. Listen again!`);
+          }
+        };
+        grid.appendChild(btn);
+      });
+
+      speakS5Prompt();
+    }
+
+    function speakS5Prompt() {
+      if (s5Target) {
+        speakEn(`Where is... ${s5Target.word}?`);
+      }
+    }
+
+    // ======== 9. CONFETTI CELEBRATION ========
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function launchConfetti() {
+      const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#1dd1a1', '#5f27cd'];
+      for (let i = 0; i < 45; i++) {
+        particles.push({
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+          vx: (Math.random() - 0.5) * 15,
+          vy: (Math.random() - 0.8) * 15 - 3,
+          size: Math.random() * 8 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 12
+        });
+      }
+      requestAnimationFrame(updateConfetti);
+    }
+
+    function updateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.42;
+        p.rot += p.vRot;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rot * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+        if (p.y > canvas.height) particles.splice(idx, 1);
+      });
+      if (particles.length > 0) requestAnimationFrame(updateConfetti);
+    }
+
+    window.addEventListener('pageshow', () => {
+      stars = getUnifiedStars();
+      updateStarUI();
+    });
+
+    window.onload = () => {
+      stars = getUnifiedStars();
+      updateStarUI();
+
+      // ตรวจสอบพารามิเตอร์ ?stage=1 ถึง 5 จากหน้า Hub index.html
+      const params = new URLSearchParams(window.location.search);
+      const stParam = parseInt(params.get('stage'), 10);
+      if (stParam >= 1 && stParam <= 5) {
+        openStage(stParam);
+      }
+    };
+  </script>
+</body>
+</html>

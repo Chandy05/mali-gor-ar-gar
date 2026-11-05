@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>วิชาโค้ดดิ้ง & เชาวน์ปัญญา - เมืองจำลองของหนู</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Mali', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 55%, #d4fc79 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #2d3436;
+    }
+
+    /* Top Header & Progress Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-left-group, .nav-right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-btn {
+      background: #ffeaa7;
+      border: 3px solid #fdcb6e;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 #e1b12c;
+      flex-shrink: 0;
+      text-decoration: none;
+      color: #2d3436;
+    }
+    .icon-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .back-map-btn {
+      background: #ff7675;
+      color: #fff;
+      border: 3px solid #d63031;
+      border-radius: 22px;
+      padding: 6px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #b33939;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-map-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .star-progress-wrap {
+      flex: 1;
+      max-width: 440px;
+      min-width: 170px;
+      background: #dfe6e9;
+      border-radius: 25px;
+      height: 36px;
+      position: relative;
+      border: 3px solid #fff;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .star-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fdcb6e, #f39c12);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .star-progress-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #2d3436;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+    }
+
+    /* Quick Stage Switcher Bar */
+    .quick-stage-bar {
+      display: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 860px;
+      margin: 10px auto 0;
+      padding: 0 14px;
+    }
+    .quick-stage-bar.show { display: flex; }
+
+    /* Screen Container */
+    .screen {
+      display: none;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 14px;
+      text-align: center;
+    }
+    .screen.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Hub Town Cards */
+    .town-title {
+      font-size: 28px;
+      color: #2d3436;
+      margin: 8px 0 4px;
+      text-shadow: 2px 2px 0 #fff;
+    }
+    .town-sub {
+      font-size: 16px;
+      color: #636e72;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .town-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 520px) {
+      .town-grid { grid-template-columns: 1fr; }
+    }
+    .zone-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      cursor: pointer;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .zone-card:active { transform: translateY(4px); box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+    .zone-1 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+    .zone-2 { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+    .zone-3 { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+    .zone-4 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+
+    .zone-emoji { font-size: 54px; margin-bottom: 6px; }
+    .zone-name { font-size: 21px; font-weight: 700; margin: 4px 0; }
+    .zone-tag {
+      background: rgba(255,255,255,0.85);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Mode Selector Pills */
+    .mode-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .pill-btn {
+      background: #fff;
+      border: 3px solid #b2bec3;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #2d3436;
+    }
+    .pill-btn.active {
+      background: #6c5ce7;
+      color: #fff;
+      border-color: #4834d4;
+      box-shadow: 0 3px 0 #30336b;
+    }
+    .pill-sub.active {
+      background: #00b894;
+      color: #fff;
+      border-color: #00896f;
+      box-shadow: 0 3px 0 #006266;
+    }
+    .pill-warn.active {
+      background: #e17055;
+      color: #fff;
+      border-color: #d63031;
+      box-shadow: 0 3px 0 #b33939;
+    }
+
+    /* Prompt Box */
+    .prompt-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      border: 4px solid #74b9ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+    .prompt-text {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: left;
+      flex: 1;
+    }
+    .speak-btn {
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 0 #0652DD;
+    }
+    .speak-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Game 1: Toy Room */
+    .toy-floor {
+      background: rgba(255,255,255,0.75);
+      border-radius: 22px;
+      padding: 14px;
+      min-height: 220px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      border: 3px dashed #fff;
+    }
+    .toy-item {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      cursor: pointer;
+      border: 4px solid #fff;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+      transition: transform 0.15s;
+    }
+    .toy-item:active { transform: scale(1.12); }
+    .toy-red { background: #ff7675; }
+    .toy-blue { background: #74b9ff; }
+    .toy-yellow { background: #ffeaa7; }
+    .toy-green { background: #55efc4; }
+    .toy-box {
+      background: #e17055;
+      color: #fff;
+      border: 5px solid #d63031;
+      border-radius: 24px;
+      padding: 16px;
+      font-size: 20px;
+      font-weight: 700;
+      max-width: 440px;
+      margin: 0 auto;
+      box-shadow: 0 7px 0 #b33939;
+    }
+
+    /* Game 2: Garden Maze */
+    .maze-grid {
+      display: grid;
+      gap: 6px;
+      max-width: 390px;
+      margin: 0 auto 14px;
+      background: #55efc4;
+      padding: 10px;
+      border-radius: 20px;
+      border: 4px solid #00b894;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .maze-cell {
+      aspect-ratio: 1;
+      background: rgba(255,255,255,0.88);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+    .maze-cell.player-cell {
+      background: #ffeaa7;
+      border: 3px solid #f39c12;
+      animation: hopMove 0.28s ease-out;
+    }
+    @keyframes hopMove {
+      0% { transform: scale(0.75) translateY(6px); }
+      60% { transform: scale(1.18) translateY(-6px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+    .queue-box {
+      min-height: 48px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 14px;
+      padding: 6px 12px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 20px;
+      border: 2px solid #dfe6e9;
+    }
+    .dpad {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ctrl-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      border: none;
+      background: #fdcb6e;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #e1b12c;
+    }
+    .ctrl-btn:active { transform: translateY(4px); box-shadow: none; }
+    .go-btn {
+      background: #00b894;
+      color: #fff;
+      font-weight: 700;
+      font-size: 20px;
+      padding: 0 22px;
+      width: auto;
+      box-shadow: 0 5px 0 #00896f;
+    }
+
+    /* Game 3 & 4: Worksheet Pattern & Good Habits */
+    .worksheet-stage {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px 12px;
+      margin-bottom: 16px;
+      border: 5px solid #ff9ff3;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 130px;
+    }
+    .pat-item {
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      border: 3px solid #dfe6e9;
+      padding: 6px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .pat-item svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .pat-blank {
+      background: #fff9db;
+      border: 4px dashed #f59f00;
+      min-width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+      color: #e67700;
+      padding: 6px 10px;
+      animation: pulse 1.2s infinite;
+    }
+    .pat-blank.double-blank {
+      min-width: 136px;
+      background: #fff3bf;
+    }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+    .choices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    @media (max-width: 520px) {
+      .choices-grid { grid-template-columns: 1fr; }
+    }
+    .choice-btn {
+      background: #fff;
+      border: 4px solid #74b9ff;
+      border-radius: 22px;
+      padding: 14px 12px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #0984e3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+    }
+    .choice-btn:active { transform: translateY(4px); box-shadow: none; }
+    .choice-badge {
+      background: #ffeaa7;
+      color: #d63031;
+      border: 2px solid #fdcb6e;
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .choice-visual-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .choice-svg-box {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .choice-svg-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Modals & Settings */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 14px;
+      overflow-y: auto;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 20px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      border: 5px solid #fdcb6e;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .lang-setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f2f6;
+      padding: 8px 12px;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .lang-toggle-group {
+      display: flex;
+      gap: 6px;
+    }
+    .lang-chip {
+      border: 2px solid #b2bec3;
+      background: #fff;
+      border-radius: 12px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .lang-chip.active {
+      background: #0984e3;
+      color: #fff;
+      border-color: #0652DD;
+    }
+    .primary-btn {
+      background: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #00896f;
+      margin: 6px;
+    }
+    .shake { animation: shakeAnim 0.4s; }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <div class="top-bar">
+    <div class="nav-left-group">
+      <a href="index.html" class="icon-btn" title="กลับหน้าเมืองหลัก (Home)">🏠</a>
+      <button class="back-map-btn" id="btnBackCodingHub" onclick="goCodingHub()">🗺️ เลือกด่าน</button>
+    </div>
+
+    <div class="star-progress-wrap" onclick="openRewardModal()">
+      <div class="star-progress-fill" id="starFill"></div>
+      <div class="star-progress-text" id="starText">⭐ 0 / 50 ดาว</div>
+    </div>
+
+    <div class="nav-right-group">
+      <button class="icon-btn" onclick="openSettings()" title="ตั้งค่าภาษาและเป้าหมายดาว">⚙️</button>
+    </div>
+  </div>
+
+  <!-- Quick Stage Switcher Bar (Visible inside active game stages) -->
+  <div class="quick-stage-bar" id="quickStageBar">
+    <button class="pill-btn" id="qTab1" onclick="openZone(1)">🧸 1. ห้องของเล่น</button>
+    <button class="pill-btn" id="qTab2" onclick="openZone(2)">🚀 2. สวนผจญภัย Coding</button>
+    <button class="pill-btn" id="qTab3" onclick="openZone(3)">🎨 3. อนุกรมภาพต่อเนื่อง</button>
+    <button class="pill-btn" id="qTab4" onclick="openZone(4)">💖 4. เด็กดีมีวินัย</button>
+  </div>
+
+  <!-- CODING STAGE HUB SCREEN -->
+  <div id="hubScreen" class="screen active">
+    <h1 class="town-title">🤖 วิชาโค้ดดิ้ง & เชาวน์ปัญญาของ <span id="childNameLabel">น้องมะลิ</span></h1>
+    <div class="town-sub">ฝึกคิดเป็นลำดับขั้นตอน แก้ปริศนาอนุกรมภาพ และสะสมดาวแลกรางวัล!</div>
+
+    <div class="town-grid">
+      <div class="zone-card zone-1" onclick="openZone(1)">
+        <div class="zone-emoji">🧸</div>
+        <div class="zone-name">1. ห้องของเล่นแสนระเบียบ</div>
+        <div class="zone-tag">จัดหมวดหมู่ + นับจำนวน + แยกสี (<span id="hubLang1">เสียง EN</span>)</div>
+      </div>
+
+      <div class="zone-card zone-2" onclick="openZone(2)">
+        <div class="zone-emoji">🚀</div>
+        <div class="zone-name">2. สวนผจญภัย Coding</div>
+        <div class="zone-tag">Coding 5 เรื่องราว + เสียงเดินครบทุกก้าว (<span id="hubLang2">เสียง EN</span>)</div>
+      </div>
+
+      <div class="zone-card zone-3" onclick="openZone(3)">
+        <div class="zone-emoji">🎨</div>
+        <div class="zone-name">3. อนุกรมภาพต่อเนื่อง</div>
+        <div class="zone-tag">สังเกตแบบรูป รูปทรง ยานพาหนะ & สัตว์ (<span id="hubLang3">เสียง TH</span>)</div>
+      </div>
+
+      <div class="zone-card zone-4" onclick="openZone(4)">
+        <div class="zone-emoji">💖</div>
+        <div class="zone-name">4. เด็กดีมีวินัย & เหตุการณ์</div>
+        <div class="zone-tag">คิดวิเคราะห์เหตุผล & กิจวัตรประจำวัน (<span id="hubLang4">เสียง TH</span>)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONE 1: TOY ROOM (ALGORITHMIC SORTING) -->
+  <div id="zone1" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn active" id="z1EasyBtn" onclick="setZ1Diff('easy')">🌱 ระดับง่าย (เก็บ 1 ชนิด)</button>
+      <button class="pill-btn" id="z1HardBtn" onclick="setZ1Diff('hard')">🔥 ระดับยาก (เงื่อนไขผสม 2 ชนิด + ตัวหลอก)</button>
+    </div>
+    <div class="prompt-box">
+      <div class="prompt-text" id="z1Prompt">กำลังเตรียมของเล่น...</div>
+      <button class="speak-btn" onclick="speakZ1()">🔊</button>
+    </div>
+    <div class="toy-floor" id="toyFloor"></div>
+    <div class="toy-box" id="toyBoxStatus">📦 กล่องเก็บของเล่น (แตะที่ของเล่นตามโจทย์เพื่อเก็บลงกล่อง)</div>
+  </div>
+
+  <!-- ZONE 2: GARDEN MAZE (SEQUENTIAL CODING) -->
+  <div id="zone2" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn pill-sub active" id="z2StoryRandom" onclick="setZ2Story('random')">🎲 สุ่มเรื่องราว</button>
+      <button class="pill-btn pill-sub" id="z2StoryPuppy" onclick="setZ2Story('puppy')">🐶 ลูกหมา (ต๊อกแต๊ก)</button>
+      <button class="pill-btn pill-sub" id="z2StoryBunny" onclick="setZ2Story('bunny')">🐰 กระต่าย (ดึ๋งๆ)</button>
+      <button class="pill-btn pill-sub" id="z2StoryRocket" onclick="setZ2Story('rocket')">🚀 จรวด (ฟู่ๆ)</button>
+      <button class="pill-btn pill-sub" id="z2StoryBee" onclick="setZ2Story('bee')">🐝 ผึ้งน้อย (หึ่งๆ)</button>
+      <button class="pill-btn pill-sub" id="z2StoryFire" onclick="setZ2Story('firetruck')">🚒 รถดับเพลิง (หวอๆ)</button>
+    </div>
+    <div class="mode-bar">
+      <button class="pill-btn active" id="z2Size4" onclick="setZ2Grid(4)">🟢 4x4 (ง่าย)</button>
+      <button class="pill-btn" id="z2Size5" onclick="setZ2Grid(5)">🟡 5x5 (กลาง)</button>
+      <button class="pill-btn" id="z2Size6" onclick="setZ2Grid(6)">🔴 6x6 (ยาก)</button>
+      <button class="pill-btn active" id="z2StepMode" onclick="setZ2Control('step')">👆 เดินทีละก้าว</button>
+      <button class="pill-btn" id="z2CodeMode" onclick="setZ2Control('code')">🤖 เรียงคำสั่ง Coding</button>
+    </div>
+    <div class="prompt-box">
+      <div class="prompt-text" id="z2Prompt">พาตัวละครเดินหลบสิ่งกีดขวางไปหาเป้าหมาย!</div>
+      <button class="speak-btn" onclick="speakZ2()">🔊</button>
+    </div>
+    <div class="maze-grid" id="mazeGrid"></div>
+    <div class="queue-box" id="codeQueueBox" style="display:none;">ยังไม่มีคำสั่ง</div>
+    <div class="dpad">
+      <button class="ctrl-btn" onclick="handleMazeInput('UP')">⬆️</button>
+      <button class="ctrl-btn" onclick="handleMazeInput('DOWN')">⬇️</button>
+      <button class="ctrl-btn" onclick="handleMazeInput('LEFT')">⬅️</button>
+      <button class="ctrl-btn" onclick="handleMazeInput('RIGHT')">➡️</button>
+      <button class="ctrl-btn go-btn" id="mazeGoBtn" style="display:none;" onclick="runCodeQueue()">▶️ GO!</button>
+      <button class="ctrl-btn" id="mazeClearBtn" style="display:none; background:#ff7675;" onclick="clearCodeQueue()">🗑️</button>
+    </div>
+  </div>
+
+  <!-- ZONE 3: PATTERN RECOGNITION WORKSHEET -->
+  <div id="zone3" class="screen">
+    <div class="mode-bar">
+      <button class="pill-btn pill-sub active" id="patThemeMix" onclick="setPatTheme('mix')">🌈 รวมทุกหมวด</button>
+      <button class="pill-btn pill-sub" id="patThemeShapes" onclick="setPatTheme('shapes')">🔷 รูปทรงหลากสี</button>
+      <button class="pill-btn pill-sub" id="patThemeVehicles" onclick="setPatTheme('vehicles')">🚒 ยานพาหนะ</button>
+      <button class="pill-btn pill-sub" id="patThemeAnimals" onclick="setPatTheme('animals')">🦁 สัตว์ & ผลไม้</button>
+    </div>
+    <div class="mode-bar">
+      <button class="pill-btn active" id="patDiffEasy" onclick="setPatDiff('easy')">🌱 ง่าย (ABAB เติมท้าย)</button>
+      <button class="pill-btn" id="patDiffMed" onclick="setPatDiff('med')">⭐ กลาง (AAB / แหว่งกลาง)</button>
+      <button class="pill-btn" id="patDiffHard" onclick="setPatDiff('hard')">🔥 ยาก (เติมคู่ 2 ช่อง ก./ข.)</button>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-text" id="z3Prompt">เลือกภาพเติมในช่องว่างให้ถูกต้องนะจ๊ะ!</div>
+      <button class="speak-btn" onclick="speakZ3()">🔊</button>
+    </div>
+
+    <div class="worksheet-stage" id="z3Stage"></div>
+    <div class="choices-grid" id="z3Choices"></div>
+  </div>
+
+  <!-- ZONE 4: GOOD HABITS & CAUSE-EFFECT LOGIC -->
+  <div id="zone4" class="screen">
+    <div class="prompt-box">
+      <div class="prompt-text" id="z4Prompt">ถ้าเกิดเหตุการณ์แบบนี้ หนูควรทำอย่างไรต่อไปนะ?</div>
+      <button class="speak-btn" onclick="speakZ4()">🔊</button>
+    </div>
+
+    <div class="worksheet-stage" id="z4Stage"></div>
+    <div class="choices-grid" id="z4Choices"></div>
+  </div>
+
+  <!-- REWARD MODAL -->
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal-card">
+      <div style="font-size:64px;">🏆🎉</div>
+      <h2 id="rewardModalTitle">เก่งที่สุดเลย!</h2>
+      <p id="rewardModalDesc" style="font-size:18px;"></p>
+      <div style="background:#ffeaa7; padding:14px; border-radius:18px; border:3px dashed #e17055; margin:14px 0; font-size:20px; font-weight:700;" id="couponTextDisplay">
+        🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!
+      </div>
+      <button class="primary-btn" onclick="closeRewardModal()">เล่นต่อเลย!</button>
+      <button class="pill-btn" onclick="claimAndResetStars()">🎁 แลกรางวัลแล้ว (เริ่มสะสมใหม่)</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-card">
+      <h2 style="margin-top:0;">⚙️ ตั้งค่าวิชาโค้ดดิ้ง & เชาวน์ปัญญา</h2>
+
+      <div style="text-align:left; margin-bottom:14px; background:#dfe6e9; padding:12px; border-radius:18px;">
+        <div style="font-weight:700; margin-bottom:8px; font-size:16px;">🗣️ เลือกภาษาเสียงพูดในแต่ละด่าน:</div>
+
+        <div class="lang-setting-row">
+          <span>1. ห้องของเล่นแสนระเบียบ</span>
+          <div class="lang-toggle-group">
+            <button class="lang-chip" id="langBtn_z1_th" onclick="setZoneLang('z1','th')">🇹🇭 เสียงไทย</button>
+            <button class="lang-chip" id="langBtn_z1_en" onclick="setZoneLang('z1','en')">🇬🇧 เสียง Eng</button>
+          </div>
+        </div>
+
+        <div class="lang-setting-row">
+          <span>2. สวนผจญภัย (Coding)</span>
+          <div class="lang-toggle-group">
+            <button class="lang-chip" id="langBtn_z2_th" onclick="setZoneLang('z2','th')">🇹🇭 เสียงไทย</button>
+            <button class="lang-chip" id="langBtn_z2_en" onclick="setZoneLang('z2','en')">🇬🇧 เสียง Eng</button>
+          </div>
+        </div>
+
+        <div class="lang-setting-row">
+          <span>3. อนุกรมภาพต่อเนื่อง</span>
+          <div class="lang-toggle-group">
+            <button class="lang-chip" id="langBtn_z3_th" onclick="setZoneLang('z3','th')">🇹🇭 เสียงไทย</button>
+            <button class="lang-chip" id="langBtn_z3_en" onclick="setZoneLang('z3','en')">🇬🇧 เสียง Eng</button>
+          </div>
+        </div>
+
+        <div class="lang-setting-row" style="margin-bottom:0;">
+          <span>4. เด็กดีมีวินัย & เหตุการณ์</span>
+          <div class="lang-toggle-group">
+            <button class="lang-chip" id="langBtn_z4_th" onclick="setZoneLang('z4','th')">🇹🇭 เสียงไทย</button>
+            <button class="lang-chip" id="langBtn_z4_en" onclick="setZoneLang('z4','en')">🇬🇧 เสียง Eng</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:left; margin-bottom:10px;">
+        <label style="font-weight:700;">ชื่อของน้อง:</label>
+        <input type="text" id="inputChildName" style="width:100%; padding:8px 10px; border-radius:12px; border:2px solid #b2bec3; font-size:16px; margin-top:4px;">
+      </div>
+      <div style="text-align:left; margin-bottom:10px;">
+        <label style="font-weight:700;">เป้าหมายดาวแลกรางวัล (ค่าเริ่มต้น 50 ดาว):</label>
+        <input type="number" id="inputStarGoal" style="width:100%; padding:8px 10px; border-radius:12px; border:2px solid #b2bec3; font-size:16px; margin-top:4px;">
+      </div>
+      <div style="text-align:left; margin-bottom:12px;">
+        <label style="font-weight:700;">ข้อความคูปองรางวัลจริง:</label>
+        <input type="text" id="inputCouponText" style="width:100%; padding:8px 10px; border-radius:12px; border:2px solid #b2bec3; font-size:16px; margin-top:4px;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <button class="pill-btn" onclick="adjustStars(5)">➕ เพิ่มให้ 5 ดาว</button>
+        <button class="pill-btn" onclick="adjustStars(-5)">➖ ลด 5 ดาว</button>
+      </div>
+      <button class="primary-btn" onclick="saveSettings()">💾 บันทึก</button>
+      <button class="pill-btn" onclick="closeSettings()">ปิด</button>
+    </div>
+  </div>
+
+  <script>
+    // ======== WEB AUDIO ENGINE (ANDROID/HUAWEI P30 SAFE) ========
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state !== 'running') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function unlockMobileAudio() {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      if (ctx.state !== 'running') ctx.resume();
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      if (source.start) source.start(0);
+    }
+    document.addEventListener('touchstart', unlockMobileAudio, { passive: true });
+    document.addEventListener('click', unlockMobileAudio, { passive: true });
+
+    function playNoiseBurstAt(when, duration, filterFreq = 1200, volume = 0.35) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const t0 = Math.max(ctx.currentTime, when || ctx.currentTime);
+      const bufferSize = Math.floor(ctx.sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(filterFreq, t0);
+      filter.frequency.exponentialRampToValueAtTime(filterFreq * 0.4, t0 + duration);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(volume, t0);
+      gain.gain.exponentialRampToValueAtTime(0.01, t0 + duration);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start(t0);
+    }
+
+    function playAdventureMoveSFX(storyId, scheduledTime = 0) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const now = Math.max(ctx.currentTime, scheduledTime || ctx.currentTime);
+
+      if (storyId === 'puppy') {
+        [0, 0.09].forEach((offset, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          const baseFreq = i === 0 ? 680 : 940;
+          osc.frequency.setValueAtTime(baseFreq, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(200, now + offset + 0.065);
+          gain.gain.setValueAtTime(0.45, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.07);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.075);
+        });
+      } else if (storyId === 'bunny') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.exponentialRampToValueAtTime(720, now + 0.14);
+        osc.frequency.exponentialRampToValueAtTime(520, now + 0.22);
+        gain.gain.setValueAtTime(0.42, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.23);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.24);
+      } else if (storyId === 'rocket') {
+        playNoiseBurstAt(now, 0.22, 1400, 0.38);
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(190, now);
+        osc.frequency.exponentialRampToValueAtTime(580, now + 0.19);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.21);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      } else if (storyId === 'bee') {
+        const osc = ctx.createOscillator();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        const gain = ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+
+        lfo.frequency.setValueAtTime(40, now);
+        lfoGain.gain.setValueAtTime(50, now);
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.21);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        lfo.start(now);
+        osc.stop(now + 0.22);
+        lfo.stop(now + 0.22);
+      } else if (storyId === 'firetruck') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(580, now);
+        osc.frequency.setValueAtTime(800, now + 0.09);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.21);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      } else {
+        playSFX('step', now);
+      }
+    }
+
+    function playAdventureWinSFX(storyId, scheduledTime = 0) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const now = Math.max(ctx.currentTime, scheduledTime || ctx.currentTime);
+
+      if (storyId === 'puppy') {
+        [0, 0.16].forEach(offset => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(320, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(540, now + offset + 0.05);
+          osc.frequency.exponentialRampToValueAtTime(180, now + offset + 0.12);
+          gain.gain.setValueAtTime(0.35, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.13);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.14);
+        });
+      } else if (storyId === 'firetruck') {
+        playNoiseBurstAt(now, 0.35, 1800, 0.35);
+      }
+      playSFX('win', now + 0.15);
+    }
+
+    function playSFX(type, scheduledTime = 0) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const now = Math.max(ctx.currentTime, scheduledTime || ctx.currentTime);
+
+      if (type === 'step') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(340, now);
+        osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.11);
+      } else if (type === 'queue') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(700, now);
+        osc.frequency.exponentialRampToValueAtTime(940, now + 0.06);
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.075);
+      } else if (type === 'wall' || type === 'rock') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(190, now);
+        osc.frequency.linearRampToValueAtTime(65, now + 0.28);
+        gain.gain.setValueAtTime(0.38, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.31);
+      } else if (type === 'win') {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+          gain.gain.setValueAtTime(0.3, now + idx * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.09 + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.09);
+          osc.stop(now + idx * 0.09 + 0.23);
+        });
+      }
+    }
+
+    // ======== STATE & SHARED LOCAL STORAGE SYNC ========
+    function getUnifiedStars() {
+      const s1 = parseInt(localStorage.getItem('mlst_stars') || '0', 10);
+      const s2 = parseInt(localStorage.getItem('kidsMath_totalStars') || '0', 10);
+      return Math.max(isNaN(s1) ? 0 : s1, isNaN(s2) ? 0 : s2);
+    }
+
+    let defaultLangs = { z1: 'en', z2: 'en', z3: 'th', z4: 'th' };
+    let savedLangs = {};
+    try {
+      savedLangs = JSON.parse(localStorage.getItem('mlst_langs') || '{}');
+    } catch (e) { savedLangs = {}; }
+
+    let appState = {
+      childName: localStorage.getItem('mlst_name') || 'น้องมะลิ',
+      stars: getUnifiedStars(),
+      starGoal: parseInt(localStorage.getItem('mlst_goal') || '50', 10),
+      couponText: localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!',
+      langs: { ...defaultLangs, ...savedLangs }
+    };
+
+    function saveState() {
+      localStorage.setItem('mlst_name', appState.childName);
+      localStorage.setItem('mlst_stars', String(appState.stars));
+      localStorage.setItem('kidsMath_totalStars', String(appState.stars));
+      localStorage.setItem('mlst_goal', String(appState.starGoal));
+      localStorage.setItem('mlst_coupon', appState.couponText);
+      localStorage.setItem('mlst_langs', JSON.stringify(appState.langs));
+      updateTopUI();
+    }
+
+    function updateTopUI() {
+      document.getElementById('childNameLabel').textContent = appState.childName;
+      const pct = Math.min(100, Math.round(((appState.stars % appState.starGoal) / appState.starGoal) * 100));
+      document.getElementById('starFill').style.width = (appState.stars > 0 && appState.stars % appState.starGoal === 0 ? 100 : pct) + '%';
+      document.getElementById('starText').textContent = `⭐ ${appState.stars} / ${appState.starGoal} ดาว`;
+      document.getElementById('couponTextDisplay').textContent = appState.couponText;
+
+      ['z1', 'z2', 'z3', 'z4'].forEach((z, idx) => {
+        const el = document.getElementById('hubLang' + (idx + 1));
+        if (el) el.textContent = appState.langs[z] === 'en' ? 'เสียง EN' : 'เสียง TH';
+      });
+    }
+
+    function setZoneLang(zoneKey, lang) {
+      appState.langs[zoneKey] = lang;
+      updateLangChipsUI();
+    }
+
+    function updateLangChipsUI() {
+      ['z1', 'z2', 'z3', 'z4'].forEach(z => {
+        const btnTh = document.getElementById(`langBtn_${z}_th`);
+        const btnEn = document.getElementById(`langBtn_${z}_en`);
+        if (btnTh) btnTh.classList.toggle('active', appState.langs[z] === 'th');
+        if (btnEn) btnEn.classList.toggle('active', appState.langs[z] === 'en');
+      });
+    }
+
+    // ======== SOUND & SPEECH ========
+    function speakText(text, lang = 'th-TH') {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang;
+      utter.rate = lang === 'en-US' ? 0.88 : 0.95;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function speakByZone(zoneKey, thText, enText) {
+      const isEn = appState.langs[zoneKey] === 'en';
+      speakText(isEn ? enText : thText, isEn ? 'en-US' : 'th-TH');
+    }
+
+    function addStar(amount = 1) {
+      appState.stars += amount;
+      saveState();
+      if (appState.stars >= appState.starGoal && appState.stars % appState.starGoal === 0) {
+        playSFX('win');
+        document.getElementById('rewardModalTitle').textContent = `🎉 ครบ ${appState.stars} ดาวแล้ว!`;
+        document.getElementById('rewardModalDesc').textContent = `${appState.childName} เก่งมากๆ เลย เอาหน้าจอนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลยครับ!`;
+        document.getElementById('rewardModal').classList.add('show');
+        speakText(`เย้! ${appState.childName} สะสมครบ ${appState.stars} ดาวแล้ว เก่งที่สุดเลยครับ!`, 'th-TH');
+      } else if (appState.stars % 10 === 0) {
+        speakText(`ว้าว! สะสมได้ ${appState.stars} ดาวแล้ว สู้ๆ นะครับ!`, 'th-TH');
+      }
+    }
+
+    // ======== NAVIGATION ========
+    function goCodingHub() {
+      clearQueueTimers();
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('hubScreen').classList.add('active');
+      document.getElementById('btnBackCodingHub').style.display = 'none';
+      document.getElementById('quickStageBar').classList.remove('show');
+      speakText('เลือกด่านวิชาโค้ดดิ้งและเชาวน์ปัญญาได้เลยจ้า', 'th-TH');
+    }
+
+    function openZone(num) {
+      clearQueueTimers();
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('zone' + num).classList.add('active');
+      document.getElementById('btnBackCodingHub').style.display = 'inline-flex';
+      document.getElementById('quickStageBar').classList.add('show');
+
+      [1, 2, 3, 4].forEach(i => {
+        const tab = document.getElementById('qTab' + i);
+        if (tab) tab.classList.toggle('active', i === num);
+      });
+
+      if (num === 1) initZone1();
+      if (num === 2) initZone2();
+      if (num === 3) initZone3();
+      if (num === 4) initZone4();
+    }
+
+    // ======== ZONE 1: TOY ROOM ========
+    let z1Diff = 'easy';
+    let z1Tasks = [];
+    const toyTypes = [
+      { id: 'car', emoji: '🚗', en: 'Cars', th: 'รถ' },
+      { id: 'bear', emoji: '🧸', en: 'Bears', th: 'ตุ๊กตาหมี' },
+      { id: 'duck', emoji: '🦆', en: 'Ducks', th: 'เป็ด' },
+      { id: 'ball', emoji: '⚽', en: 'Balls', th: 'ลูกบอล' }
+    ];
+    const toyColors = [
+      { id: 'red', cls: 'toy-red', en: 'Red', th: 'สีแดง' },
+      { id: 'blue', cls: 'toy-blue', en: 'Blue', th: 'สีฟ้า' },
+      { id: 'yellow', cls: 'toy-yellow', en: 'Yellow', th: 'สีเหลือง' },
+      { id: 'green', cls: 'toy-green', en: 'Green', th: 'สีเขียว' }
+    ];
+
+    function setZ1Diff(diff) {
+      z1Diff = diff;
+      document.getElementById('z1EasyBtn').classList.toggle('active', diff === 'easy');
+      document.getElementById('z1HardBtn').classList.toggle('active', diff === 'hard');
+      initZone1();
+    }
+
+    function initZone1() {
+      const floor = document.getElementById('toyFloor');
+      floor.innerHTML = '';
+      z1Tasks = [];
+
+      const shuffledColors = [...toyColors].sort(() => Math.random() - 0.5);
+      const shuffledToys = [...toyTypes].sort(() => Math.random() - 0.5);
+
+      if (z1Diff === 'easy') {
+        const count = Math.floor(Math.random() * 3) + 2;
+        z1Tasks.push({ color: shuffledColors[0], toy: shuffledToys[0], target: count, collected: 0 });
+      } else {
+        const c1 = Math.floor(Math.random() * 2) + 2;
+        const c2 = Math.floor(Math.random() * 2) + 2;
+        z1Tasks.push({ color: shuffledColors[0], toy: shuffledToys[0], target: c1, collected: 0 });
+        z1Tasks.push({ color: shuffledColors[1], toy: shuffledToys[1], target: c2, collected: 0 });
+      }
+
+      let items = [];
+      z1Tasks.forEach(t => {
+        for (let i = 0; i < t.target; i++) items.push({ color: t.color, toy: t.toy });
+      });
+
+      const distractorCount = z1Diff === 'easy' ? 4 : 8;
+      for (let i = 0; i < distractorCount; i++) {
+        const rc = toyColors[Math.floor(Math.random() * toyColors.length)];
+        const rt = toyTypes[Math.floor(Math.random() * toyTypes.length)];
+        items.push({ color: rc, toy: rt });
+      }
+
+      items.sort(() => Math.random() - 0.5);
+      items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = `toy-item ${item.color.cls}`;
+        el.textContent = item.toy.emoji;
+        el.onclick = () => clickToyItem(el, item);
+        floor.appendChild(el);
+      });
+
+      updateZ1Prompt();
+      speakZ1();
+    }
+
+    function updateZ1Prompt() {
+      if (z1Tasks.length === 1) {
+        const t = z1Tasks[0];
+        document.getElementById('z1Prompt').textContent =
+          `Put ${t.target} ${t.color.en} ${t.toy.en} in the box! (เก็บ${t.toy.th}${t.color.th} ${t.collected}/${t.target})`;
+      } else {
+        const [t1, t2] = z1Tasks;
+        document.getElementById('z1Prompt').textContent =
+          `เก็บ ${t1.target} ${t1.color.en} ${t1.toy.en} (${t1.collected}/${t1.target}) และ ${t2.target} ${t2.color.en} ${t2.toy.en} (${t2.collected}/${t2.target})`;
+      }
+    }
+
+    function speakZ1() {
+      if (z1Tasks.length === 1) {
+        const t = z1Tasks[0];
+        speakByZone('z1',
+          `มาช่วยกันเก็บ${t.toy.th}${t.color.th} จำนวน ${t.target} ชิ้น ลงกล่องกันเถอะ`,
+          `Put ${t.target} ${t.color.en} ${t.toy.en} in the box`
+        );
+      } else {
+        const [t1, t2] = z1Tasks;
+        speakByZone('z1',
+          `เก็บ${t1.toy.th}${t1.color.th} ${t1.target} ชิ้น และ ${t2.toy.th}${t2.color.th} ${t2.target} ชิ้น ลงกล่องจ้า`,
+          `Put ${t1.target} ${t1.color.en} ${t1.toy.en}, and ${t2.target} ${t2.color.en} ${t2.toy.en} in the box`
+        );
+      }
+    }
+
+    function clickToyItem(el, item) {
+      const matchTask = z1Tasks.find(t =>
+        t.color.id === item.color.id && t.toy.id === item.toy.id && t.collected < t.target
+      );
+      if (matchTask) {
+        playSFX('step');
+        matchTask.collected++;
+        el.style.transform = 'scale(0)';
+        setTimeout(() => el.remove(), 150);
+        const countStr = String(matchTask.collected);
+        speakByZone('z1', countStr, countStr);
+        updateZ1Prompt();
+
+        if (z1Tasks.every(t => t.collected >= t.target)) {
+          playSFX('win');
+          addStar(z1Diff === 'hard' ? 2 : 1);
+          setTimeout(() => {
+            speakByZone('z1', 'เก่งมากๆ เลย ช่วยเก็บของเรียบร้อยแล้ว!', 'Good job! You are very helpful!');
+            initZone1();
+          }, 900);
+        }
+      } else {
+        playSFX('wall');
+        el.classList.add('shake');
+        setTimeout(() => el.classList.remove('shake'), 400);
+        speakByZone('z1', 'ลองดูใหม่นะจ๊ะ', 'Try again please!');
+      }
+    }
+
+    // ======== ZONE 2: GARDEN MAZE (CODING) ========
+    let z2GridSize = 4;
+    let z2Control = 'step';
+    let z2StoryMode = 'random';
+    let currentStory = null;
+    let playerPos = { r: 0, c: 0 };
+    let goalPos = { r: 3, c: 3 };
+    let rocks = [];
+    let codeQueue = [];
+    let isRunningQueue = false;
+    let queueTimers = [];
+
+    const mazeStories = {
+      puppy: {
+        id: 'puppy',
+        actorEmoji: '🐶', actorTh: 'ลูกหมา', actorEn: 'Puppy',
+        goalEmoji: '🦴', goalTh: 'กระดูก', goalEn: 'Bone',
+        obsEmoji: '🪨', obsTh: 'ก้อนหิน', obsEn: 'Rock',
+        bg: '#55efc4', border: '#00b894'
+      },
+      bunny: {
+        id: 'bunny',
+        actorEmoji: '🐰', actorTh: 'กระต่ายน้อย', actorEn: 'Bunny',
+        goalEmoji: '🥕', goalTh: 'แครอท', goalEn: 'Carrot',
+        obsEmoji: '🪵', obsTh: 'ขอนไม้', obsEn: 'Log',
+        bg: '#a8e6cf', border: '#38ada9'
+      },
+      rocket: {
+        id: 'rocket',
+        actorEmoji: '🚀', actorTh: 'จรวดอวกาศ', actorEn: 'Rocket',
+        goalEmoji: '🌕', goalTh: 'ดวงจันทร์', goalEn: 'Moon',
+        obsEmoji: '☄️', obsTh: 'อุกกาบาต', obsEn: 'Meteor',
+        bg: '#6c5ce7', border: '#341f97'
+      },
+      bee: {
+        id: 'bee',
+        actorEmoji: '🐝', actorTh: 'ผึ้งน้อย', actorEn: 'Little Bee',
+        goalEmoji: '🌻', goalTh: 'ดอกทานตะวัน', goalEn: 'Sunflower',
+        obsEmoji: '🕸️', obsTh: 'ใยแมงมุม', obsEn: 'Spiderweb',
+        bg: '#ffeaa7', border: '#fdcb6e'
+      },
+      firetruck: {
+        id: 'firetruck',
+        actorEmoji: '🚒', actorTh: 'รถดับเพลิง', actorEn: 'Fire Truck',
+        goalEmoji: '🔥', goalTh: 'จุดไฟไหม้', goalEn: 'Fire',
+        obsEmoji: '🚧', obsTh: 'แผงกั้นถนน', obsEn: 'Barrier',
+        bg: '#fab1a0', border: '#e17055'
+      }
+    };
+
+    function clearQueueTimers() {
+      queueTimers.forEach(t => clearTimeout(t));
+      queueTimers = [];
+      isRunningQueue = false;
+    }
+
+    function setZ2Story(storyKey) {
+      clearQueueTimers();
+      z2StoryMode = storyKey;
+      document.getElementById('z2StoryRandom').classList.toggle('active', storyKey === 'random');
+      document.getElementById('z2StoryPuppy').classList.toggle('active', storyKey === 'puppy');
+      document.getElementById('z2StoryBunny').classList.toggle('active', storyKey === 'bunny');
+      document.getElementById('z2StoryRocket').classList.toggle('active', storyKey === 'rocket');
+      document.getElementById('z2StoryBee').classList.toggle('active', storyKey === 'bee');
+      document.getElementById('z2StoryFire').classList.toggle('active', storyKey === 'firetruck');
+      if (storyKey !== 'random') playAdventureMoveSFX(storyKey);
+      initZone2(false);
+    }
+
+    function setZ2Grid(size) {
+      clearQueueTimers();
+      z2GridSize = size;
+      document.getElementById('z2Size4').classList.toggle('active', size === 4);
+      document.getElementById('z2Size5').classList.toggle('active', size === 5);
+      document.getElementById('z2Size6').classList.toggle('active', size === 6);
+      initZone2();
+    }
+
+    function setZ2Control(mode) {
+      clearQueueTimers();
+      z2Control = mode;
+      document.getElementById('z2StepMode').classList.toggle('active', mode === 'step');
+      document.getElementById('z2CodeMode').classList.toggle('active', mode === 'code');
+      document.getElementById('codeQueueBox').style.display = mode === 'code' ? 'flex' : 'none';
+      document.getElementById('mazeGoBtn').style.display = mode === 'code' ? 'inline-block' : 'none';
+      document.getElementById('mazeClearBtn').style.display = mode === 'code' ? 'inline-block' : 'none';
+      initZone2(false);
+    }
+
+    function initZone2(shouldSpeak = true) {
+      clearQueueTimers();
+      playerPos = { r: 0, c: 0 };
+      goalPos = { r: z2GridSize - 1, c: z2GridSize - 1 };
+      codeQueue = [];
+
+      const keys = Object.keys(mazeStories);
+      if (z2StoryMode === 'random') {
+        const rk = keys[Math.floor(Math.random() * keys.length)];
+        currentStory = mazeStories[rk];
+      } else {
+        currentStory = mazeStories[z2StoryMode];
+      }
+
+      const gridEl = document.getElementById('mazeGrid');
+      gridEl.style.background = currentStory.bg;
+      gridEl.style.borderColor = currentStory.border;
+
+      let safePath = new Set(['0,0', `${goalPos.r},${goalPos.c}`]);
+      let cr = 0, cc = 0;
+      while (cr < goalPos.r || cc < goalPos.c) {
+        if (cr < goalPos.r && (cc === goalPos.c || Math.random() < 0.5)) cr++;
+        else cc++;
+        safePath.add(`${cr},${cc}`);
+      }
+
+      rocks = [];
+      const rockCount = z2GridSize === 4 ? 2 : (z2GridSize === 5 ? 5 : 9);
+      let attempts = 0;
+      while (rocks.length < rockCount && attempts < 100) {
+        attempts++;
+        const rr = Math.floor(Math.random() * z2GridSize);
+        const rc = Math.floor(Math.random() * z2GridSize);
+        const key = `${rr},${rc}`;
+        if (!safePath.has(key) && !rocks.some(k => k.r === rr && k.c === rc)) {
+          rocks.push({ r: rr, c: rc });
+        }
+      }
+
+      document.getElementById('z2Prompt').textContent =
+        `${currentStory.actorEmoji} พา${currentStory.actorTh}หลบ${currentStory.obsTh} ไปหา${currentStory.goalTh}! (Help the ${currentStory.actorEn} find the ${currentStory.goalEn})`;
+      renderMaze();
+      updateQueueUI();
+      if (shouldSpeak) speakZ2();
+    }
+
+    function speakZ2() {
+      if (!currentStory) return;
+      speakByZone('z2',
+        `มาช่วยพา${currentStory.actorTh} เดินหลบ${currentStory.obsTh} ไปหา${currentStory.goalTh}กันเถอะ`,
+        `Help the ${currentStory.actorEn} find the ${currentStory.goalEn}`
+      );
+    }
+
+    function renderMaze() {
+      const grid = document.getElementById('mazeGrid');
+      grid.style.gridTemplateColumns = `repeat(${z2GridSize}, 1fr)`;
+      grid.innerHTML = '';
+
+      for (let r = 0; r < z2GridSize; r++) {
+        for (let c = 0; c < z2GridSize; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'maze-cell';
+          cell.style.fontSize = z2GridSize === 6 ? '22px' : '30px';
+          if (playerPos.r === r && playerPos.c === c) {
+            cell.textContent = currentStory.actorEmoji;
+            cell.classList.add('player-cell');
+          } else if (goalPos.r === r && goalPos.c === c) {
+            cell.textContent = currentStory.goalEmoji;
+          } else if (rocks.some(k => k.r === r && k.c === c)) {
+            cell.textContent = currentStory.obsEmoji;
+          }
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    function handleMazeInput(dir) {
+      if (isRunningQueue) return;
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      unlockMobileAudio();
+
+      if (z2Control === 'step') {
+        moveSingleStep(dir);
+      } else {
+        playSFX('queue');
+        codeQueue.push(dir);
+        updateQueueUI();
+      }
+    }
+
+    function updateQueueUI(activeIndex = -1) {
+      const icons = { UP: '⬆️', DOWN: '⬇️', LEFT: '⬅️', RIGHT: '➡️' };
+      const box = document.getElementById('codeQueueBox');
+      if (!codeQueue.length) {
+        box.textContent = 'กดลูกศรเพื่อเรียงคำสั่ง แล้วกด ▶️ GO!';
+        return;
+      }
+      box.innerHTML = codeQueue.map((d, idx) => {
+        const highlight = idx === activeIndex
+          ? 'background:#ffeaa7; border:3px solid #e17055; border-radius:10px; padding:2px 8px; transform:scale(1.22); display:inline-block;'
+          : 'padding:2px 4px; display:inline-block;';
+        return `<span style="${highlight}">${icons[d]}</span>`;
+      }).join('');
+    }
+
+    function clearCodeQueue() {
+      if (isRunningQueue) clearQueueTimers();
+      playSFX('queue');
+      codeQueue = [];
+      playerPos = { r: 0, c: 0 };
+      renderMaze();
+      updateQueueUI();
+    }
+
+    function moveSingleStep(dir, playImmediateSound = true) {
+      let nr = playerPos.r, nc = playerPos.c;
+      if (dir === 'UP') nr--;
+      if (dir === 'DOWN') nr++;
+      if (dir === 'LEFT') nc--;
+      if (dir === 'RIGHT') nc++;
+
+      const gridEl = document.getElementById('mazeGrid');
+
+      if (nr < 0 || nr >= z2GridSize || nc < 0 || nc >= z2GridSize) {
+        if (playImmediateSound) playSFX('wall');
+        gridEl.classList.add('shake');
+        setTimeout(() => gridEl.classList.remove('shake'), 400);
+        setTimeout(() => speakByZone('z2', 'อุ๊ย ชนขอบกำแพงแล้วจ้า!', 'Oops! Hit the wall!'), 250);
+        return false;
+      }
+      if (rocks.some(k => k.r === nr && k.c === nc)) {
+        if (playImmediateSound) playSFX('rock');
+        gridEl.classList.add('shake');
+        setTimeout(() => gridEl.classList.remove('shake'), 400);
+        setTimeout(() => speakByZone('z2', `อุ๊ย ชน${currentStory.obsTh}!`, `Oops! Hit the ${currentStory.obsEn}!`), 250);
+        return false;
+      }
+
+      if (playImmediateSound) playAdventureMoveSFX(currentStory.id);
+      playerPos = { r: nr, c: nc };
+      renderMaze();
+
+      if (playerPos.r === goalPos.r && playerPos.c === goalPos.c) {
+        if (playImmediateSound) playAdventureWinSFX(currentStory.id);
+        addStar(z2GridSize === 6 ? 2 : 1);
+        setTimeout(() => {
+          speakByZone('z2',
+            `เย้! พา${currentStory.actorTh}ไปถึง${currentStory.goalTh}สำเร็จแล้ว!`,
+            `Awesome! The ${currentStory.actorEn} found the ${currentStory.goalEn}!`
+          );
+        }, 380);
+        setTimeout(() => initZone2(true), 1600);
+        return 'WIN';
+      }
+      return true;
+    }
+
+    function runCodeQueue() {
+      if (!codeQueue.length || isRunningQueue) return;
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      unlockMobileAudio();
+
+      const ctx = getAudioCtx();
+      isRunningQueue = true;
+      playerPos = { r: 0, c: 0 };
+      renderMaze();
+
+      const stepIntervalMs = 460;
+      const stepIntervalSec = stepIntervalMs / 1000;
+
+      let simR = 0, simC = 0;
+      let simSteps = [];
+      for (let i = 0; i < codeQueue.length; i++) {
+        const dir = codeQueue[i];
+        let nr = simR, nc = simC;
+        if (dir === 'UP') nr--;
+        if (dir === 'DOWN') nr++;
+        if (dir === 'LEFT') nc--;
+        if (dir === 'RIGHT') nc++;
+
+        if (nr < 0 || nr >= z2GridSize || nc < 0 || nc >= z2GridSize) {
+          simSteps.push({ dir, outcome: 'WALL' });
+          break;
+        } else if (rocks.some(k => k.r === nr && k.c === nc)) {
+          simSteps.push({ dir, outcome: 'ROCK' });
+          break;
+        } else {
+          simR = nr;
+          simC = nc;
+          const isGoal = (simR === goalPos.r && simC === goalPos.c);
+          simSteps.push({ dir, outcome: isGoal ? 'WIN' : 'STEP' });
+          if (isGoal) break;
+        }
+      }
+
+      if (ctx) {
+        const baseTime = ctx.currentTime + 0.05;
+        simSteps.forEach((st, idx) => {
+          const t = baseTime + idx * stepIntervalSec;
+          if (st.outcome === 'STEP') {
+            playAdventureMoveSFX(currentStory.id, t);
+          } else if (st.outcome === 'WIN') {
+            playAdventureMoveSFX(currentStory.id, t);
+            playAdventureWinSFX(currentStory.id, t + 0.12);
+          } else if (st.outcome === 'WALL' || st.outcome === 'ROCK') {
+            playSFX(st.outcome === 'WALL' ? 'wall' : 'rock', t);
+          }
+        });
+      }
+
+      simSteps.forEach((st, idx) => {
+        const timerId = setTimeout(() => {
+          updateQueueUI(idx);
+          moveSingleStep(st.dir, false);
+          if (idx === simSteps.length - 1) {
+            isRunningQueue = false;
+          }
+        }, 50 + idx * stepIntervalMs);
+        queueTimers.push(timerId);
+      });
+    }
+
+    // ======== ZONE 3: PATTERN RECOGNITION WORKSHEET ========
+    let patTheme = 'mix';
+    let patDiff = 'easy';
+    let currentZ3Question = null;
+
+    function makeShapeSVG(type, fill, stroke = '#2d3436') {
+      const shapes = {
+        circle: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="${fill}" stroke="${stroke}" stroke-width="6"/><circle cx="35" cy="35" r="8" fill="rgba(255,255,255,0.45)"/></svg>`,
+        square: `<svg viewBox="0 0 100 100"><rect x="14" y="14" width="72" height="72" rx="10" fill="${fill}" stroke="${stroke}" stroke-width="6"/><rect x="24" y="24" width="20" height="12" rx="4" fill="rgba(255,255,255,0.4)"/></svg>`,
+        triangle: `<svg viewBox="0 0 100 100"><polygon points="50,10 90,86 10,86" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/></svg>`,
+        star: `<svg viewBox="0 0 100 100"><polygon points="50,8 63,36 94,40 71,62 77,92 50,77 23,92 29,62 6,40 37,36" fill="${fill}" stroke="${stroke}" stroke-width="5" stroke-linejoin="round"/></svg>`,
+        hexagon: `<svg viewBox="0 0 100 100"><polygon points="28,12 72,12 94,50 72,88 28,88 6,50" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/></svg>`,
+        heart: `<svg viewBox="0 0 100 100"><path d="M50,86 C50,86 10,60 10,34 C10,18 24,10 38,16 C45,19 50,26 50,26 C50,26 55,19 62,16 C76,10 90,18 90,34 C90,60 50,86 50,86 Z" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/></svg>`,
+        diamond: `<svg viewBox="0 0 100 100"><polygon points="50,8 88,50 50,92 12,50" fill="${fill}" stroke="${stroke}" stroke-width="6" stroke-linejoin="round"/></svg>`
+      };
+      return shapes[type];
+    }
+
+    function makeVehicleSVG(type, primaryColor, secondaryColor = '#ffeaa7') {
+      const v = {
+        car: `<svg viewBox="0 0 100 100">
+          <rect x="10" y="46" width="80" height="28" rx="10" fill="${primaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <path d="M24,46 L36,24 L66,24 L78,46 Z" fill="${primaryColor}" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+          <polygon points="38,29 63,29 71,44 30,44" fill="#dff9fb"/>
+          <circle cx="28" cy="76" r="12" fill="#2d3436"/><circle cx="28" cy="76" r="5" fill="#dfe6e9"/>
+          <circle cx="72" cy="76" r="12" fill="#2d3436"/><circle cx="72" cy="76" r="5" fill="#dfe6e9"/>
+          <circle cx="84" cy="56" r="4" fill="#ffeaa7"/>
+        </svg>`,
+        bus: `<svg viewBox="0 0 100 100">
+          <rect x="8" y="24" width="84" height="50" rx="8" fill="${primaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <rect x="16" y="32" width="16" height="16" rx="3" fill="#dff9fb" stroke="#2d3436" stroke-width="3"/>
+          <rect x="38" y="32" width="16" height="16" rx="3" fill="#dff9fb" stroke="#2d3436" stroke-width="3"/>
+          <rect x="60" y="32" width="22" height="16" rx="3" fill="#dff9fb" stroke="#2d3436" stroke-width="3"/>
+          <circle cx="26" cy="76" r="11" fill="#2d3436"/><circle cx="26" cy="76" r="5" fill="#dfe6e9"/>
+          <circle cx="74" cy="76" r="11" fill="#2d3436"/><circle cx="74" cy="76" r="5" fill="#dfe6e9"/>
+        </svg>`,
+        rocket: `<svg viewBox="0 0 100 100">
+          <path d="M35,72 L20,86 L35,82 Z" fill="${secondaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <path d="M65,72 L80,86 L65,82 Z" fill="${secondaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <path d="M50,10 C68,28 70,56 66,78 L34,78 C30,56 32,28 50,10 Z" fill="${primaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <circle cx="50" cy="46" r="12" fill="#dff9fb" stroke="#2d3436" stroke-width="4"/>
+          <path d="M40,78 L50,96 L60,78 Z" fill="#ff7675"/>
+        </svg>`,
+        boat: `<svg viewBox="0 0 100 100">
+          <polygon points="48,14 48,56 80,56" fill="${primaryColor}" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+          <polygon points="44,22 44,56 20,56" fill="${secondaryColor}" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+          <polygon points="12,62 88,62 74,84 26,84" fill="#e17055" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+        </svg>`,
+        heli: `<svg viewBox="0 0 100 100">
+          <line x1="18" y1="20" x2="82" y2="20" stroke="#2d3436" stroke-width="6" stroke-linecap="round"/>
+          <line x1="50" y1="20" x2="50" y2="32" stroke="#2d3436" stroke-width="5"/>
+          <path d="M12,50 L36,50" stroke="${primaryColor}" stroke-width="8" stroke-linecap="round"/>
+          <ellipse cx="56" cy="52" rx="26" ry="20" fill="${primaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <path d="M58,36 C72,36 78,44 78,52 L58,52 Z" fill="#dff9fb" stroke="#2d3436" stroke-width="3"/>
+          <line x1="36" y1="78" x2="76" y2="78" stroke="#2d3436" stroke-width="5" stroke-linecap="round"/>
+        </svg>`,
+        plane: `<svg viewBox="0 0 100 100">
+          <path d="M12,52 L86,36 C94,35 96,46 88,50 L16,66 Z" fill="#ffffff" stroke="#2d3436" stroke-width="4"/>
+          <polygon points="42,46 62,42 46,20 34,22" fill="${primaryColor}" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+          <polygon points="44,56 64,52 50,82 38,82" fill="${primaryColor}" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+          <polygon points="14,52 26,49 20,32 10,34" fill="${secondaryColor}" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+        </svg>`,
+        scooter: `<svg viewBox="0 0 100 100">
+          <path d="M24,68 L64,68 L72,36 L60,36" fill="none" stroke="${primaryColor}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22,68 C22,52 44,52 44,68 Z" fill="${primaryColor}" stroke="#2d3436" stroke-width="4"/>
+          <rect x="24" y="46" width="22" height="8" rx="4" fill="#2d3436"/>
+          <circle cx="24" cy="74" r="12" fill="#2d3436"/><circle cx="24" cy="74" r="5" fill="#fff"/>
+          <circle cx="72" cy="74" r="12" fill="#2d3436"/><circle cx="72" cy="74" r="5" fill="#fff"/>
+        </svg>`,
+        bike: `<svg viewBox="0 0 100 100">
+          <circle cx="24" cy="70" r="14" fill="none" stroke="#2d3436" stroke-width="6"/>
+          <circle cx="76" cy="70" r="14" fill="none" stroke="#2d3436" stroke-width="6"/>
+          <polyline points="24,70 46,44 70,44 50,70 24,70" fill="none" stroke="${primaryColor}" stroke-width="5" stroke-linejoin="round"/>
+          <line x1="76" y1="70" x2="66" y2="34" stroke="${primaryColor}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="58" y1="34" x2="74" y2="34" stroke="#2d3436" stroke-width="5" stroke-linecap="round"/>
+          <line x1="38" y1="40" x2="52" y2="40" stroke="#2d3436" stroke-width="6" stroke-linecap="round"/>
+        </svg>`
+      };
+      return v[type];
+    }
+
+    function makeEmojiSVG(emoji, bg) {
+      return `<svg viewBox="0 0 100 100">
+        <rect x="6" y="6" width="88" height="88" rx="22" fill="${bg}" stroke="#2d3436" stroke-width="4"/>
+        <text x="50" y="68" font-size="56" text-anchor="middle">${emoji}</text>
+      </svg>`;
+    }
+
+    const visualCatalog = {
+      shapes: [
+        { id: 'sh_cy', svg: makeShapeSVG('circle', '#ffd32a') },
+        { id: 'sh_cb', svg: makeShapeSVG('circle', '#b37d4e') },
+        { id: 'sh_sp', svg: makeShapeSVG('square', '#f53b57') },
+        { id: 'sh_so', svg: makeShapeSVG('square', '#ff9f1a') },
+        { id: 'sh_sr', svg: makeShapeSVG('square', '#eb2f06') },
+        { id: 'sh_tb', svg: makeShapeSVG('triangle', '#4bcffa') },
+        { id: 'sh_ty', svg: makeShapeSVG('triangle', '#fffa65') },
+        { id: 'sh_hg', svg: makeShapeSVG('hexagon', '#05c46b') },
+        { id: 'sh_stp', svg: makeShapeSVG('star', '#8c7ae6') },
+        { id: 'sh_stpk', svg: makeShapeSVG('star', '#ffcccc') },
+        { id: 'sh_hr', svg: makeShapeSVG('heart', '#ff6b81') },
+        { id: 'sh_dm', svg: makeShapeSVG('diamond', '#18dcff') }
+      ],
+      vehicles: [
+        { id: 'vh_scoot', svg: makeVehicleSVG('scooter', '#ff3f34') },
+        { id: 'vh_taxi', svg: makeVehicleSVG('car', '#ffd32a') },
+        { id: 'vh_car_o', svg: makeVehicleSVG('car', '#ff793f') },
+        { id: 'vh_car_b', svg: makeVehicleSVG('car', '#3867d6') },
+        { id: 'vh_bike', svg: makeVehicleSVG('bike', '#eb3b5a') },
+        { id: 'vh_plane', svg: makeVehicleSVG('plane', '#45aaf2', '#fed330') },
+        { id: 'vh_heli', svg: makeVehicleSVG('heli', '#fed330') },
+        { id: 'vh_boat', svg: makeVehicleSVG('boat', '#2bcbba', '#fed330') },
+        { id: 'vh_bus', svg: makeVehicleSVG('bus', '#fa8231') },
+        { id: 'vh_rock_o', svg: makeVehicleSVG('rocket', '#fd9644', '#4b7bec') },
+        { id: 'vh_rock_p', svg: makeVehicleSVG('rocket', '#a55eea', '#ff7675') }
+      ],
+      animals: [
+        { id: 'an_lion', svg: makeEmojiSVG('🦁', '#ffeaa7') },
+        { id: 'an_frog', svg: makeEmojiSVG('🐸', '#b8e994') },
+        { id: 'an_panda', svg: makeEmojiSVG('🐼', '#dff9fb') },
+        { id: 'an_rab', svg: makeEmojiSVG('🐰', '#ffcccc') },
+        { id: 'an_oct', svg: makeEmojiSVG('🐙', '#f8a5c2') },
+        { id: 'fr_apple', svg: makeEmojiSVG('🍎', '#ffcccc') },
+        { id: 'fr_bana', svg: makeEmojiSVG('🍌', '#fff200') },
+        { id: 'fr_straw', svg: makeEmojiSVG('🍓', '#fab1a0') },
+        { id: 'fr_grape', svg: makeEmojiSVG('🍇', '#d6a2e8') },
+        { id: 'fr_melon', svg: makeEmojiSVG('🍉', '#b8e994') }
+      ]
+    };
+
+    function setPatTheme(theme) {
+      patTheme = theme;
+      document.getElementById('patThemeMix').classList.toggle('active', theme === 'mix');
+      document.getElementById('patThemeShapes').classList.toggle('active', theme === 'shapes');
+      document.getElementById('patThemeVehicles').classList.toggle('active', theme === 'vehicles');
+      document.getElementById('patThemeAnimals').classList.toggle('active', theme === 'animals');
+      initZone3();
+    }
+
+    function setPatDiff(diff) {
+      patDiff = diff;
+      document.getElementById('patDiffEasy').classList.toggle('active', diff === 'easy');
+      document.getElementById('patDiffMed').classList.toggle('active', diff === 'med');
+      document.getElementById('patDiffHard').classList.toggle('active', diff === 'hard');
+      initZone3();
+    }
+
+    function initZone3() {
+      const stage = document.getElementById('z3Stage');
+      const choicesEl = document.getElementById('z3Choices');
+      stage.innerHTML = '';
+      choicesEl.innerHTML = '';
+
+      let pool = [];
+      if (patTheme === 'shapes') pool = [...visualCatalog.shapes];
+      else if (patTheme === 'vehicles') pool = [...visualCatalog.vehicles];
+      else if (patTheme === 'animals') pool = [...visualCatalog.animals];
+      else {
+        const keys = ['shapes', 'vehicles', 'animals'];
+        const chosenKey = keys[Math.floor(Math.random() * keys.length)];
+        pool = [...visualCatalog[chosenKey]];
+      }
+
+      pool.sort(() => Math.random() - 0.5);
+      const itemA = pool[0], itemB = pool[1], itemC = pool[2];
+
+      let seq = [], blankStart = 0, blankCount = 1;
+
+      if (patDiff === 'easy') {
+        const templates = [
+          [itemA, itemB, itemA, itemB, itemA],
+          [itemA, itemB, itemA, itemB, itemA, itemB],
+          [itemA, itemA, itemB, itemB, itemA, itemA]
+        ];
+        seq = templates[Math.floor(Math.random() * templates.length)];
+        blankStart = seq.length - 1;
+        blankCount = 1;
+      } else if (patDiff === 'med') {
+        const templates = [
+          [itemA, itemA, itemB, itemA, itemA, itemB, itemA, itemA, itemB],
+          [itemA, itemB, itemA, itemB, itemA, itemB, itemA],
+          [itemA, itemB, itemC, itemA, itemB, itemC]
+        ];
+        seq = templates[Math.floor(Math.random() * templates.length)];
+        const possiblePositions = [seq.length - 1, seq.length - 2, Math.floor(seq.length / 2)];
+        blankStart = possiblePositions[Math.floor(Math.random() * possiblePositions.length)];
+        blankCount = 1;
+      } else {
+        const templates = [
+          { s: [itemA, itemB, itemB, itemA, itemB, itemB, itemA, itemB, itemB, itemA], b: 3 },
+          { s: [itemA, itemA, itemB, itemB, itemA, itemA, itemB, itemB, itemA, itemA], b: 1 },
+          { s: [itemA, itemB, itemA, itemB, itemA, itemB, itemA, itemB], b: 3 }
+        ];
+        const picked = templates[Math.floor(Math.random() * templates.length)];
+        seq = picked.s;
+        blankStart = picked.b;
+        blankCount = 2;
+      }
+
+      for (let i = 0; i < seq.length; i++) {
+        if (i === blankStart) {
+          const blankBox = document.createElement('div');
+          blankBox.className = 'pat-blank' + (blankCount === 2 ? ' double-blank' : '');
+          blankBox.textContent = blankCount === 2 ? '❓ ❓' : '❓';
+          stage.appendChild(blankBox);
+          if (blankCount === 2) i++;
+        } else {
+          const itemBox = document.createElement('div');
+          itemBox.className = 'pat-item';
+          itemBox.innerHTML = seq[i].svg;
+          stage.appendChild(itemBox);
+        }
+      }
+
+      const thaiLetters = ['ก.', 'ข.', 'ค.'];
+      let options = [];
+
+      if (blankCount === 1) {
+        const correctItem = seq[blankStart];
+        const wrong1 = correctItem.id === itemA.id ? itemB : itemA;
+        const wrong2 = itemC;
+        options = [
+          { items: [correctItem], correct: true },
+          { items: [wrong1], correct: false },
+          { items: [wrong2], correct: false }
+        ];
+        currentZ3Question = {
+          th: 'ให้เลือกภาพเติมในช่องว่างให้สัมพันธ์กับแบบรูปนะจ๊ะ',
+          en: 'Choose the right picture to complete the pattern!'
+        };
+        document.getElementById('z3Prompt').textContent = '🎨 เลือกภาพเติมลงในกรอบสี่เหลี่ยม [ ❓ ] ให้ถูกต้อง!';
+      } else {
+        const c1 = seq[blankStart], c2 = seq[blankStart + 1];
+        options = [
+          { items: [c1, c2], correct: true },
+          { items: [c2, c1.id === c2.id ? (c1.id === itemA.id ? itemB : itemA) : c1], correct: false },
+          { items: [itemB, itemB.id === c1.id && itemB.id === c2.id ? itemA : itemB], correct: false }
+        ];
+        currentZ3Question = {
+          th: 'ช่องว่างหายไปสองรูป เลือกคู่ภาพ กอ ขอ หรือ คอ มาเติมให้ถูกต้องนะจ๊ะ',
+          en: 'Two pictures are missing! Choose the right pair to fill the blanks!'
+        };
+        document.getElementById('z3Prompt').textContent = '🔥 ท้าทาย! เลือกคู่ภาพ (2 รูป) เติมลงในช่องว่าง [ ❓ ❓ ] ให้ถูกต้อง!';
+      }
+
+      options.sort(() => Math.random() - 0.5);
+
+      options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        const visualsHTML = opt.items.map(it => `<div class="choice-svg-box">${it.svg}</div>`).join('');
+        btn.innerHTML = `
+          <div class="choice-visual-wrap">${visualsHTML}</div>
+          <div class="choice-badge">${thaiLetters[idx]}</div>
+        `;
+        btn.onclick = () => {
+          if (opt.correct) {
+            playSFX('win');
+            addStar(patDiff === 'hard' ? 2 : 1);
+            speakByZone('z3', 'เก่งมากจ้า ถูกต้องเลย!', 'Awesome! That is correct!');
+            setTimeout(initZone3, 900);
+          } else {
+            playSFX('wall');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 400);
+            speakByZone('z3', 'ยังไม่ใช่นะจ๊ะ ลองสังเกตลำดับภาพอีกทีนะ', 'Not quite, look closely at the pattern!');
+          }
+        };
+        choicesEl.appendChild(btn);
+      });
+
+      speakZ3();
+    }
+
+    function speakZ3() {
+      if (currentZ3Question) {
+        speakByZone('z3', currentZ3Question.th, currentZ3Question.en);
+      }
+    }
+
+    // ======== ZONE 4: GOOD HABITS & CAUSE-EFFECT LOGIC ========
+    let currentZ4Question = null;
+
+    const attitudeQuestions = [
+      {
+        promptTh: 'กินกล้วยเสร็จแล้ว ควรทำอะไรต่อครับ?',
+        promptEn: 'After eating a banana, what should you do next?',
+        seq: ['🍌', '😋', '❓'],
+        options: [
+          { icon: '🗑️', textTh: 'ทิ้งเปลือกในถังขยะ', textEn: 'Put peel in the trash', correct: true },
+          { icon: '🛣️', textTh: 'โยนทิ้งบนพื้น', textEn: 'Throw on the floor', correct: false },
+          { icon: '🛏️', textTh: 'วางไว้บนที่นอน', textEn: 'Leave on the bed', correct: false }
+        ]
+      },
+      {
+        promptTh: 'เล่นของเล่นเต็มห้องเสร็จแล้ว ทำอย่างไรต่อดีนะ?',
+        promptEn: 'After playing with toys, what should you do?',
+        seq: ['🧸', '🚗', '❓'],
+        options: [
+          { icon: '📦', textTh: 'เก็บใส่กล่องให้เรียบร้อย', textEn: 'Put toys in the box', correct: true },
+          { icon: '🏃', textTh: 'เดินหนีไปเลย', textEn: 'Walk away', correct: false },
+          { icon: '😭', textTh: 'ร้องไห้งอแง', textEn: 'Cry loudly', correct: false }
+        ]
+      },
+      {
+        promptTh: 'ก่อนกินข้าว มือเปื้อน ต้องทำอะไรก่อนครับ?',
+        promptEn: 'Before eating with dirty hands, what should you do?',
+        seq: ['👐', '🦠', '❓'],
+        options: [
+          { icon: '🧼', textTh: 'ล้างมือด้วยสบู่', textEn: 'Wash hands with soap', correct: true },
+          { icon: '👕', textTh: 'เช็ดกับเสื้อผ้า', textEn: 'Wipe on clothes', correct: false },
+          { icon: '🎮', textTh: 'ไปเล่นเกมต่อ', textEn: 'Play games', correct: false }
+        ]
+      },
+      {
+        promptTh: 'เห็นเพื่อนหกล้มที่สนามเด็กเล่น เราควรทำอย่างไร?',
+        promptEn: 'When a friend falls down, what should we do?',
+        seq: ['👦', '💥', '❓'],
+        options: [
+          { icon: '🤝', textTh: 'เข้าไปช่วยพยุงเพื่อน', textEn: 'Help the friend up', correct: true },
+          { icon: '😆', textTh: 'หัวเราะเยาะเพื่อน', textEn: 'Laugh at them', correct: false },
+          { icon: '🙈', textTh: 'แกล้งทำเป็นไม่เห็น', textEn: 'Ignore them', correct: false }
+        ]
+      },
+      {
+        promptTh: 'ตื่นนอนตอนเช้า พับผ้าห่มแล้ว ควรทำอะไรต่อ?',
+        promptEn: 'After waking up and making the bed, what is next?',
+        seq: ['🌅', '🛏️', '❓'],
+        options: [
+          { icon: '🪥', textTh: 'แปรงฟันล้างหน้า', textEn: 'Brush teeth and wash face', correct: true },
+          { icon: '🍬', textTh: 'กินลูกอมทันที', textEn: 'Eat candy right away', correct: false },
+          { icon: '👟', textTh: 'ใส่รองเท้าขึ้นเตียง', textEn: 'Wear shoes in bed', correct: false }
+        ]
+      },
+      {
+        promptTh: 'เมื่อคุณพ่อคุณแม่ยื่นของให้ เราควรทำอย่างไร?',
+        promptEn: 'When parents give you something, what should you do?',
+        seq: ['🎁', '👨‍👩‍👧', '❓'],
+        options: [
+          { icon: '🙏', textTh: 'ไหว้และพูดขอบคุณ', textEn: 'Say thank you nicely', correct: true },
+          { icon: '😠', textTh: 'ดึงของแล้ววิ่งหนี', textEn: 'Grab and run away', correct: false },
+          { icon: '🙄', textTh: 'ไม่พูดอะไรเลย', textEn: 'Say nothing', correct: false }
+        ]
+      },
+      {
+        promptTh: 'ฝนกำลังจะตก ฟ้าร้องครืนๆ ก่อนออกจากบ้านควรหยิบอะไรไปด้วย?',
+        promptEn: 'It is about to rain! What should you bring before going outside?',
+        seq: ['🌧️', '⚡', '❓'],
+        options: [
+          { icon: '☂️', textTh: 'กางร่มหรือใส่เสื้อกันฝน', textEn: 'Bring an umbrella', correct: true },
+          { icon: '🕶️', textTh: 'ใส่แว่นกันแดด', textEn: 'Wear sunglasses', correct: false },
+          { icon: '🍦', textTh: 'ถือไอศกรีมออกไปตากฝน', textEn: 'Hold ice cream in the rain', correct: false }
+        ]
+      },
+      {
+        promptTh: 'เข้านอนตอนกลางคืน เพื่อให้หลับฝันดีควรทำอย่างไรครับ?',
+        promptEn: 'At bedtime, what should you do before sleeping?',
+        seq: ['🌙', '🛌', '❓'],
+        options: [
+          { icon: '💡', textTh: 'ปิดไฟและหลับตาพักผ่อน', textEn: 'Turn off the light and sleep', correct: true },
+          { icon: '🥁', textTh: 'ตีกลองเสียงดังลั่นบ้าน', textEn: 'Play loud drums', correct: false },
+          { icon: '🏃', textTh: 'กระโดดโลดเต้นบนเตียง', textEn: 'Jump on the bed', correct: false }
+        ]
+      }
+    ];
+
+    function initZone4() {
+      const stage = document.getElementById('z4Stage');
+      const choicesEl = document.getElementById('z4Choices');
+      stage.innerHTML = '';
+      choicesEl.innerHTML = '';
+
+      const useEn = appState.langs.z4 === 'en';
+      const q = attitudeQuestions[Math.floor(Math.random() * attitudeQuestions.length)];
+      currentZ4Question = { th: q.promptTh, en: q.promptEn };
+      document.getElementById('z4Prompt').textContent = useEn ? q.promptEn : q.promptTh;
+
+      q.seq.forEach(item => {
+        const box = document.createElement('div');
+        box.className = item === '❓' ? 'pat-blank' : 'pat-item';
+        box.style.fontSize = '38px';
+        box.textContent = item;
+        stage.appendChild(box);
+      });
+
+      const opts = [...q.options].sort(() => Math.random() - 0.5);
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        const label = useEn ? opt.textEn : opt.textTh;
+        btn.innerHTML = `<span style="font-size:42px;">${opt.icon}</span><span>${label}</span>`;
+        btn.onclick = () => {
+          if (opt.correct) {
+            playSFX('win');
+            addStar(1);
+            speakByZone('z4', `ยอดเยี่ยมมาก! ${opt.textTh}`, `Great job! ${opt.textEn}`);
+            setTimeout(initZone4, 950);
+          } else {
+            playSFX('wall');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 400);
+            speakByZone('z4', 'เอ๊... ลองคิดดูใหม่อีกทีนะจ๊ะ', 'Hmm, let us try again!');
+          }
+        };
+        choicesEl.appendChild(btn);
+      });
+
+      speakZ4();
+    }
+
+    function speakZ4() {
+      if (currentZ4Question) {
+        speakByZone('z4', currentZ4Question.th, currentZ4Question.en);
+      }
+    }
+
+    // ======== MODALS & SETTINGS ========
+    function openRewardModal() {
+      document.getElementById('rewardModalTitle').textContent = `⭐ สะสมได้ ${appState.stars} / ${appState.starGoal} ดาว`;
+      document.getElementById('rewardModalDesc').textContent =
+        appState.stars >= appState.starGoal
+          ? 'ครบตามเป้าหมายแล้ว! นำคูปองนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลย!'
+          : `อีกแค่ ${appState.starGoal - (appState.stars % appState.starGoal)} ดาว ก็จะได้รับคูปองรางวัลพิเศษแล้ว สู้ๆ นะ!`;
+      document.getElementById('rewardModal').classList.add('show');
+    }
+
+    function closeRewardModal() {
+      document.getElementById('rewardModal').classList.remove('show');
+    }
+
+    function claimAndResetStars() {
+      appState.stars = 0;
+      saveState();
+      closeRewardModal();
+      speakText('เริ่มสะสมดาวรอบใหม่กันเลย!', 'th-TH');
+    }
+
+    function openSettings() {
+      document.getElementById('inputChildName').value = appState.childName;
+      document.getElementById('inputStarGoal').value = appState.starGoal;
+      document.getElementById('inputCouponText').value = appState.couponText;
+      updateLangChipsUI();
+      document.getElementById('settingsModal').classList.add('show');
+    }
+
+    function closeSettings() {
+      document.getElementById('settingsModal').classList.remove('show');
+    }
+
+    function adjustStars(delta) {
+      appState.stars = Math.max(0, appState.stars + delta);
+      saveState();
+    }
+
+    function saveSettings() {
+      appState.childName = document.getElementById('inputChildName').value.trim() || 'น้องมะลิ';
+      appState.starGoal = Math.max(5, parseInt(document.getElementById('inputStarGoal').value, 10) || 50);
+      appState.couponText = document.getElementById('inputCouponText').value.trim() || '🍦 คูปองแลกไอศกรีม 1 แท่ง!';
+      saveState();
+      closeSettings();
+    }
+
+    window.addEventListener('pageshow', () => {
+      appState.stars = getUnifiedStars();
+      updateTopUI();
+    });
+
+    window.onload = () => {
+      appState.stars = getUnifiedStars();
+      updateTopUI();
+
+      // ตรวจสอบพารามิเตอร์ ?zone=1 ถึง 4 จากหน้า Hub index.html
+      const params = new URLSearchParams(window.location.search);
+      const zoneParam = parseInt(params.get('zone'), 10);
+      if (zoneParam >= 1 && zoneParam <= 4) {
+        openZone(zoneParam);
+      }
+    };
+  </script>
+</body>
+</html>

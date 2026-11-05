@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Magic Clock Tower - หอนาฬิกาหรรษา</title>
+  <title>ด่านที่ 8: หอนาฬิกาหรรษา - วิชาคณิตศาสตร์ & เวลา</title>
   <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -15,32 +15,39 @@
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%);
+      background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 50%, #bae6fd 100%);
       min-height: 100vh;
       overflow-x: hidden;
       color: #2d3436;
     }
 
-    /* Top Header & Shared Star Bar */
+    /* Top Header & Shared Star Bar (Unified Theme) */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
-      background: rgba(255, 255, 255, 0.94);
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.95);
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       position: sticky;
       top: 0;
       z-index: 100;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-left-group, .nav-right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .icon-btn {
       background: #ffeaa7;
       border: 3px solid #fdcb6e;
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 22px;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -48,19 +55,39 @@
       box-shadow: 0 3px 0 #e1b12c;
       flex-shrink: 0;
       text-decoration: none;
+      color: #2d3436;
     }
     .icon-btn:active { transform: translateY(3px); box-shadow: none; }
 
+    .back-map-btn {
+      background: #ff7675;
+      color: #fff;
+      border: 3px solid #d63031;
+      border-radius: 22px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #b33939;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .back-map-btn:active { transform: translateY(3px); box-shadow: none; }
+
     .star-progress-wrap {
       flex: 1;
-      max-width: 420px;
+      max-width: 390px;
+      min-width: 160px;
       background: #dfe6e9;
       border-radius: 25px;
-      height: 36px;
+      height: 34px;
       position: relative;
       border: 3px solid #fff;
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
       overflow: hidden;
+      cursor: pointer;
     }
     .star-progress-fill {
       height: 100%;
@@ -75,7 +102,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 14px;
       color: #2d3436;
       text-shadow: 0 1px 2px rgba(255,255,255,0.9);
     }
@@ -86,16 +113,54 @@
       border: 3px solid #0984e3;
       border-radius: 20px;
       padding: 6px 14px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 3px 0 #0652DD;
     }
     .lang-switch-btn:active { transform: translateY(3px); box-shadow: none; }
 
+    /* Quick Math Stage Switcher Row */
+    .math-stage-tabs {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding-top: 6px;
+      margin-top: 4px;
+      border-top: 1px solid #dfe6e9;
+      scrollbar-width: none;
+    }
+    .math-stage-tabs::-webkit-scrollbar { display: none; }
+    .stage-tab-link {
+      flex-shrink: 0;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      color: #475569;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .stage-tab-link:hover {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+    }
+    .stage-tab-link.active {
+      background: #6c5ce7;
+      color: #fff;
+      border-color: #4834d4;
+      box-shadow: 0 2px 0 #30336b;
+      transform: scale(1.05);
+    }
+
     /* Main Container */
     .container {
-      max-width: 820px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 14px;
       text-align: center;
@@ -173,7 +238,7 @@
 
     /* Clock Display Area */
     .clock-board {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border-radius: 28px;
       padding: 18px;
       border: 5px solid #fff;
@@ -223,7 +288,7 @@
     .dig-hour {
       font-size: 48px;
       font-weight: 700;
-      color: #ff7675; /* Matches Red Hour Hand */
+      color: #ff7675;
       text-shadow: 0 0 10px rgba(255, 118, 117, 0.5);
     }
     .dig-colon {
@@ -236,7 +301,7 @@
     .dig-min {
       font-size: 48px;
       font-weight: 700;
-      color: #74b9ff; /* Matches Blue Minute Hand */
+      color: #74b9ff;
       text-shadow: 0 0 10px rgba(116, 185, 255, 0.5);
     }
 
@@ -263,7 +328,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      max-width: 300px;
+      max-width: 310px;
     }
     .routine-emoji { font-size: 40px; }
     .routine-text {
@@ -348,6 +413,36 @@
       font-weight: 700;
     }
 
+    /* Reward Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 14px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 22px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      border: 5px solid #fdcb6e;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+    }
+
     .shake { animation: shakeAnim 0.4s; }
     @keyframes shakeAnim {
       0%, 100% { transform: translateX(0); }
@@ -358,14 +453,35 @@
 </head>
 <body>
 
-  <!-- Top Bar (Connected to index.html Stars) -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Bar (Connected to index.html & maths.html Stage Hub) -->
   <div class="top-bar">
-    <a href="index.html" class="icon-btn" title="กลับหน้าเมืองหลัก">🏠</a>
-    <div class="star-progress-wrap">
+    <div class="nav-left-group">
+      <a href="index.html" class="icon-btn" title="กลับหน้าเมืองหลัก (Home)">🏠</a>
+      <a href="maths.html" class="back-map-btn" title="กลับไปเลือกด่านในวิชาคณิตศาสตร์">🗺️ เลือกด่านคณิต</a>
+    </div>
+
+    <div class="star-progress-wrap" onclick="openRewardModal()" title="แตะเพื่อดูรางวัลสะสม">
       <div class="star-progress-fill" id="starFill"></div>
       <div class="star-progress-text" id="starText">⭐ 0 / 50 ดาว</div>
     </div>
-    <button class="lang-switch-btn" id="langBtn" onclick="toggleLang()">🇹🇭 เสียงไทย</button>
+
+    <div class="nav-right-group">
+      <button class="lang-switch-btn" id="langBtn" onclick="toggleLang()">🇹🇭 เสียงไทย</button>
+    </div>
+
+    <!-- Quick Math Stage Switcher Row (Jump directly to any Math stage 1-8) -->
+    <div class="math-stage-tabs">
+      <a href="maths.html?stage=1" class="stage-tab-link">1. 🧱 นับบล็อก</a>
+      <a href="maths.html?stage=2" class="stage-tab-link">2. 🔢 ทายตัวเลข</a>
+      <a href="maths.html?stage=3" class="stage-tab-link">3. 🍎 บวกเลข (+)</a>
+      <a href="maths.html?stage=4" class="stage-tab-link">4. 🧁 ลบเลข (-)</a>
+      <a href="maths.html?stage=5" class="stage-tab-link">5. 🐊 มากกว่า/น้อยกว่า</a>
+      <a href="maths.html?stage=6" class="stage-tab-link">6. 👛 กระเป๋าตังค์</a>
+      <a href="maths.html?stage=7" class="stage-tab-link">7. 💴 ทายเงิน</a>
+      <a href="clock.html" class="stage-tab-link active">8. ⏰ หอนาฬิกา</a>
+    </div>
   </div>
 
   <div class="container">
@@ -461,6 +577,19 @@
     <div class="choices-grid" id="quizChoices" style="display:none;"></div>
   </div>
 
+  <!-- REWARD MODAL -->
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal-card">
+      <div style="font-size:64px;">🏆🎉</div>
+      <h2 id="rewardModalTitle">เก่งที่สุดเลย!</h2>
+      <p id="rewardModalDesc" style="font-size:18px; font-weight:700;"></p>
+      <div style="background:#ffeaa7; padding:14px; border-radius:18px; border:3px dashed #e17055; margin:14px 0; font-size:20px; font-weight:700;" id="couponTextDisplay">
+        🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!
+      </div>
+      <button class="check-btn" style="margin-top:0;" onclick="closeRewardModal()">เล่นต่อเลย!</button>
+    </div>
+  </div>
+
   <script>
     // ======== WEB AUDIO ENGINE (MOBILE & HUAWEI P30 SAFE) ========
     let audioCtx = null;
@@ -491,7 +620,6 @@
       const now = ctx.currentTime;
 
       if (type === 'tick') {
-        // Mechanical clock tick-tock sound
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
@@ -504,7 +632,6 @@
         osc.start(now);
         osc.stop(now + 0.045);
       } else if (type === 'win') {
-        // Cuckoo chime + fanfare
         const notes = [523.25, 659.25, 783.99, 1046.5];
         notes.forEach((f, i) => {
           const osc = ctx.createOscillator();
@@ -533,22 +660,57 @@
       }
     }
 
-    // ======== SHARED STAR PROGRESS (SYNCED WITH INDEX.HTML) ========
-    let stars = parseInt(localStorage.getItem('mlst_stars') || '0', 10);
+    // ======== SHARED STAR PROGRESS (SYNCED WITH INDEX.HTML & MATHS.HTML) ========
+    function getUnifiedStars() {
+      const s1 = parseInt(localStorage.getItem('mlst_stars') || '0', 10);
+      const s2 = parseInt(localStorage.getItem('kidsMath_totalStars') || '0', 10);
+      return Math.max(isNaN(s1) ? 0 : s1, isNaN(s2) ? 0 : s2);
+    }
+
+    let stars = getUnifiedStars();
     let starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+    let childName = localStorage.getItem('mlst_name') || 'น้องมะลิ';
+    let couponText = localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!';
     let voiceLang = localStorage.getItem('mlst_clock_lang') || 'th';
 
     function updateStarUI() {
-      const pct = Math.min(100, Math.round((stars / starGoal) * 100));
-      document.getElementById('starFill').style.width = pct + '%';
+      starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+      childName = localStorage.getItem('mlst_name') || 'น้องมะลิ';
+      couponText = localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!';
+
+      const pct = Math.min(100, Math.round(((stars % starGoal) / starGoal) * 100));
+      document.getElementById('starFill').style.width = (stars > 0 && stars % starGoal === 0 ? 100 : pct) + '%';
       document.getElementById('starText').textContent = `⭐ ${stars} / ${starGoal} ดาว`;
       document.getElementById('langBtn').textContent = voiceLang === 'th' ? '🇹🇭 เสียงไทย' : '🇬🇧 เสียง Eng';
+      document.getElementById('couponTextDisplay').textContent = couponText;
     }
 
     function addStar(amount = 1) {
       stars += amount;
-      localStorage.setItem('mlst_stars', stars);
+      localStorage.setItem('mlst_stars', String(stars));
+      localStorage.setItem('kidsMath_totalStars', String(stars));
       updateStarUI();
+      launchConfetti();
+
+      if (stars >= starGoal && stars % starGoal === 0) {
+        document.getElementById('rewardModalTitle').textContent = `🎉 ครบ ${stars} ดาวแล้ว!`;
+        document.getElementById('rewardModalDesc').textContent = `${childName} ดูนาฬิกาเก่งมากๆ เลย นำหน้าจอนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลยจ้า!`;
+        document.getElementById('rewardModal').classList.add('show');
+      }
+    }
+
+    function openRewardModal() {
+      playClockSFX('tick');
+      document.getElementById('rewardModalTitle').textContent = `⭐ สะสมได้ ${stars} / ${starGoal} ดาว`;
+      document.getElementById('rewardModalDesc').textContent =
+        stars >= starGoal
+          ? 'ครบตามเป้าหมายแล้ว! นำคูปองนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลย!'
+          : `อีกแค่ ${starGoal - (stars % starGoal)} ดาว จะได้รับคูปองรางวัลพิเศษแล้ว สู้ๆ นะจ๊ะ!`;
+      document.getElementById('rewardModal').classList.add('show');
+    }
+
+    function closeRewardModal() {
+      document.getElementById('rewardModal').classList.remove('show');
     }
 
     function toggleLang() {
@@ -605,7 +767,6 @@
 
       for (let h = 1; h <= 12; h++) {
         const angle = (h * 30 - 90) * (Math.PI / 180);
-        // Inner Hour Numbers (1 - 12)
         const hrR = 88;
         const hx = 150 + hrR * Math.cos(angle);
         const hy = 150 + hrR * Math.sin(angle) + 8;
@@ -620,7 +781,6 @@
         hText.textContent = h;
         hoursGroup.appendChild(hText);
 
-        // Outer Minute Helper Numbers (05, 10, ... 00)
         const minVal = (h * 5) % 60;
         const minStr = String(minVal).padStart(2, '0');
         const mnR = 130;
@@ -666,19 +826,16 @@
     }
 
     function updateClockDisplay(shouldSpeak = false) {
-      // Calculate hand angles
       const minAngle = currentMin * 6;
       const hourAngle = ((currentHour % 12) * 30) + (currentMin * 0.5);
 
       document.getElementById('hourHand').setAttribute('transform', `rotate(${hourAngle} 150 150)`);
       document.getElementById('minuteHand').setAttribute('transform', `rotate(${minAngle} 150 150)`);
 
-      // In Read Quiz Mode, hide digital numbers on the main board until answered
       if (gameMode === 'read') {
         document.getElementById('digHour').textContent = '??';
         document.getElementById('digMin').textContent = '??';
       } else if (gameMode === 'set') {
-        // Show the target digital time that the child needs to match!
         document.getElementById('digHour').textContent = String(targetHour).padStart(2, '0');
         document.getElementById('digMin').textContent = String(targetMin).padStart(2, '0');
       } else {
@@ -686,7 +843,6 @@
         document.getElementById('digMin').textContent = String(currentMin).padStart(2, '0');
       }
 
-      // Update Routine Card
       const refHour = gameMode === 'set' ? targetHour : currentHour;
       const refMin = gameMode === 'set' ? targetMin : currentMin;
       const routine = routinesByHour[refHour] || routinesByHour[8];
@@ -703,7 +859,7 @@
     }
 
     // ======== INTERACTIVE HAND DRAGGING & BUTTON ADJUSTMENT ========
-    let draggingHand = null; // 'hour' or 'minute'
+    let draggingHand = null;
 
     function setupDragEvents() {
       const svg = document.getElementById('clockSvg');
@@ -711,7 +867,7 @@
       const minHand = document.getElementById('minuteHand');
 
       function startDrag(handType, e) {
-        if (gameMode === 'read') return; // Lock hands during Read quiz
+        if (gameMode === 'read') return;
         e.preventDefault();
         draggingHand = handType;
       }
@@ -841,7 +997,6 @@
 
         renderReadChoices();
       } else if (gameMode === 'set') {
-        // Offset current hands so child has to move them to match target
         currentHour = (targetHour % 12) + 1;
         currentMin = (targetMin + 30) % 60;
         updateClockDisplay(false);
@@ -858,12 +1013,10 @@
       const grid = document.getElementById('quizChoices');
       grid.innerHTML = '';
 
-      const correctKey = `${targetHour}:${targetMin}`;
       let pool = [{ h: targetHour, m: targetMin, correct: true }];
 
       while (pool.length < 3) {
         const cand = randomTimeByDiff();
-        // Ensure distinct choices even in easy mode
         if (difficulty === 'easy') cand.m = 0;
         const key = `${cand.h}:${cand.m}`;
         if (!pool.some(p => `${p.h}:${p.m}` === key)) {
@@ -939,9 +1092,62 @@
       }
     }
 
+    // ======== CONFETTI CELEBRATION ========
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function launchConfetti() {
+      const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#1dd1a1', '#5f27cd'];
+      for (let i = 0; i < 45; i++) {
+        particles.push({
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+          vx: (Math.random() - 0.5) * 15,
+          vy: (Math.random() - 0.8) * 15 - 3,
+          size: Math.random() * 8 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 12
+        });
+      }
+      requestAnimationFrame(updateConfetti);
+    }
+
+    function updateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.42;
+        p.rot += p.vRot;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rot * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+        if (p.y > canvas.height) particles.splice(idx, 1);
+      });
+      if (particles.length > 0) requestAnimationFrame(updateConfetti);
+    }
+
+    window.addEventListener('pageshow', () => {
+      stars = getUnifiedStars();
+      updateStarUI();
+    });
+
     // Initialize everything
     buildClockFaceSVG();
     setupDragEvents();
+    stars = getUnifiedStars();
     updateStarUI();
     updateClockDisplay(false);
   </script>
