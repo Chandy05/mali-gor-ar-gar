@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Magic Clock Tower - หอนาฬิกาหรรษา</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Mali', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #2d3436;
+    }
+
+    /* Top Header & Shared Star Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 10px;
+    }
+    .icon-btn {
+      background: #ffeaa7;
+      border: 3px solid #fdcb6e;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 #e1b12c;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .icon-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .star-progress-wrap {
+      flex: 1;
+      max-width: 420px;
+      background: #dfe6e9;
+      border-radius: 25px;
+      height: 36px;
+      position: relative;
+      border: 3px solid #fff;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .star-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fdcb6e, #f39c12);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .star-progress-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #2d3436;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+    }
+
+    .lang-switch-btn {
+      background: #74b9ff;
+      color: #fff;
+      border: 3px solid #0984e3;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #0652DD;
+    }
+    .lang-switch-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Main Container */
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 14px;
+      text-align: center;
+    }
+
+    /* Mode & Difficulty Pills */
+    .mode-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .pill-btn {
+      background: #fff;
+      border: 3px solid #b2bec3;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #2d3436;
+    }
+    .pill-btn.active {
+      background: #6c5ce7;
+      color: #fff;
+      border-color: #4834d4;
+      box-shadow: 0 3px 0 #30336b;
+    }
+    .pill-sub.active {
+      background: #00b894;
+      color: #fff;
+      border-color: #00896f;
+      box-shadow: 0 3px 0 #006266;
+    }
+    .pill-helper.active {
+      background: #ff7675;
+      color: #fff;
+      border-color: #d63031;
+      box-shadow: 0 3px 0 #b33939;
+    }
+
+    /* Prompt Box */
+    .prompt-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      border: 4px solid #fdcb6e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+    .prompt-text {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: left;
+      flex: 1;
+    }
+    .speak-btn {
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 0 #0652DD;
+    }
+    .speak-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Clock Display Area */
+    .clock-board {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      padding: 18px;
+      border: 5px solid #fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-around;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    /* Analog Clock SVG Wrapper */
+    .analog-wrap {
+      width: 290px;
+      height: 290px;
+      position: relative;
+      touch-action: none;
+    }
+    .analog-wrap svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12));
+    }
+
+    /* Digital Clock & Routine Info Panel */
+    .info-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      min-width: 240px;
+    }
+
+    .digital-frame {
+      background: #2d3436;
+      border: 6px solid #636e72;
+      border-radius: 22px;
+      padding: 12px 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.6), 0 6px 0 #b2bec3;
+    }
+    .dig-hour {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ff7675; /* Matches Red Hour Hand */
+      text-shadow: 0 0 10px rgba(255, 118, 117, 0.5);
+    }
+    .dig-colon {
+      font-size: 42px;
+      font-weight: 700;
+      color: #ffeaa7;
+      animation: blinkColon 1s infinite;
+    }
+    @keyframes blinkColon { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .dig-min {
+      font-size: 48px;
+      font-weight: 700;
+      color: #74b9ff; /* Matches Blue Minute Hand */
+      text-shadow: 0 0 10px rgba(116, 185, 255, 0.5);
+    }
+
+    .hand-legend {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .legend-badge {
+      padding: 4px 12px;
+      border-radius: 14px;
+      color: #fff;
+    }
+    .badge-hr { background: #e17055; }
+    .badge-mn { background: #0984e3; }
+
+    /* Daily Routine Card */
+    .routine-card {
+      background: #fff9db;
+      border: 3px dashed #f59f00;
+      border-radius: 20px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 300px;
+    }
+    .routine-emoji { font-size: 40px; }
+    .routine-text {
+      text-align: left;
+      font-size: 15px;
+      font-weight: 700;
+      color: #2d3436;
+    }
+
+    /* Controls for Explore & Set Mode */
+    .step-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .adj-btn {
+      background: #ffeaa7;
+      border: 3px solid #fdcb6e;
+      border-radius: 16px;
+      padding: 8px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #e1b12c;
+    }
+    .adj-btn:active { transform: translateY(3px); box-shadow: none; }
+    .adj-hr { background: #ffcccc; border-color: #ff7675; box-shadow: 0 4px 0 #d63031; }
+    .adj-mn { background: #d1ecf1; border-color: #74b9ff; box-shadow: 0 4px 0 #0984e3; }
+
+    .check-btn {
+      background: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 28px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #00896f;
+      margin-top: 8px;
+    }
+    .check-btn:active { transform: translateY(4px); box-shadow: none; }
+
+    /* Quiz Choices Grid (Digital Cards) */
+    .choices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    @media (max-width: 520px) {
+      .choices-grid { grid-template-columns: 1fr; }
+    }
+    .dig-choice-btn {
+      background: #2d3436;
+      border: 5px solid #74b9ff;
+      border-radius: 22px;
+      padding: 14px 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #0984e3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .dig-choice-btn:active { transform: translateY(4px); box-shadow: none; }
+    .dig-choice-time {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .dig-choice-sub {
+      background: #ffeaa7;
+      color: #d63031;
+      border-radius: 10px;
+      padding: 2px 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .shake { animation: shakeAnim 0.4s; }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar (Connected to index.html Stars) -->
+  <div class="top-bar">
+    <a href="index.html" class="icon-btn" title="กลับหน้าเมืองหลัก">🏠</a>
+    <div class="star-progress-wrap">
+      <div class="star-progress-fill" id="starFill"></div>
+      <div class="star-progress-text" id="starText">⭐ 0 / 50 ดาว</div>
+    </div>
+    <button class="lang-switch-btn" id="langBtn" onclick="toggleLang()">🇹🇭 เสียงไทย</button>
+  </div>
+
+  <div class="container">
+    <!-- Game Mode Selector -->
+    <div class="mode-bar">
+      <button class="pill-btn active" id="modeExplore" onclick="setGameMode('explore')">👆 1. หมุนเข็มสำรวจเวลา</button>
+      <button class="pill-btn" id="modeRead" onclick="setGameMode('read')">🎯 2. ทายเวลาดิจิตอล</button>
+      <button class="pill-btn" id="modeSet" onclick="setGameMode('set')">🛠️ 3. ตั้งเข็มนาฬิกา</button>
+    </div>
+
+    <!-- Difficulty & Helper Bar -->
+    <div class="mode-bar">
+      <button class="pill-btn pill-sub active" id="diffEasy" onclick="setDiff('easy')">🌱 ง่าย (ตรงชั่วโมง .00)</button>
+      <button class="pill-btn pill-sub" id="diffMed" onclick="setDiff('med')">⭐ กลาง (ครึ่งชั่วโมง .30)</button>
+      <button class="pill-btn pill-sub" id="diffHard" onclick="setDiff('hard')">🔥 ยาก (ทุกๆ 5-15 นาที)</button>
+      <button class="pill-btn pill-helper active" id="helperBtn" onclick="toggleMinuteHelper()">👁️ แสดงเลขนาที (00-55)</button>
+    </div>
+
+    <!-- Prompt Banner -->
+    <div class="prompt-box">
+      <div class="prompt-text" id="promptText">ลองหมุนเข็มนาฬิกา หรือกดปุ่มปรับเวลาเพื่อฟังเสียงบอกเวลาได้เลย!</div>
+      <button class="speak-btn" onclick="speakCurrentPrompt()">🔊</button>
+    </div>
+
+    <!-- Main Clock Stage -->
+    <div class="clock-board" id="clockBoard">
+      <!-- Interactive Analog SVG Clock -->
+      <div class="analog-wrap" id="analogWrap">
+        <svg viewBox="0 0 300 300" id="clockSvg">
+          <!-- Outer Frame -->
+          <circle cx="150" cy="150" r="138" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="10"/>
+          <circle cx="150" cy="150" r="120" fill="#ffffff" stroke="#dfe6e9" stroke-width="4"/>
+
+          <!-- Minute Ticks & Outer Minute Helper Numbers (00, 05, ... 55) -->
+          <g id="ticksGroup"></g>
+          <g id="minuteHelperGroup"></g>
+
+          <!-- Hour Numbers (1 - 12) -->
+          <g id="hourNumbersGroup"></g>
+
+          <!-- Hour Hand (Short, Red) -->
+          <g id="hourHand" style="cursor:pointer;">
+            <line x1="150" y1="150" x2="150" y2="82" stroke="#eb2f06" stroke-width="12" stroke-linecap="round"/>
+            <circle cx="150" cy="82" r="10" fill="#eb2f06"/>
+          </g>
+
+          <!-- Minute Hand (Long, Blue) -->
+          <g id="minuteHand" style="cursor:pointer;">
+            <line x1="150" y1="150" x2="150" y2="48" stroke="#0984e3" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="150" cy="48" r="8" fill="#0984e3"/>
+          </g>
+
+          <!-- Center Pin -->
+          <circle cx="150" cy="150" r="10" fill="#2d3436" stroke="#fdcb6e" stroke-width="4"/>
+        </svg>
+      </div>
+
+      <!-- Digital Clock & Controls Side -->
+      <div class="info-panel">
+        <div class="hand-legend">
+          <span class="legend-badge badge-hr">🔴 เข็มสั้น = ชั่วโมง</span>
+          <span class="legend-badge badge-mn">🔵 เข็มยาว = นาที</span>
+        </div>
+
+        <!-- Digital Display -->
+        <div class="digital-frame" id="digitalFrame">
+          <span class="dig-hour" id="digHour">08</span>
+          <span class="dig-colon">:</span>
+          <span class="dig-min" id="digMin">00</span>
+        </div>
+
+        <!-- Daily Activity Illustration -->
+        <div class="routine-card" id="routineCard">
+          <div class="routine-emoji" id="routineEmoji">🏫</div>
+          <div class="routine-text" id="routineText">08:00 น. ได้เวลาไปโรงเรียนแล้วจ้า!</div>
+        </div>
+
+        <!-- Buttons for adjusting time (Shown in Explore & Set modes) -->
+        <div id="interactiveControls">
+          <div class="step-controls">
+            <button class="adj-btn adj-hr" onclick="adjustTime(-60)">➖ 1 ชม.</button>
+            <button class="adj-btn adj-hr" onclick="adjustTime(60)">➕ 1 ชม.</button>
+            <button class="adj-btn adj-mn" onclick="adjustTime(-5)">➖ 5 นาที</button>
+            <button class="adj-btn adj-mn" onclick="adjustTime(5)">➕ 5 นาที</button>
+            <button class="adj-btn adj-mn" onclick="adjustTime(30)">➕ 30 นาที</button>
+          </div>
+          <button class="check-btn" id="confirmSetBtn" style="display:none;" onclick="checkSetClockAnswer()">✅ ตอบเวลานี้เลย!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multiple Choice Container (Shown in Read Mode) -->
+    <div class="choices-grid" id="quizChoices" style="display:none;"></div>
+  </div>
+
+  <script>
+    // ======== WEB AUDIO ENGINE (MOBILE & HUAWEI P30 SAFE) ========
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state !== 'running') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function unlockAudio() {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      if (src.start) src.start(0);
+    }
+    document.addEventListener('touchstart', unlockAudio, { passive: true });
+    document.addEventListener('click', unlockAudio, { passive: true });
+
+    function playClockSFX(type) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      if (type === 'tick') {
+        // Mechanical clock tick-tock sound
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(950, now);
+        osc.frequency.exponentialRampToValueAtTime(280, now + 0.035);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.045);
+      } else if (type === 'win') {
+        // Cuckoo chime + fanfare
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now + i * 0.09);
+          gain.gain.setValueAtTime(0.3, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.09 + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.23);
+        });
+      } else if (type === 'wrong') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.linearRampToValueAtTime(70, now + 0.25);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.26);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.27);
+      }
+    }
+
+    // ======== SHARED STAR PROGRESS (SYNCED WITH INDEX.HTML) ========
+    let stars = parseInt(localStorage.getItem('mlst_stars') || '0', 10);
+    let starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+    let voiceLang = localStorage.getItem('mlst_clock_lang') || 'th';
+
+    function updateStarUI() {
+      const pct = Math.min(100, Math.round((stars / starGoal) * 100));
+      document.getElementById('starFill').style.width = pct + '%';
+      document.getElementById('starText').textContent = `⭐ ${stars} / ${starGoal} ดาว`;
+      document.getElementById('langBtn').textContent = voiceLang === 'th' ? '🇹🇭 เสียงไทย' : '🇬🇧 เสียง Eng';
+    }
+
+    function addStar(amount = 1) {
+      stars += amount;
+      localStorage.setItem('mlst_stars', stars);
+      updateStarUI();
+    }
+
+    function toggleLang() {
+      voiceLang = voiceLang === 'th' ? 'en' : 'th';
+      localStorage.setItem('mlst_clock_lang', voiceLang);
+      updateStarUI();
+      updateClockDisplay(true);
+    }
+
+    function speakText(thMsg, enMsg) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(voiceLang === 'en' ? enMsg : thMsg);
+      utter.lang = voiceLang === 'en' ? 'en-US' : 'th-TH';
+      utter.rate = voiceLang === 'en' ? 0.88 : 0.95;
+      window.speechSynthesis.speak(utter);
+    }
+
+    // ======== CLOCK STATE & SVG INITIALIZATION ========
+    let gameMode = 'explore'; // 'explore', 'read', 'set'
+    let difficulty = 'easy';  // 'easy' (.00), 'med' (.30), 'hard' (.05-.55)
+    let showMinuteHelper = true;
+
+    let currentHour = 8;   // 1 - 12
+    let currentMin = 0;    // 0 - 55 (step 5)
+    let targetHour = 8;
+    let targetMin = 0;
+
+    function buildClockFaceSVG() {
+      const ticksGroup = document.getElementById('ticksGroup');
+      const helperGroup = document.getElementById('minuteHelperGroup');
+      const hoursGroup = document.getElementById('hourNumbersGroup');
+
+      for (let i = 0; i < 60; i++) {
+        const angle = (i * 6 - 90) * (Math.PI / 180);
+        const isHourTick = i % 5 === 0;
+        const r1 = isHourTick ? 108 : 113;
+        const r2 = 118;
+        const x1 = 150 + r1 * Math.cos(angle);
+        const y1 = 150 + r1 * Math.sin(angle);
+        const x2 = 150 + r2 * Math.cos(angle);
+        const y2 = 150 + r2 * Math.sin(angle);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke', isHourTick ? '#2d3436' : '#b2bec3');
+        line.setAttribute('stroke-width', isHourTick ? '4' : '2');
+        line.setAttribute('stroke-linecap', 'round');
+        ticksGroup.appendChild(line);
+      }
+
+      for (let h = 1; h <= 12; h++) {
+        const angle = (h * 30 - 90) * (Math.PI / 180);
+        // Inner Hour Numbers (1 - 12)
+        const hrR = 88;
+        const hx = 150 + hrR * Math.cos(angle);
+        const hy = 150 + hrR * Math.sin(angle) + 8;
+
+        const hText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        hText.setAttribute('x', hx);
+        hText.setAttribute('y', hy);
+        hText.setAttribute('text-anchor', 'middle');
+        hText.setAttribute('font-size', '24');
+        hText.setAttribute('font-weight', '700');
+        hText.setAttribute('fill', '#2d3436');
+        hText.textContent = h;
+        hoursGroup.appendChild(hText);
+
+        // Outer Minute Helper Numbers (05, 10, ... 00)
+        const minVal = (h * 5) % 60;
+        const minStr = String(minVal).padStart(2, '0');
+        const mnR = 130;
+        const mx = 150 + mnR * Math.cos(angle);
+        const my = 150 + mnR * Math.sin(angle) + 5;
+
+        const mText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        mText.setAttribute('x', mx);
+        mText.setAttribute('y', my);
+        mText.setAttribute('text-anchor', 'middle');
+        mText.setAttribute('font-size', '13');
+        mText.setAttribute('font-weight', '700');
+        mText.setAttribute('fill', '#0984e3');
+        mText.textContent = minStr;
+        helperGroup.appendChild(mText);
+      }
+    }
+
+    // ======== TIME FORMATTING & ROUTINE STORIES ========
+    const routinesByHour = {
+      1: { emoji: '🎨', th: 'บ่ายโมงตรง เวลาวาดรูประบายสี', en: 'One o clock, art and drawing time!' },
+      2: { emoji: '🧩', th: 'บ่ายสองโมง เวลาเล่นต่อจิ๊กซอว์', en: 'Two o clock, puzzle play time!' },
+      3: { emoji: '🥛', th: 'บ่ายสามโมง เวลาพักดื่มนมและผลไม้', en: 'Three o clock, milk and snack time!' },
+      4: { emoji: '🚲', th: 'สี่โมงเย็น เวลาออกไปวิ่งเล่นที่สวน', en: 'Four o clock, outdoor park time!' },
+      5: { emoji: '🛁', th: 'ห้าโมงเย็น เวลาอาบน้ำสระผมหอมๆ', en: 'Five o clock, bath time!' },
+      6: { emoji: '🍲', th: 'หกโมงเย็น เวลากินข้าวเย็นกับครอบครัว', en: 'Six o clock, family dinner time!' },
+      7: { emoji: '🌅', th: 'เจ็ดโมงเช้า ตื่นนอนแปรงฟัน กินข้าวเช้า', en: 'Seven o clock, wake up and eat breakfast!' },
+      8: { emoji: '🏫', th: 'แปดโมงเช้า ไปโรงเรียนพบคุณครูและเพื่อนๆ', en: 'Eight o clock, time for school!' },
+      9: { emoji: '📚', th: 'เก้าโมงเช้า เวลาเรียนหนังสือแสนสนุก', en: 'Nine o clock, learning time in class!' },
+      10: { emoji: '🤸', th: 'สิบโมงเช้า เวลาออกกำลังกายยืดเส้นยืดสาย', en: 'Ten o clock, morning exercise time!' },
+      11: { emoji: '🎶', th: 'สิบเอ็ดโมง เวลาฟังเพลงและร้องเพลง', en: 'Eleven o clock, music and singing time!' },
+      12: { emoji: '🍱', th: 'สิบสองนาฬิกา (เที่ยงวัน) พักกินข้าวกลางวัน', en: 'Twelve o clock, yummy lunch time!' }
+    };
+
+    function formatTimeSpeech(h, m) {
+      const mStr = m === 0 ? 'ตรง' : `${m} นาที`;
+      const thSpeech = `เวลา ${h} นาฬิกา ${mStr}`;
+      let enSpeech = '';
+      if (m === 0) enSpeech = `It is ${h} o'clock`;
+      else if (m === 30) enSpeech = `It is half past ${h} (${h} thirty)`;
+      else enSpeech = `It is ${h} ${m < 10 ? 'oh ' + m : m}`;
+      return { th: thSpeech, en: enSpeech };
+    }
+
+    function updateClockDisplay(shouldSpeak = false) {
+      // Calculate hand angles
+      const minAngle = currentMin * 6;
+      const hourAngle = ((currentHour % 12) * 30) + (currentMin * 0.5);
+
+      document.getElementById('hourHand').setAttribute('transform', `rotate(${hourAngle} 150 150)`);
+      document.getElementById('minuteHand').setAttribute('transform', `rotate(${minAngle} 150 150)`);
+
+      // In Read Quiz Mode, hide digital numbers on the main board until answered
+      if (gameMode === 'read') {
+        document.getElementById('digHour').textContent = '??';
+        document.getElementById('digMin').textContent = '??';
+      } else if (gameMode === 'set') {
+        // Show the target digital time that the child needs to match!
+        document.getElementById('digHour').textContent = String(targetHour).padStart(2, '0');
+        document.getElementById('digMin').textContent = String(targetMin).padStart(2, '0');
+      } else {
+        document.getElementById('digHour').textContent = String(currentHour).padStart(2, '0');
+        document.getElementById('digMin').textContent = String(currentMin).padStart(2, '0');
+      }
+
+      // Update Routine Card
+      const refHour = gameMode === 'set' ? targetHour : currentHour;
+      const refMin = gameMode === 'set' ? targetMin : currentMin;
+      const routine = routinesByHour[refHour] || routinesByHour[8];
+      document.getElementById('routineEmoji').textContent = routine.emoji;
+      const speechObj = formatTimeSpeech(refHour, refMin);
+      document.getElementById('routineText').textContent =
+        voiceLang === 'en' ? `${speechObj.en} — ${routine.en}` : `${speechObj.th} (${routine.th})`;
+
+      if (shouldSpeak && gameMode === 'explore') {
+        document.getElementById('promptText').textContent =
+          voiceLang === 'en' ? `🕒 ${speechObj.en}` : `🕒 ${speechObj.th}`;
+        speakText(speechObj.th, speechObj.en);
+      }
+    }
+
+    // ======== INTERACTIVE HAND DRAGGING & BUTTON ADJUSTMENT ========
+    let draggingHand = null; // 'hour' or 'minute'
+
+    function setupDragEvents() {
+      const svg = document.getElementById('clockSvg');
+      const hourHand = document.getElementById('hourHand');
+      const minHand = document.getElementById('minuteHand');
+
+      function startDrag(handType, e) {
+        if (gameMode === 'read') return; // Lock hands during Read quiz
+        e.preventDefault();
+        draggingHand = handType;
+      }
+
+      hourHand.addEventListener('mousedown', e => startDrag('hour', e));
+      hourHand.addEventListener('touchstart', e => startDrag('hour', e), { passive: false });
+      minHand.addEventListener('mousedown', e => startDrag('minute', e));
+      minHand.addEventListener('touchstart', e => startDrag('minute', e), { passive: false });
+
+      function moveDrag(e) {
+        if (!draggingHand) return;
+        const rect = svg.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        let deg = Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI) + 90;
+        if (deg < 0) deg += 360;
+
+        if (draggingHand === 'minute') {
+          const snappedMin = (Math.round(deg / 30) * 5) % 60;
+          if (snappedMin !== currentMin) {
+            currentMin = snappedMin;
+            playClockSFX('tick');
+            updateClockDisplay(false);
+          }
+        } else if (draggingHand === 'hour') {
+          let snappedHr = Math.round(deg / 30);
+          if (snappedHr === 0) snappedHr = 12;
+          if (snappedHr !== currentHour) {
+            currentHour = snappedHr;
+            playClockSFX('tick');
+            updateClockDisplay(false);
+          }
+        }
+      }
+
+      function endDrag() {
+        if (!draggingHand) return;
+        draggingHand = null;
+        if (gameMode === 'explore') updateClockDisplay(true);
+      }
+
+      window.addEventListener('mousemove', moveDrag);
+      window.addEventListener('touchmove', moveDrag, { passive: false });
+      window.addEventListener('mouseup', endDrag);
+      window.addEventListener('touchend', endDrag);
+    }
+
+    function adjustTime(deltaMinutes) {
+      if (gameMode === 'read') return;
+      playClockSFX('tick');
+      let total = ((currentHour % 12) * 60) + currentMin + deltaMinutes;
+      if (total < 0) total += 720;
+      total = total % 720;
+
+      let newHr = Math.floor(total / 60);
+      if (newHr === 0) newHr = 12;
+      currentHour = newHr;
+      currentMin = total % 60;
+      updateClockDisplay(gameMode === 'explore');
+    }
+
+    function toggleMinuteHelper() {
+      showMinuteHelper = !showMinuteHelper;
+      document.getElementById('helperBtn').classList.toggle('active', showMinuteHelper);
+      document.getElementById('minuteHelperGroup').style.display = showMinuteHelper ? 'block' : 'none';
+    }
+
+    // ======== MODES & QUIZ GENERATOR ========
+    function setGameMode(mode) {
+      gameMode = mode;
+      document.getElementById('modeExplore').classList.toggle('active', mode === 'explore');
+      document.getElementById('modeRead').classList.toggle('active', mode === 'read');
+      document.getElementById('modeSet').classList.toggle('active', mode === 'set');
+
+      document.getElementById('interactiveControls').style.display = mode === 'read' ? 'none' : 'block';
+      document.getElementById('confirmSetBtn').style.display = mode === 'set' ? 'inline-block' : 'none';
+      document.getElementById('quizChoices').style.display = mode === 'read' ? 'grid' : 'none';
+      document.getElementById('routineCard').style.display = mode === 'read' ? 'none' : 'flex';
+
+      startRound();
+    }
+
+    function setDiff(diff) {
+      difficulty = diff;
+      document.getElementById('diffEasy').classList.toggle('active', diff === 'easy');
+      document.getElementById('diffMed').classList.toggle('active', diff === 'med');
+      document.getElementById('diffHard').classList.toggle('active', diff === 'hard');
+      startRound();
+    }
+
+    function randomTimeByDiff() {
+      const h = Math.floor(Math.random() * 12) + 1;
+      let m = 0;
+      if (difficulty === 'easy') {
+        m = 0;
+      } else if (difficulty === 'med') {
+        m = Math.random() < 0.65 ? 30 : 0;
+      } else {
+        const mins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+        m = mins[Math.floor(Math.random() * mins.length)];
+      }
+      return { h, m };
+    }
+
+    function startRound() {
+      if (gameMode === 'explore') {
+        updateClockDisplay(true);
+        return;
+      }
+
+      const t = randomTimeByDiff();
+      targetHour = t.h;
+      targetMin = t.m;
+
+      if (gameMode === 'read') {
+        currentHour = targetHour;
+        currentMin = targetMin;
+        updateClockDisplay(false);
+
+        const thP = 'ดูเข็มสั้นสีแดงและเข็มยาวสีฟ้า แล้วเลือกป้ายเวลาดิจิตอลที่ตรงกันนะจ๊ะ!';
+        const enP = 'Look at the clock hands and choose the matching digital time!';
+        document.getElementById('promptText').textContent = voiceLang === 'en' ? enP : thP;
+        speakText(thP, enP);
+
+        renderReadChoices();
+      } else if (gameMode === 'set') {
+        // Offset current hands so child has to move them to match target
+        currentHour = (targetHour % 12) + 1;
+        currentMin = (targetMin + 30) % 60;
+        updateClockDisplay(false);
+
+        const sp = formatTimeSpeech(targetHour, targetMin);
+        const thP = `🛠️ หมุนเข็มหรือกดปุ่มตั้งเวลาให้เป็น "${String(targetHour).padStart(2,'0')}:${String(targetMin).padStart(2,'0')}" (${sp.th})`;
+        const enP = `🛠️ Set the clock hands to "${String(targetHour).padStart(2,'0')}:${String(targetMin).padStart(2,'0')}" (${sp.en})`;
+        document.getElementById('promptText').textContent = voiceLang === 'en' ? enP : thP;
+        speakText(`ช่วยตั้งเข็มนาฬิกาให้เป็น ${sp.th} หน่อยจ้า`, `Please set the clock to ${sp.en}`);
+      }
+    }
+
+    function renderReadChoices() {
+      const grid = document.getElementById('quizChoices');
+      grid.innerHTML = '';
+
+      const correctKey = `${targetHour}:${targetMin}`;
+      let pool = [{ h: targetHour, m: targetMin, correct: true }];
+
+      while (pool.length < 3) {
+        const cand = randomTimeByDiff();
+        // Ensure distinct choices even in easy mode
+        if (difficulty === 'easy') cand.m = 0;
+        const key = `${cand.h}:${cand.m}`;
+        if (!pool.some(p => `${p.h}:${p.m}` === key)) {
+          pool.push({ h: cand.h, m: cand.m, correct: false });
+        }
+      }
+
+      pool.sort(() => Math.random() - 0.5);
+      const badges = ['ก.', 'ข.', 'ค.'];
+
+      pool.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'dig-choice-btn';
+        const hStr = String(opt.h).padStart(2, '0');
+        const mStr = String(opt.m).padStart(2, '0');
+        btn.innerHTML = `
+          <div class="dig-choice-time">
+            <span style="color:#ff7675;">${hStr}</span><span style="color:#ffeaa7;">:</span><span style="color:#74b9ff;">${mStr}</span>
+          </div>
+          <div class="dig-choice-sub">${badges[idx]}</div>
+        `;
+        btn.onclick = () => {
+          if (opt.correct) {
+            playClockSFX('win');
+            document.getElementById('digHour').textContent = hStr;
+            document.getElementById('digMin').textContent = mStr;
+            addStar(difficulty === 'hard' ? 2 : 1);
+            const sp = formatTimeSpeech(targetHour, targetMin);
+            speakText(`เก่งมากจ้า! ${sp.th}`, `Awesome! ${sp.en}`);
+            setTimeout(startRound, 1400);
+          } else {
+            playClockSFX('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 400);
+            speakText('ยังไม่ใช่นะจ๊ะ ดูที่เข็มสั้นสีแดงและเข็มยาวสีฟ้าอีกทีนะ', 'Not quite! Check the red hour hand and blue minute hand again!');
+          }
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function checkSetClockAnswer() {
+      if (currentHour === targetHour && currentMin === targetMin) {
+        playClockSFX('win');
+        addStar(difficulty === 'hard' ? 2 : 1);
+        const sp = formatTimeSpeech(targetHour, targetMin);
+        speakText(`ยอดเยี่ยมเลย! ตั้งเข็มเป็น ${sp.th} ถูกต้องเป๊ะเลยจ้า!`, `Fantastic! You set the clock to ${sp.en}!`);
+        setTimeout(startRound, 1500);
+      } else {
+        playClockSFX('wrong');
+        const board = document.getElementById('clockBoard');
+        board.classList.add('shake');
+        setTimeout(() => board.classList.remove('shake'), 400);
+        speakText(
+          `ตอนนี้เข็มอยู่ที่ ${currentHour} นาฬิกา ${currentMin} นาที ลองขยับให้ตรงกับเลขดิจิตอลนะจ๊ะ`,
+          `Almost! Check the red hour hand and blue minute hand again.`
+        );
+      }
+    }
+
+    function speakCurrentPrompt() {
+      if (gameMode === 'explore') {
+        const sp = formatTimeSpeech(currentHour, currentMin);
+        speakText(sp.th, sp.en);
+      } else if (gameMode === 'read') {
+        speakText(
+          'ดูเข็มสั้นสีแดงและเข็มยาวสีฟ้า แล้วเลือกป้ายเวลาดิจิตอลด้านล่างให้ตรงกันจ้า',
+          'Look at the clock hands and choose the matching digital time below!'
+        );
+      } else if (gameMode === 'set') {
+        const sp = formatTimeSpeech(targetHour, targetMin);
+        speakText(`ช่วยตั้งเข็มนาฬิกาให้เป็น ${sp.th} หน่อยจ้า`, `Please set the clock to ${sp.en}`);
+      }
+    }
+
+    // Initialize everything
+    buildClockFaceSVG();
+    setupDragEvents();
+    updateStarUI();
+    updateClockDisplay(false);
+  </script>
+</body>
+</html>
