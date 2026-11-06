@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>เมืองแห่งการเรียนรู้ของหนู - Smart Kids Learning Town</title>
+  <!-- ป้องกันเบราว์เซอร์จำหน้าเก่า (Anti-Cache Meta Tags) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
-  <!-- PWA Meta Tags (เชื่อมกับไฟล์เดิมใน Repo mali-gor-ar-gar) -->
+  <title>เมืองแห่งการเรียนรู้ของหนู V6.3 - Smart Kids Learning Town</title>
+
+  <!-- PWA Meta Tags -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#FF6B6B">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -682,6 +687,13 @@
         <div id="customSubjectsList" style="margin-top:8px;"></div>
       </div>
 
+      <div class="form-group" style="background:#fff9db; border-color:#fdcb6e;">
+        <label style="color:#d35400;">🔄 แก้ปัญหาหน้าเว็บจำแคชเก่า (Force Update):</label>
+        <button class="toy-icon-btn" style="width:100%; background:#e17055; color:#fff; border-color:#d63031;" onclick="forceClearBrowserCache()">
+          🧹 ล้างแคชระบบและโหลดหน้าเว็บใหม่ล่าสุด
+        </button>
+      </div>
+
       <button class="subj-enter-btn" style="background:#00b894; margin-top:10px;" onclick="saveParentSettings()">
         💾 บันทึกการตั้งค่าทั้งหมด
       </button>
@@ -692,6 +704,8 @@
     /* ==========================================================
        1. ARCHITECTURE: 5 CORE SUBJECTS + UNLIMITED CUSTOM SUBJECTS
     ========================================================== */
+    const APP_BUILD_VERSION = 'v6.3';
+
     const CORE_SUBJECTS = [
       {
         id: 'thai',
@@ -853,7 +867,7 @@
     let bgmTimer = null;
     let bgmNoteIdx = 0;
 
-    // โน้ตเพลงกล่องดนตรีสดใสสำหรับหน้าโฮม (Twinkle & Happy Town Melody)
+    // โน้ตเพลงกล่องดนตรีสดใสสำหรับหน้าโฮม
     const HOME_BGM_NOTES = [
       { f: 523.25, d: 0.26 }, { f: 523.25, d: 0.26 }, { f: 783.99, d: 0.26 }, { f: 783.99, d: 0.26 },
       { f: 880.00, d: 0.26 }, { f: 880.00, d: 0.26 }, { f: 783.99, d: 0.48 }, { f: 0, d: 0.15 },
@@ -1005,6 +1019,11 @@
     /* ==========================================================
        4. RENDER UI, SUBJECT CARDS & FILTER TABS
     ========================================================== */
+    function addVersionParam(urlStr) {
+      if (!urlStr || urlStr === '#') return '#';
+      return urlStr.includes('?') ? `${urlStr}&v=${APP_BUILD_VERSION}` : `${urlStr}?v=${APP_BUILD_VERSION}`;
+    }
+
     function updateTopUI() {
       appState.stars = getUnifiedStars();
       document.getElementById('childNameDisplay').textContent = appState.childName;
@@ -1067,7 +1086,7 @@
         card.style.background = subj.cardGradient || 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)';
 
         const stagesHtml = (subj.stages || []).map(st => `
-          <a href="${st.url}" class="stage-pill" onclick="playSFX('pop')">
+          <a href="${addVersionParam(st.url)}" class="stage-pill" onclick="playSFX('pop')">
             <span>${st.name}</span>
           </a>
         `).join('');
@@ -1093,7 +1112,7 @@
             </div>
           </div>
 
-          <a href="${subj.url}" class="subj-enter-btn" style="background: ${subj.btnColor || '#0984e3'};" onclick="playSFX('pop')">
+          <a href="${addVersionParam(subj.url)}" class="subj-enter-btn" style="background: ${subj.btnColor || '#0984e3'};" onclick="playSFX('pop')">
             <span>🚀 เข้าสู่ ${subj.title}</span>
           </a>
         `;
@@ -1187,7 +1206,7 @@
     function renderCustomSubjectsManagerList() {
       const box = document.getElementById('customSubjectsList');
       if (!appState.customSubjects.length) {
-        box.innerHTML = '<small style="color:#636e72;">ยังไม่มีวิชาที่เพิ่มเอง (มี 5 วิชาหลักมาตรฐาน)</small>';
+        box.innerHTML = '<small style="color:#636e72;">ยังไม่มีวิชาที่เพิ่มเอง (มี 5 วิชาหลักมาตรฐานพร้อมวิชาวาดเขียน)</small>';
         return;
       }
       box.innerHTML = appState.customSubjects.map((s, idx) => `
@@ -1270,6 +1289,20 @@
       document.getElementById(id).classList.remove('show');
     }
 
+    async function forceClearBrowserCache() {
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const r of regs) await r.unregister();
+        }
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          for (const k of keys) await caches.delete(k);
+        }
+      } catch (e) {}
+      window.location.href = window.location.pathname + '?updated=' + Date.now();
+    }
+
     /* ==========================================================
        6. CONFETTI CELEBRATION ENGINE
     ========================================================== */
@@ -1320,7 +1353,7 @@
     }
 
     /* ==========================================================
-       7. INITIALIZE & SERVICE WORKER REGISTRATION
+       7. INITIALIZE & AUTO-CLEAR OLD SERVICE WORKER CACHE
     ========================================================== */
     window.addEventListener('pageshow', () => {
       updateTopUI();
@@ -1331,10 +1364,23 @@
       renderCategoryTabs();
       renderSubjectsGrid();
 
-      if ('serviceWorker' in navigator) {
+      // ถอน Service Worker ตัวเก่าและล้างแคชที่ค้างอยู่โดยอัตโนมัติ
+      if (localStorage.getItem('mlst_app_version') !== APP_BUILD_VERSION) {
         try {
-          await navigator.serviceWorker.register('./sw.js');
+          if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (const reg of registrations) {
+              await reg.unregister();
+            }
+          }
+          if ('caches' in window) {
+            const cacheKeys = await caches.keys();
+            for (const key of cacheKeys) {
+              await caches.delete(key);
+            }
+          }
         } catch (e) {}
+        localStorage.setItem('mlst_app_version', APP_BUILD_VERSION);
       }
     };
   </script>
