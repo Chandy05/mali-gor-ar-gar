@@ -117,8 +117,8 @@
     /* Center Star & Trophy Progress */
     .progress-hub {
       flex: 1;
-      max-width: 420px;
-      min-width: 200px;
+      max-width: 400px;
+      min-width: 190px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -147,7 +147,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: #2d3436;
       text-shadow: 0 1px 2px rgba(255,255,255,0.95);
     }
@@ -157,6 +157,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .toy-icon-btn {
       background: #fff;
@@ -164,7 +165,7 @@
       border-radius: 16px;
       height: 44px;
       padding: 0 12px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -178,6 +179,23 @@
     .toy-icon-btn:active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 #0984e3;
+    }
+    .toy-icon-btn.bgm-btn {
+      background: #dfe6e9;
+      border-color: #b2bec3;
+      color: #636e72;
+      box-shadow: 0 4px 0 #95a5a6;
+    }
+    .toy-icon-btn.bgm-btn.playing {
+      background: linear-gradient(135deg, #55efc4, #00b894);
+      border-color: #00896f;
+      color: #fff;
+      box-shadow: 0 4px 0 #006266;
+      animation: pulseMusic 2s infinite;
+    }
+    @keyframes pulseMusic {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
     }
     .toy-icon-btn.sticker-btn {
       background: linear-gradient(135deg, #ff9ff3, #f368e0);
@@ -202,7 +220,7 @@
     .main-wrap {
       position: relative;
       z-index: 10;
-      max-width: 1140px;
+      max-width: 1160px;
       width: 100%;
       margin: 0 auto;
       padding: 14px 16px 32px;
@@ -216,12 +234,12 @@
     .hero-banner {
       text-align: center;
       margin-bottom: 14px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       padding: 12px 24px;
       border-radius: 28px;
       border: 4px solid #fff;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      max-width: 780px;
+      max-width: 820px;
       width: 100%;
     }
     .hero-title {
@@ -237,7 +255,7 @@
       color: #57606f;
     }
 
-    /* Category Filter Pills (All + Dynamic Subjects) */
+    /* Category Filter Pills */
     .category-filter-bar {
       display: flex;
       flex-wrap: wrap;
@@ -246,11 +264,11 @@
       margin-bottom: 16px;
     }
     .cat-tab {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.92);
       border: 3px solid #dfe6e9;
       border-radius: 20px;
-      padding: 7px 16px;
-      font-size: 0.92rem;
+      padding: 7px 15px;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 0 #b2bec3;
@@ -267,12 +285,17 @@
       transform: scale(1.04);
     }
 
-    /* Subject Grid (Responsive for Portrait, Landscape & Future Subjects) */
+    /* Subject Grid */
     .subjects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
       gap: 18px;
       width: 100%;
+    }
+    @media (max-width: 480px) {
+      .subjects-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .subject-card {
@@ -326,7 +349,7 @@
     }
     .subj-title {
       margin: 0;
-      font-size: 1.35rem;
+      font-size: 1.32rem;
       font-weight: 700;
       color: #2d3436;
       line-height: 1.2;
@@ -339,7 +362,7 @@
       opacity: 0.85;
     }
 
-    /* Sub-stages Quick Preview Pills inside each Subject Card */
+    /* Sub-stages Quick Preview Pills */
     .stages-preview-box {
       background: rgba(255, 255, 255, 0.78);
       border-radius: 20px;
@@ -392,7 +415,7 @@
       border: 3px solid #fff;
       border-radius: 20px;
       padding: 11px 16px;
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       font-weight: 700;
       color: #fff;
       cursor: pointer;
@@ -539,8 +562,12 @@
       </div>
     </div>
 
-    <!-- Right: Sticker Book, Audio Speak, Parent Settings -->
+    <!-- Right: BGM Toggle, Sticker Book, Audio Speak, Parent Settings -->
     <div class="top-actions">
+      <button class="toy-icon-btn bgm-btn" id="bgmToggleBtn" onclick="toggleHomeBGM()" title="เปิด/ปิดเพลงดนตรีประกอบหน้าโฮม">
+        <span id="bgmIcon">🎵</span>
+        <span id="bgmLabel">เพลง: เปิด</span>
+      </button>
       <button class="toy-icon-btn sticker-btn" onclick="openStickerModal()" title="สมุดสะสมสติกเกอร์">
         <span>📒</span>
         <span id="stickerBadgeText">0/12</span>
@@ -564,7 +591,7 @@
       </p>
     </div>
 
-    <!-- Category Filter Bar (Supports Unlimited Future Subjects) -->
+    <!-- Category Filter Bar -->
     <div class="category-filter-bar" id="categoryFilterBar"></div>
 
     <!-- Dynamic Subject Cards Grid -->
@@ -642,10 +669,10 @@
 
       <!-- Future Subject Expansion Manager -->
       <div class="form-group" style="background:#eef9ff; border-color:#74b9ff;">
-        <label style="color:#0984e3;">🚀 เพิ่มหมวดวิชาใหม่ในอนาคต (เช่น วิทยาศาสตร์, ศิลปะ, ดนตรี):</label>
+        <label style="color:#0984e3;">🚀 เพิ่มหมวดวิชาใหม่ในอนาคต (เช่น วิทยาศาสตร์, ดนตรี):</label>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:6px;">
           <input type="text" class="form-input" id="newSubjTitle" placeholder="ชื่อวิชา เช่น วิทยาศาสตร์">
-          <input type="text" class="form-input" id="newSubjEmoji" placeholder="ไอคอน เช่น 🔬 หรือ 🎨">
+          <input type="text" class="form-input" id="newSubjEmoji" placeholder="ไอคอน เช่น 🔬 หรือ 🎹">
           <input type="text" class="form-input" id="newSubjUrl" placeholder="ชื่อไฟล์ลิงก์ เช่น science.html">
           <input type="text" class="form-input" id="newSubjDesc" placeholder="คำอธิบายสั้นๆ">
         </div>
@@ -663,8 +690,7 @@
 
   <script>
     /* ==========================================================
-       1. ARCHITECTURE: SCALABLE SUBJECT REGISTRY
-       รองรับ 4 วิชาหลัก + ขยายเพิ่มวิชาใหม่ในอนาคตได้ไม่จำกัด
+       1. ARCHITECTURE: 5 CORE SUBJECTS + UNLIMITED CUSTOM SUBJECTS
     ========================================================== */
     const CORE_SUBJECTS = [
       {
@@ -742,24 +768,24 @@
           { name: '🎨 3. อนุกรมภาพต่อเนื่อง', url: 'coding.html?zone=3' },
           { name: '💖 4. เด็กดีมีวินัย', url: 'coding.html?zone=4' }
         ]
+      },
+      {
+        id: 'art',
+        title: 'วิชาศิลปะ & ระบายสีมีชีวิต',
+        badge: '🎨 จินตนาการ & กล้ามเนื้อมัดเล็ก',
+        emoji: '🖌️',
+        desc: 'ลากเส้นตามรอยประ ระบายสี 12 ภาพ ผสมสีเวทมนตร์ และเสกภาพให้ขยับได้!',
+        url: 'art.html',
+        cardGradient: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+        btnColor: '#e84393',
+        speech: 'วิชาศิลปะและระบายสีมีชีวิต มาลากเส้นตามรอยประ ระบายสี และเสกให้ภาพขยับดุ๊กดิ๊กกันจ้า',
+        stages: [
+          { name: '🦖 1. สมุดระบายสีมีชีวิต', url: 'art.html?stage=1' },
+          { name: '🔢 2. ระบายสีตามตัวเลข', url: 'art.html?stage=2' },
+          { name: '🧪 3. ห้องทดลองผสมสี', url: 'art.html?stage=3' },
+          { name: '🖌️ 4. วาดอิสระ & ตัวปั๊ม', url: 'art.html?stage=4' }
+        ]
       }
-      ,{
-     id: 'art',
-     title: 'วิชาศิลปะ & ระบายสีมีชีวิต',
-     badge: '🎨 จินตนาการ & กล้ามเนื้อมัดเล็ก',
-     emoji: '🖌️',
-     desc: 'ลากเส้นตามรอยประ ระบายสี 12 ภาพ ผสมสีเวทมนตร์ และเสกภาพให้ขยับได้!',
-     url: 'art.html',
-     cardGradient: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
-     btnColor: '#e84393',
-     speech: 'วิชาศิลปะและระบายสีมีชีวิต มาลากเส้นตามรอยประ ระบายสี และเสกให้ภาพขยับดุ๊กดิ๊กกันจ้า',
-     stages: [
-       { name: '🦖 1. สมุดระบายสีมีชีวิต', url: 'art.html?stage=1' },
-       { name: '🔢 2. ระบายสีตามตัวเลข', url: 'art.html?stage=2' },
-       { name: '🧪 3. ห้องทดลองผสมสี', url: 'art.html?stage=3' },
-       { name: '🖌️ 4. วาดอิสระ & ตัวปั๊ม', url: 'art.html?stage=4' }
-     ]
-   }
     ];
 
     const STICKER_COLLECTION = [
@@ -779,7 +805,6 @@
 
     /* ==========================================================
        2. SHARED STATE & UNIFIED LOCALSTORAGE SYNC
-       ซิงค์ดาวระหว่าง mlst_stars และ kidsMath_totalStars อัตโนมัติ
     ========================================================== */
     let activeCategoryFilter = 'all';
 
@@ -813,6 +838,7 @@
       stars: getUnifiedStars(),
       starGoal: parseInt(localStorage.getItem('mlst_goal') || '50', 10),
       couponText: localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!',
+      bgmEnabled: localStorage.getItem('mlst_home_bgm') !== 'off',
       customSubjects: loadCustomSubjects()
     };
 
@@ -821,17 +847,115 @@
     }
 
     /* ==========================================================
-       3. WEB AUDIO & THAI SPEECH ENGINE
+       3. WEB AUDIO, HOME BGM MELODY & THAI SPEECH ENGINE
     ========================================================== */
     let audioCtx = null;
+    let bgmTimer = null;
+    let bgmNoteIdx = 0;
+
+    // โน้ตเพลงกล่องดนตรีสดใสสำหรับหน้าโฮม (Twinkle & Happy Town Melody)
+    const HOME_BGM_NOTES = [
+      { f: 523.25, d: 0.26 }, { f: 523.25, d: 0.26 }, { f: 783.99, d: 0.26 }, { f: 783.99, d: 0.26 },
+      { f: 880.00, d: 0.26 }, { f: 880.00, d: 0.26 }, { f: 783.99, d: 0.48 }, { f: 0, d: 0.15 },
+      { f: 698.46, d: 0.26 }, { f: 698.46, d: 0.26 }, { f: 659.25, d: 0.26 }, { f: 659.25, d: 0.26 },
+      { f: 587.33, d: 0.26 }, { f: 587.33, d: 0.26 }, { f: 523.25, d: 0.48 }, { f: 0, d: 0.15 },
+      { f: 783.99, d: 0.26 }, { f: 783.99, d: 0.26 }, { f: 698.46, d: 0.26 }, { f: 698.46, d: 0.26 },
+      { f: 659.25, d: 0.26 }, { f: 659.25, d: 0.26 }, { f: 587.33, d: 0.48 }, { f: 0, d: 0.15 }
+    ];
+
     function getAudioCtx() {
       if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         if (AudioContextClass) audioCtx = new AudioContextClass();
       }
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
       return audioCtx;
     }
+
+    function playNextBGMNote() {
+      if (!appState.bgmEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx || ctx.state !== 'running') return;
+
+      const item = HOME_BGM_NOTES[bgmNoteIdx % HOME_BGM_NOTES.length];
+      bgmNoteIdx++;
+
+      if (item.f > 0) {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(item.f, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.11, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + item.d);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + item.d + 0.02);
+      }
+    }
+
+    function startBGMService() {
+      if (bgmTimer) clearInterval(bgmTimer);
+      if (appState.bgmEnabled) {
+        playNextBGMNote();
+        bgmTimer = setInterval(playNextBGMNote, 360);
+      }
+      updateBGMButtonUI();
+    }
+
+    function stopBGMService() {
+      if (bgmTimer) {
+        clearInterval(bgmTimer);
+        bgmTimer = null;
+      }
+      updateBGMButtonUI();
+    }
+
+    function toggleHomeBGM() {
+      getAudioCtx();
+      appState.bgmEnabled = !appState.bgmEnabled;
+      localStorage.setItem('mlst_home_bgm', appState.bgmEnabled ? 'on' : 'off');
+      if (appState.bgmEnabled) {
+        bgmNoteIdx = 0;
+        startBGMService();
+      } else {
+        stopBGMService();
+        playSFX('pop');
+      }
+    }
+
+    function updateBGMButtonUI() {
+      const btn = document.getElementById('bgmToggleBtn');
+      const icon = document.getElementById('bgmIcon');
+      const label = document.getElementById('bgmLabel');
+      if (!btn) return;
+
+      if (appState.bgmEnabled) {
+        btn.classList.add('playing');
+        icon.textContent = '🎵';
+        label.textContent = 'เพลง: เปิด';
+      } else {
+        btn.classList.remove('playing');
+        icon.textContent = '🔇';
+        label.textContent = 'เพลง: ปิด';
+      }
+    }
+
+    // ปลดล็อกเสียงอัตโนมัติเมื่อแตะหน้าจอครั้งแรกบนมือถือ
+    function unlockAudioOnFirstTouch() {
+      const ctx = getAudioCtx();
+      if (ctx && appState.bgmEnabled && !bgmTimer) {
+        startBGMService();
+      }
+    }
+    document.addEventListener('touchstart', unlockAudioOnFirstTouch, { once: true, passive: true });
+    document.addEventListener('click', unlockAudioOnFirstTouch, { once: true, passive: true });
 
     function playSFX(type = 'pop') {
       const ctx = getAudioCtx();
@@ -899,6 +1023,7 @@
 
       const unlockedStickers = STICKER_COLLECTION.filter(s => appState.stars >= s.reqStars).length;
       document.getElementById('stickerBadgeText').textContent = `${unlockedStickers}/${STICKER_COLLECTION.length}`;
+      updateBGMButtonUI();
     }
 
     function renderCategoryTabs() {
@@ -988,7 +1113,7 @@
     function pokeTownMascot() {
       playSFX('pop');
       const messages = [
-        `สวัสดีจ้า ${appState.childName}! วันนี้อยากเรียนภาษาไทย คณิต อังกฤษ หรือโค้ดดิ้งดีเอ่ย?`,
+        `สวัสดีจ้า ${appState.childName}! วันนี้อยากเรียนภาษาไทย คณิต อังกฤษ โค้ดดิ้ง หรือระบายสีดีเอ่ย?`,
         `ตอนนี้หนูสะสมได้ ${appState.stars} ดาวแล้ว สู้ๆ นะจ๊ะคนเก่ง!`,
         `กดที่สมุดสีชมพูด้านบน เพื่อดูสติกเกอร์เพื่อนรักของหนูได้นะจ๊ะ!`,
         `แตะที่ปุ่มด่านย่อยในแต่ละวิชา เพื่อเข้าเล่นด่านที่ชอบได้ทันทีเลย!`
@@ -1062,7 +1187,7 @@
     function renderCustomSubjectsManagerList() {
       const box = document.getElementById('customSubjectsList');
       if (!appState.customSubjects.length) {
-        box.innerHTML = '<small style="color:#636e72;">ยังไม่มีวิชาที่เพิ่มเอง (มี 4 วิชาหลักมาตรฐาน)</small>';
+        box.innerHTML = '<small style="color:#636e72;">ยังไม่มีวิชาที่เพิ่มเอง (มี 5 วิชาหลักมาตรฐาน)</small>';
         return;
       }
       box.innerHTML = appState.customSubjects.map((s, idx) => `
