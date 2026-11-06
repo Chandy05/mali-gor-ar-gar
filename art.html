@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>วิชาศิลปะ & สมุดระบายสีมีชีวิต - เมืองจำลองของหนู</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      font-family: 'Mali', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 50%, #fbc2eb 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #2d3436;
+    }
+
+    /* ==================== TOP NAVIGATION BAR (Coding Theme) ==================== */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-left-group, .nav-right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .icon-btn {
+      background: #ffeaa7;
+      border: 3px solid #fdcb6e;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 #e1b12c;
+      flex-shrink: 0;
+      text-decoration: none;
+      color: #2d3436;
+    }
+    .icon-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .back-map-btn {
+      background: #ff7675;
+      color: #fff;
+      border: 3px solid #d63031;
+      border-radius: 22px;
+      padding: 6px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #b33939;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-map-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    .star-progress-wrap {
+      flex: 1;
+      max-width: 420px;
+      min-width: 170px;
+      background: #dfe6e9;
+      border-radius: 25px;
+      height: 36px;
+      position: relative;
+      border: 3px solid #fff;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .star-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fdcb6e, #f39c12);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .star-progress-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      color: #2d3436;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+    }
+
+    .lang-switch-btn {
+      background: #6c5ce7;
+      color: #fff;
+      border: 3px solid #4834d4;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #30336b;
+    }
+    .lang-switch-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* Quick Stage Switcher Bar */
+    .quick-stage-bar {
+      display: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 920px;
+      margin: 10px auto 0;
+      padding: 0 14px;
+    }
+    .quick-stage-bar.show { display: flex; }
+
+    /* Screen Container */
+    .screen {
+      display: none;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 14px;
+      text-align: center;
+    }
+    .screen.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Hub Cards */
+    .town-title {
+      font-size: 28px;
+      color: #2d3436;
+      margin: 6px 0 4px;
+      text-shadow: 2px 2px 0 #fff;
+    }
+    .town-sub {
+      font-size: 16px;
+      color: #2d3436;
+      margin-bottom: 16px;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+    .town-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 540px) {
+      .town-grid { grid-template-columns: 1fr; }
+    }
+    .zone-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      cursor: pointer;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .zone-card:active { transform: translateY(4px); box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+    .zone-1 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+    .zone-2 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+    .zone-3 { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+    .zone-4 { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+    .zone-emoji { font-size: 52px; margin-bottom: 6px; }
+    .zone-name { font-size: 21px; font-weight: 700; margin: 4px 0; color: #2d3436; }
+    .zone-tag {
+      background: rgba(255,255,255,0.88);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2d3436;
+    }
+
+    /* Mode Selector Pills */
+    .mode-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .pill-btn {
+      background: #fff;
+      border: 3px solid #b2bec3;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #2d3436;
+      transition: 0.15s;
+    }
+    .pill-btn:active { transform: translateY(2px); }
+    .pill-btn.active {
+      background: #6c5ce7;
+      color: #fff;
+      border-color: #4834d4;
+      box-shadow: 0 3px 0 #30336b;
+    }
+    .pill-sub.active {
+      background: #00b894;
+      color: #fff;
+      border-color: #00896f;
+      box-shadow: 0 3px 0 #006266;
+    }
+    .pill-magic {
+      background: linear-gradient(135deg, #fdcb6e, #e17055);
+      color: #fff;
+      border-color: #d63031;
+      box-shadow: 0 3px 0 #b33939;
+    }
+
+    /* Prompt Box */
+    .prompt-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 10px 16px;
+      margin-bottom: 12px;
+      border: 4px solid #fd79a8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+    .prompt-text {
+      font-size: 17px;
+      font-weight: 700;
+      text-align: left;
+      flex: 1;
+    }
+    .speak-btn {
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      font-size: 20px;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 0 #0652DD;
+    }
+    .speak-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    /* ==================== COLORING BOOK GALLERY & CANVAS ==================== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .pic-thumb-card {
+      background: #fff;
+      border: 4px solid #dfe6e9;
+      border-radius: 22px;
+      padding: 12px 8px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #b2bec3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.15s;
+      position: relative;
+    }
+    .pic-thumb-card:hover { transform: translateY(-3px); }
+    .pic-thumb-card.active {
+      border-color: #ff7675;
+      background: #fff9db;
+      box-shadow: 0 5px 0 #d63031;
+    }
+    .done-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #00b894;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* Main Coloring Stage */
+    .art-workspace {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 28px;
+      padding: 16px;
+      border: 5px solid #fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .svg-stage-wrap {
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 4 / 3;
+      background: #ffffff;
+      border: 4px dashed #b2bec3;
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+      box-shadow: inset 0 3px 10px rgba(0,0,0,0.05);
+    }
+    .svg-stage-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Dotted Trace Mode Styling */
+    .color-region {
+      cursor: pointer;
+      transition: fill 0.25s ease, stroke-dasharray 0.3s ease;
+      stroke: #2d3436;
+      stroke-width: 5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    .trace-locked .color-region {
+      stroke: #95a5a6;
+      stroke-dasharray: 10, 10;
+      fill: #f8f9fa !important;
+      pointer-events: none;
+    }
+
+    /* Trace Checkpoint Dots (1 -> 2 -> 3 -> 4) */
+    .trace-dot-group {
+      cursor: pointer;
+    }
+    .trace-dot-circle {
+      fill: #ffeaa7;
+      stroke: #e17055;
+      stroke-width: 4;
+      transition: transform 0.2s, fill 0.2s;
+    }
+    .trace-dot-circle.done {
+      fill: #00b894;
+      stroke: #006266;
+    }
+    .trace-dot-circle.next-target {
+      fill: #ff7675;
+      stroke: #d63031;
+      animation: pulseDot 1s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { r: 18; }
+      50% { r: 23; }
+    }
+
+    /* Bring-to-Life Animations when Painting is Finished! */
+    @keyframes animRocketFly {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-28px) rotate(-3deg) scale(1.05); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+      75% { transform: translateY(-32px) rotate(-2deg) scale(1.06); }
+    }
+    @keyframes animDinoHop {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      30% { transform: translateY(-18px) rotate(-6deg); }
+      60% { transform: translateY(0) rotate(6deg) scale(1.05); }
+    }
+    @keyframes animTrainChug {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      25% { transform: translateX(-16px) translateY(-5px); }
+      50% { transform: translateX(16px) translateY(0); }
+      75% { transform: translateX(-8px) translateY(-5px); }
+    }
+    @keyframes animWiggleLaugh {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.08) rotate(-7deg); }
+      50% { transform: scale(0.96) rotate(7deg); }
+      75% { transform: scale(1.08) rotate(-5deg); }
+    }
+    .alive-rocket { animation: animRocketFly 1.6s ease-in-out infinite; transform-origin: center; }
+    .alive-dino   { animation: animDinoHop 1.2s ease-in-out infinite; transform-origin: center; }
+    .alive-train  { animation: animTrainChug 1.3s ease-in-out infinite; transform-origin: center; }
+    .alive-wiggle { animation: animWiggleLaugh 1.2s ease-in-out infinite; transform-origin: center; }
+
+    /* Oversized Crayon & Paint Bucket Palette */
+    .palette-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: #f1f2f6;
+      border-radius: 22px;
+      width: 100%;
+    }
+    .color-swatch {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      border: 4px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .color-swatch.active {
+      transform: translateY(-7px) scale(1.14);
+      border-color: #2d3436;
+      box-shadow: 0 9px 14px rgba(0,0,0,0.25);
+      z-index: 5;
+    }
+
+    /* Color Mixing Cauldron (Stage 3) */
+    .cauldron-box {
+      background: #2d3436;
+      color: #fff;
+      border: 6px solid #636e72;
+      border-radius: 36px;
+      width: 220px;
+      height: 180px;
+      margin: 12px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 -12px 25px rgba(0,0,0,0.5), 0 8px 0 #b2bec3;
+      transition: background 0.4s ease;
+    }
+
+    /* Free Draw Canvas (Stage 4) */
+    .free-canvas-wrap {
+      width: 100%;
+      max-width: 640px;
+      background: #fff;
+      border: 5px solid #74b9ff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      touch-action: none;
+    }
+    #freeDrawCanvas {
+      width: 100%;
+      height: 360px;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* Sparkle Particle on Touch */
+    .sparkle-dot {
+      position: fixed;
+      pointer-events: none;
+      font-size: 20px;
+      z-index: 999;
+      animation: sparkleFade 0.7s ease-out forwards;
+    }
+    @keyframes sparkleFade {
+      0% { transform: scale(0.5) translateY(0); opacity: 1; }
+      100% { transform: scale(1.4) translateY(-30px); opacity: 0; }
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 14px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 22px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      border: 5px solid #fdcb6e;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .action-btn {
+      background: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #00896f;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn:active { transform: translateY(3px); box-shadow: none; }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="nav-left-group">
+      <a href="index.html" class="icon-btn" title="กลับหน้าเมืองหลัก (Home)">🏠</a>
+      <button class="back-map-btn" id="btnBackArtHub" onclick="goArtHub()">🗺️ เลือกโหมดศิลปะ</button>
+    </div>
+
+    <div class="star-progress-wrap" onclick="openRewardModal()">
+      <div class="star-progress-fill" id="starFill"></div>
+      <div class="star-progress-text" id="starText">⭐ 0 / 50 ดาว</div>
+    </div>
+
+    <div class="nav-right-group">
+      <button class="lang-switch-btn" id="langBtn" onclick="toggleVoiceLang()">🇹🇭+🇬🇧 เสียง 2 ภาษา</button>
+    </div>
+  </div>
+
+  <!-- Quick Stage Switcher Bar -->
+  <div class="quick-stage-bar" id="quickStageBar">
+    <button class="pill-btn" id="qTab1" onclick="openArtStage(1)">🎨 1. สมุดระบายสีมีชีวิต (12 ภาพ)</button>
+    <button class="pill-btn" id="qTab2" onclick="openArtStage(2)">🔢 2. ระบายสีตามตัวเลข</button>
+    <button class="pill-btn" id="qTab3" onclick="openArtStage(3)">🧪 3. ห้องทดลองผสมสี</button>
+    <button class="pill-btn" id="qTab4" onclick="openArtStage(4)">🖌️ 4. วาดอิสระ & ตัวปั๊ม</button>
+  </div>
+
+  <!-- ART HUB SCREEN -->
+  <div id="hubScreen" class="screen active">
+    <h1 class="town-title">🎨 สตูดิโอศิลปะ & ระบายสีมีชีวิตของ <span id="childNameLabel">น้องมะลิ</span></h1>
+    <div class="town-sub">ลากเส้นต่อจุดตามรอยประ ระบายสีไม่เลอะออกนอกเส้น แล้วเสกให้ภาพขยับดุ๊กดิ๊กพร้อมเสียงหัวเราะ!</div>
+
+    <div class="town-grid">
+      <div class="zone-card zone-1" onclick="openArtStage(1)">
+        <div class="zone-emoji">🦖🎨</div>
+        <div class="zone-name">1. สมุดระบายสีมีชีวิต (12 ภาพ)</div>
+        <div class="zone-tag">ลากเส้นตามรอยประ + จิ้มเทสี + เสกภาพขยับดุ๊กดิ๊กมีเสียง!</div>
+      </div>
+
+      <div class="zone-card zone-2" onclick="openArtStage(2)">
+        <div class="zone-emoji">🔢🖌️</div>
+        <div class="zone-name">2. ระบายสีตามตัวเลข (1 - 6)</div>
+        <div class="zone-tag">สังเกตตัวเลขในช่องแล้วเลือกสีให้ตรงกัน ฝึกสมาธิและตัวเลข</div>
+      </div>
+
+      <div class="zone-card zone-3" onclick="openArtStage(3)">
+        <div class="zone-emoji">🧪🌈</div>
+        <div class="zone-name">3. ห้องทดลองผสมสีมหัศจรรย์</div>
+        <div class="zone-tag">ผสมแม่สี 2 ขวดในหม้อเวทมนตร์ ดูซิว่าจะกลายเป็นสีอะไรเอ่ย?</div>
+      </div>
+
+      <div class="zone-card zone-4" onclick="openArtStage(4)">
+        <div class="zone-emoji">✨🖼️</div>
+        <div class="zone-name">4. กระดานวาดอิสระ & ตัวปั๊ม</div>
+        <div class="zone-tag">พู่กันสายรุ้ง + ปั๊มสติกเกอร์น่ารัก + บันทึกรูปเก็บไว้ดูได้!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 1 & 2: INTERACTIVE COLORING BOOK (FREE & NUMBER MODE) -->
+  <div id="stageColoring" class="screen">
+    <!-- Category Filter for 12 Pictures -->
+    <div class="mode-bar">
+      <button class="pill-btn pill-sub active" id="catBtn_all" onclick="setPicCategory('all')">🌈 ทั้งหมด (12 ภาพ)</button>
+      <button class="pill-btn pill-sub" id="catBtn_animals" onclick="setPicCategory('animals')">🦖 สัตว์ & ไดโนเสาร์ (4)</button>
+      <button class="pill-btn pill-sub" id="catBtn_vehicles" onclick="setPicCategory('vehicles')">🚀 ยานพาหนะ (4)</button>
+      <button class="pill-btn pill-sub" id="catBtn_sweet" onclick="setPicCategory('sweet')">🏰 บ้าน & ของหวาน (4)</button>
+    </div>
+
+    <!-- Picture Thumbnail Selector -->
+    <div class="gallery-grid" id="pictureGallery"></div>
+
+    <!-- Prompt Banner -->
+    <div class="prompt-box">
+      <div class="prompt-text" id="coloringPrompt">✏️ ขั้นที่ 1: แตะหรือลากนิ้วผ่านจุดดาว ⭐ 1 ➔ 2 ➔ 3 ➔ 4 เพื่อวาดเส้นตามรอยประกันเถอะ!</div>
+      <button class="speak-btn" onclick="speakColoringPrompt()">🔊</button>
+    </div>
+
+    <!-- Main Art Workspace -->
+    <div class="art-workspace">
+      <!-- Action Controls Above Canvas -->
+      <div class="mode-bar" style="margin-bottom:0;">
+        <button class="pill-btn active" id="btnTraceMode" onclick="toggleTraceStep()">✏️ โหมดลากเส้นรอยประ</button>
+        <button class="pill-btn" id="btnSkipTrace" onclick="completeTraceInstantly()">🪄 เสกเส้นเสร็จทันที (ข้ามไประบายสี)</button>
+        <button class="pill-btn pill-magic" id="btnBringAlive" onclick="triggerAliveShow()">✨ เสกภาพให้มีชีวิต & ฟังเสียง!</button>
+        <button class="pill-btn" onclick="clearCurrentPicture()">🔄 ล้างสีเริ่มใหม่</button>
+      </div>
+
+      <!-- SVG Coloring Stage -->
+      <div class="svg-stage-wrap" id="svgStageWrap">
+        <svg viewBox="0 0 400 300" id="coloringSvg"></svg>
+      </div>
+
+      <!-- Oversized Paint Palette -->
+      <div class="palette-bar" id="paletteBar"></div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: MAGIC COLOR MIXING LAB -->
+  <div id="stageMixing" class="screen">
+    <div class="prompt-box">
+      <div class="prompt-text" id="mixPrompt">🧪 เลือกหยดสี 2 ขวดลงในหม้อเวทมนตร์ เพื่อดูว่าผสมกันแล้วได้สีอะไร!</div>
+      <button class="speak-btn" onclick="speakMixPrompt()">🔊</button>
+    </div>
+
+    <div class="art-workspace">
+      <div style="font-size:18px; font-weight:700; color:#6c5ce7;" id="mixMissionText">
+        🎯 ภารกิจ: ลองผสมให้ได้ "สีส้ม (Orange)" ดูสิจ๊ะ!
+      </div>
+
+      <div class="cauldron-box" id="cauldronBox">
+        <div style="font-size:48px;" id="cauldronEmoji">🧪</div>
+        <div style="font-size:20px; font-weight:700; margin-top:6px;" id="cauldronLabel">หม้อว่างเปล่า</div>
+      </div>
+
+      <div class="mode-bar">
+        <button class="action-btn" style="background:#ff4757; box-shadow:0 5px 0 #c0392b;" onclick="addDropToCauldron('red')">🔴 หยดสีแดง (Red)</button>
+        <button class="action-btn" style="background:#ffd32a; color:#2d3436; box-shadow:0 5px 0 #e1b12c;" onclick="addDropToCauldron('yellow')">🟡 หยดสีเหลือง (Yellow)</button>
+        <button class="action-btn" style="background:#1e90ff; box-shadow:0 5px 0 #0984e3;" onclick="addDropToCauldron('blue')">🔵 หยดสีน้ำเงิน (Blue)</button>
+        <button class="action-btn" style="background:#ffffff; color:#2d3436; border:2px solid #b2bec3; box-shadow:0 5px 0 #7f8c8d;" onclick="addDropToCauldron('white')">⚪ หยดสีขาว (White)</button>
+      </div>
+
+      <div class="mode-bar">
+        <button class="pill-btn" onclick="resetCauldron()">🗑️ เทหม้อทิ้งเริ่มใหม่</button>
+        <button class="pill-btn pill-sub active" onclick="newMixMission()">🎲 สุ่มโจทย์ผสมสีใหม่</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4: FREE DRAW & MAGIC STAMPS -->
+  <div id="stageFreeDraw" class="screen">
+    <div class="prompt-box">
+      <div class="prompt-text">🖌️ ลากนิ้ววาดภาพอิสระ หรือเลือกตัวปั๊มสติกเกอร์มาแตะตกแต่งภาพได้เลย!</div>
+      <button class="speak-btn" onclick="speakText('ลากนิ้ววาดภาพตามจินตนาการได้เลยจ้า', 'Draw anything you like!')">🔊</button>
+    </div>
+
+    <div class="art-workspace">
+      <div class="mode-bar" style="margin-bottom:4px;">
+        <button class="pill-btn active" id="toolBrush" onclick="setFreeTool('brush')">🖌️ พู่กันสี</button>
+        <button class="pill-btn" id="toolRainbow" onclick="setFreeTool('rainbow')">🌈 พู่กันสายรุ้ง</button>
+        <button class="pill-btn" id="toolStampStar" onclick="setFreeTool('⭐')">⭐ ปั๊มดาว</button>
+        <button class="pill-btn" id="toolStampHeart" onclick="setFreeTool('💖')">💖 ปั๊มหัวใจ</button>
+        <button class="pill-btn" id="toolStampFlower" onclick="setFreeTool('🌸')">🌸 ปั๊มดอกไม้</button>
+        <button class="pill-btn" id="toolStampDino" onclick="setFreeTool('🦖')">🦖 ปั๊มไดโนเสาร์</button>
+        <button class="pill-btn" onclick="clearFreeCanvas()">🗑️ ล้างกระดาน</button>
+        <button class="pill-btn pill-magic" onclick="saveFreeDrawing()">📸 บันทึกรูปภาพ</button>
+      </div>
+
+      <div class="free-canvas-wrap">
+        <canvas id="freeDrawCanvas" width="640" height="360"></canvas>
+      </div>
+
+      <div class="palette-bar" id="freePaletteBar"></div>
+    </div>
+  </div>
+
+  <!-- REWARD MODAL -->
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal-card">
+      <div style="font-size:64px;">🏆🎉</div>
+      <h2 id="rewardModalTitle">จิตรกรน้อยคนเก่ง!</h2>
+      <p id="rewardModalDesc" style="font-size:18px; font-weight:700;"></p>
+      <div style="background:#ffeaa7; padding:14px; border-radius:18px; border:3px dashed #e17055; margin:14px 0; font-size:20px; font-weight:700;" id="couponTextDisplay">
+        🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!
+      </div>
+      <button class="action-btn" onclick="closeRewardModal()">ระบายสีต่อเลย!</button>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================
+       1. PALETTE COLORS & 12 INTERACTIVE SVG PICTURES
+    ========================================================== */
+    const PAINT_PALETTE = [
+      { id: 1, hex: '#ff4757', th: 'สีแดง', en: 'Red' },
+      { id: 2, hex: '#ffa502', th: 'สีส้ม', en: 'Orange' },
+      { id: 3, hex: '#ffd32a', th: 'สีเหลือง', en: 'Yellow' },
+      { id: 4, hex: '#2ed573', th: 'สีเขียว', en: 'Green' },
+      { id: 5, hex: '#1e90ff', th: 'สีฟ้า', en: 'Blue' },
+      { id: 6, hex: '#8c7ae6', th: 'สีม่วง', en: 'Purple' },
+      { id: 7, hex: '#ff6b81', th: 'สีชมพู', en: 'Pink' },
+      { id: 8, hex: '#b37d4e', th: 'สีน้ำตาล', en: 'Brown' },
+      { id: 9, hex: 'url(#rainbowGrad)', th: 'สีรุ้งเวทมนตร์', en: 'Magic Rainbow', badge: '🌈' },
+      { id: 10, hex: 'url(#polkaPat)', th: 'ลายจุดหรรษา', en: 'Polka Dots', badge: '🟣' }
+    ];
+
+    const PICTURES_DB = [
+      // หมวด 1: สัตว์ & ไดโนเสาร์ (4 ภาพ)
+      {
+        id: 'dino', cat: 'animals', title: '1. พี่ไดโนเสาร์คอยาว', emoji: '🦖', animClass: 'alive-dino', sfxType: 'dino',
+        aliveSpeechTh: 'ง่ำๆ! พี่ไดโนเสาร์อิ่มอร่อยไปเลยจ้า โฮกปุ๋ง!', aliveSpeechEn: 'Yummy! Happy Dinosaur says Roar!',
+        traceDots: [{x:90,y:80}, {x:160,y:170}, {x:280,y:180}, {x:320,y:240}],
+        regions: [
+          { id: 'r1', num: 4, d: 'M120,160 Q120,70 90,70 Q70,70 70,95 Q95,105 95,165 Z' }, // คอและหัว
+          { id: 'r2', num: 4, d: 'M95,165 L270,165 Q310,165 330,220 L270,220 L95,220 Z' }, // ลำตัวและหาง
+          { id: 'r3', num: 3, d: 'M125,185 Q185,175 245,185 L245,220 L125,220 Z' }, // ท้อง
+          { id: 'r4', num: 2, d: 'M140,165 L155,135 L170,165 L190,135 L205,165 L225,135 L240,165 Z' }, // แผงหลัง
+          { id: 'r5', num: 4, d: 'M115,220 L115,265 L145,265 L145,220 Z M230,220 L230,265 L260,265 L260,220 Z' }, // ขา
+          { id: 'r6', num: 1, d: 'M160,195 A12,12 0 1,0 184,195 A12,12 0 1,0 160,195 Z M205,190 A10,10 0 1,0 225,190 A10,10 0 1,0 205,190 Z' } // ลายจุด
+        ],
+        decor: '<circle cx="85" cy="84" r="5" fill="#2d3436"/><path d="M40,265 L360,265" stroke="#2ed573" stroke-width="8" stroke-linecap="round"/>'
+      },
+      {
+        id: 'butterfly', cat: 'animals', title: '2. ผีเสื้อแสนสวย', emoji: '🦋', animClass: 'alive-wiggle', sfxType: 'flutter',
+        aliveSpeechTh: 'พรึ่บพั่บๆ! ผีเสื้อกางปีกบินไปดมดอกไม้แล้วจ้า!', aliveSpeechEn: 'Flutter flutter! Beautiful butterfly!',
+        traceDots: [{x:120,y:90}, {x:280,y:90}, {x:280,y:210}, {x:120,y:210}],
+        regions: [
+          { id: 'r1', num: 7, d: 'M190,120 C110,40 60,90 100,150 C130,165 170,155 190,150 Z' }, // ปีกบนซ้าย
+          { id: 'r2', num: 7, d: 'M210,120 C290,40 340,90 300,150 C270,165 230,155 210,150 Z' }, // ปีกบนขวา
+          { id: 'r3', num: 5, d: 'M190,160 C120,165 95,225 145,245 C175,255 190,210 190,190 Z' }, // ปีกล่างซ้าย
+          { id: 'r4', num: 5, d: 'M210,160 C280,165 305,225 255,245 C225,255 210,210 210,190 Z' }, // ปีกล่างขวา
+          { id: 'r5', num: 3, d: 'M118,115 A18,18 0 1,0 154,115 A18,18 0 1,0 118,115 Z M246,115 A18,18 0 1,0 282,115 A18,18 0 1,0 246,115 Z' }, // ลายวงกลมปีก
+          { id: 'r6', num: 8, d: 'M188,95 Q200,85 212,95 L212,220 Q200,235 188,220 Z' } // ลำตัวผีเสื้อ
+        ],
+        decor: '<path d="M195,90 Q175,55 160,65 M205,90 Q225,55 240,65" stroke="#2d3436" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="195" cy="105" r="3" fill="#fff"/><circle cx="205" cy="105" r="3" fill="#fff"/>'
+      },
+      {
+        id: 'lion', cat: 'animals', title: '3. พี่สิงโตเจ้าป่า', emoji: '🦁', animClass: 'alive-dino', sfxType: 'dino',
+        aliveSpeechTh: 'โฮกกก! พี่สิงโตแผงคอสีสวย ใจดีที่สุดเลยจ้า!', aliveSpeechEn: 'Roar! The happy lion is smiling!',
+        traceDots: [{x:200,y:55}, {x:280,y:135}, {x:200,y:215}, {x:120,y:135}],
+        regions: [
+          { id: 'r1', num: 2, d: 'M200,45 C255,45 295,85 295,140 C295,195 255,235 200,235 C145,235 105,195 105,140 C105,85 145,45 200,45 Z' }, // แผงคอ
+          { id: 'r2', num: 3, d: 'M200,80 C235,80 260,105 260,140 C260,175 235,200 200,200 C165,200 140,175 140,140 C140,105 165,80 200,80 Z' }, // ใบหน้า
+          { id: 'r3', num: 3, d: 'M135,75 A20,20 0 1,0 165,75 Z M235,75 A20,20 0 1,0 265,75 Z' }, // หูซ้ายขวา
+          { id: 'r4', num: 1, d: 'M188,140 L212,140 L200,158 Z' }, // จมูก
+          { id: 'r5', num: 3, d: 'M160,225 L240,225 L255,275 L145,275 Z' } // ลำตัวด้านล่าง
+        ],
+        decor: '<circle cx="178" cy="125" r="6" fill="#2d3436"/><circle cx="222" cy="125" r="6" fill="#2d3436"/><path d="M185,168 Q200,180 215,168" stroke="#2d3436" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      },
+      {
+        id: 'turtle', cat: 'animals', title: '4. เต่าน้อยใต้ทะเล', emoji: '🐢', animClass: 'alive-train', sfxType: 'bubble',
+        aliveSpeechTh: 'บุ๋งๆๆ! เต่าน้อยว่ายน้ำดุ๊กดิ๊กสบายใจจังเลย!', aliveSpeechEn: 'Splash! Little turtle is swimming!',
+        traceDots: [{x:130,y:140}, {x:210,y:95}, {x:285,y:150}, {x:200,y:215}],
+        regions: [
+          { id: 'r1', num: 4, d: 'M115,180 C115,100 285,100 285,180 Z' }, // กระดองบน
+          { id: 'r2', num: 3, d: 'M110,180 L290,180 L280,205 L120,205 Z' }, // ขอบกระดองล่าง
+          { id: 'r3', num: 2, d: 'M175,125 L225,125 L235,175 L165,175 Z' }, // ลายกลางกระดอง
+          { id: 'r4', num: 4, d: 'M70,155 C70,125 115,125 115,165 C115,190 70,190 70,155 Z' }, // หัวเต่า
+          { id: 'r5', num: 4, d: 'M135,205 L125,255 L160,255 L165,205 Z M235,205 L240,255 L275,255 L265,205 Z' }, // ขาเต่า
+          { id: 'r6', num: 5, d: 'M60,80 A14,14 0 1,0 88,80 A14,14 0 1,0 60,80 Z M95,55 A10,10 0 1,0 115,55 A10,10 0 1,0 95,55 Z' } // ฟองอากาศ
+        ],
+        decor: '<circle cx="88" cy="150" r="5" fill="#2d3436"/><path d="M80,170 Q92,178 102,170" stroke="#2d3436" stroke-width="3" fill="none"/>'
+      },
+
+      // หมวด 2: ยานพาหนะ (4 ภาพ)
+      {
+        id: 'rocket', cat: 'vehicles', title: '5. จรวดท่องอวกาศ', emoji: '🚀', animClass: 'alive-rocket', sfxType: 'rocket',
+        aliveSpeechTh: 'สาม สอง หนึ่ง... ฟู่ๆๆๆ! จรวดพุ่งทะยานขึ้นไปหาดวงจันทร์แล้วจ้า!', aliveSpeechEn: 'Three, two, one, Blast off to the moon!',
+        traceDots: [{x:200,y:40}, {x:245,y:130}, {x:245,y:215}, {x:155,y:130}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M200,30 L245,95 L155,95 Z' }, // หัวจรวด
+          { id: 'r2', num: 5, d: 'M155,95 L245,95 L245,210 L155,210 Z' }, // ตัวถังจรวด
+          { id: 'r3', num: 3, d: 'M172,145 A28,28 0 1,0 228,145 A28,28 0 1,0 172,145 Z' }, // หน้าต่างกลม
+          { id: 'r4', num: 1, d: 'M155,155 L110,220 L155,210 Z M245,155 L290,220 L245,210 Z' }, // ปีกซ้าย-ขวา
+          { id: 'r5', num: 2, d: 'M168,210 L200,275 L232,210 Z' }, // เปลวไฟไอพ่น
+          { id: 'r6', num: 3, d: 'M75,75 L85,95 L105,98 L90,112 L94,132 L75,122 L56,132 L60,112 L45,98 L65,95 Z' } // ดวงดาว
+        ],
+        decor: '<circle cx="320" cy="80" r="22" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="4"/>'
+      },
+      {
+        id: 'train', cat: 'vehicles', title: '6. รถไฟปู๊นๆ', emoji: '🚂', animClass: 'alive-train', sfxType: 'train',
+        aliveSpeechTh: 'ฉึกฉักๆ ปู๊น ปู๊น! รถไฟหรรษาออกเดินทางแล้วจ้า!', aliveSpeechEn: 'Choo Choo! All aboard the happy train!',
+        traceDots: [{x:115,y:95}, {x:230,y:85}, {x:310,y:190}, {x:110,y:225}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M95,125 L215,125 L215,215 L95,215 Z' }, // ตัวถังหน้า
+          { id: 'r2', num: 5, d: 'M215,75 L320,75 L320,215 L215,215 Z' }, // ห้องคนขับ
+          { id: 'r3', num: 3, d: 'M235,95 L300,95 L300,145 L235,145 Z' }, // หน้าต่างรถไฟ
+          { id: 'r4', num: 6, d: 'M115,75 L155,75 L145,125 L125,125 Z' }, // ปล่องควัน
+          { id: 'r5', num: 2, d: 'M115,235 A26,26 0 1,0 167,235 A26,26 0 1,0 115,235 Z M235,235 A26,26 0 1,0 287,235 A26,26 0 1,0 235,235 Z' }, // ล้อรถไฟ
+          { id: 'r6', num: 7, d: 'M60,215 L95,175 L95,215 Z' } // กันชนหน้ารถไฟ
+        ],
+        decor: '<circle cx="145" cy="48" r="14" fill="#dfe6e9"/><circle cx="175" cy="36" r="18" fill="#dfe6e9"/><line x1="40" y1="264" x2="360" y2="264" stroke="#636e72" stroke-width="6"/>'
+      },
+      {
+        id: 'boat', cat: 'vehicles', title: '7. เรือใบโต้คลื่น', emoji: '⛵', animClass: 'alive-wiggle', sfxType: 'bubble',
+        aliveSpeechTh: 'ซ่าๆๆ! เรือใบกางรับลมแล่นฉิวไปในทะเลแล้วจ้า!', aliveSpeechEn: 'Swoosh! The sailboat is riding the waves!',
+        traceDots: [{x:200,y:45}, {x:290,y:175}, {x:265,y:235}, {x:115,y:175}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M205,45 L205,180 L300,180 Z' }, // ใบเรือใหญ่ขวา
+          { id: 'r2', num: 3, d: 'M195,65 L195,180 L115,180 Z' }, // ใบเรือซ้าย
+          { id: 'r3', num: 8, d: 'M90,190 L310,190 L275,245 L125,245 Z' }, // ตัวเรือ
+          { id: 'r4', num: 5, d: 'M50,240 Q100,220 150,240 T250,240 T350,240 L350,280 L50,280 Z' }, // น้ำทะเล
+          { id: 'r5', num: 2, d: 'M65,65 A24,24 0 1,0 113,65 A24,24 0 1,0 65,65 Z' } // พระอาทิตย์
+        ],
+        decor: '<line x1="200" y1="40" x2="200" y2="190" stroke="#2d3436" stroke-width="6"/>'
+      },
+      {
+        id: 'car', cat: 'vehicles', title: '8. รถยนต์หรรษา', emoji: '🚗', animClass: 'alive-train', sfxType: 'train',
+        aliveSpeechTh: 'บรื้นๆๆ ปี๊นๆ! คาดเข็มขัดนิรภัยแล้วออกเดินทางกันเลย!', aliveSpeechEn: 'Vroom Vroom! Beep Beep! Let us go for a drive!',
+        traceDots: [{x:135,y:95}, {x:265,y:95}, {x:325,y:175}, {x:75,y:175}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M70,150 L330,150 Q350,150 350,175 L350,215 L50,215 L50,175 Q50,150 70,150 Z' }, // ตัวถังรถ
+          { id: 'r2', num: 2, d: 'M115,150 L150,90 L255,90 L295,150 Z' }, // หลังคารถ
+          { id: 'r3', num: 5, d: 'M155,102 L248,102 L275,145 L132,145 Z' }, // กระจกหน้าต่าง
+          { id: 'r4', num: 6, d: 'M95,215 A28,28 0 1,0 151,215 A28,28 0 1,0 95,215 Z M249,215 A28,28 0 1,0 305,215 A28,28 0 1,0 249,215 Z' }, // ล้อรถ
+          { id: 'r5', num: 3, d: 'M330,162 L350,162 L350,185 L330,185 Z' } // ไฟหน้ารถ
+        ],
+        decor: '<line x1="30" y1="245" x2="370" y2="245" stroke="#636e72" stroke-width="6"/>'
+      },
+
+      // หมวด 3: บ้านในฝัน & ของหวาน (4 ภาพ)
+      {
+        id: 'mushroom', cat: 'sweet', title: '9. บ้านเห็ดน้อยในนิทาน', emoji: '🍄', animClass: 'alive-wiggle', sfxType: 'flutter',
+        aliveSpeechTh: 'ปิ๊งป่อง! ก๊อกๆๆ มีภูตน้อยเปิดประตูออกมาทักทายหนูด้วยจ้า!', aliveSpeechEn: 'Knock knock! Welcome to the magic mushroom house!',
+        traceDots: [{x:200,y:50}, {x:310,y:145}, {x:265,y:245}, {x:135,y:245}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M80,155 C80,35 320,35 320,155 Z' }, // หลังคาเห็ด
+          { id: 'r2', num: 3, d: 'M130,155 L270,155 L280,260 L120,260 Z' }, // ตัวบ้าน
+          { id: 'r3', num: 8, d: 'M175,195 Q200,175 225,195 L225,260 L175,260 Z' }, // ประตูบ้าน
+          { id: 'r4', num: 5, d: 'M140,105 A20,20 0 1,0 180,105 A20,20 0 1,0 140,105 Z M225,95 A22,22 0 1,0 269,95 A22,22 0 1,0 225,95 Z' }, // ลายจุดบนเห็ด
+          { id: 'r5', num: 4, d: 'M70,260 Q200,245 330,260 L330,280 L70,280 Z' } // สนามหญ้า
+        ],
+        decor: '<circle cx="215" cy="230" r="4" fill="#ffd32a"/>'
+      },
+      {
+        id: 'icecream', cat: 'sweet', title: '10. ไอศกรีมซันเดย์ 3 ชั้น', emoji: '🍨', animClass: 'alive-dino', sfxType: 'flutter',
+        aliveSpeechTh: 'ง่ำๆๆ! ไอศกรีมสามรสหวานเย็นชื่นใจ อร่อยที่สุดเลยจ้า!', aliveSpeechEn: 'Yummy! Sweet and cold triple ice cream!',
+        traceDots: [{x:200,y:45}, {x:255,y:135}, {x:200,y:265}, {x:145,y:135}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M184,48 A16,16 0 1,0 216,48 A16,16 0 1,0 184,48 Z' }, // ลูกเชอร์รี
+          { id: 'r2', num: 7, d: 'M145,105 C145,60 255,60 255,105 Z' }, // ไอศกรีมลูกบน
+          { id: 'r3', num: 3, d: 'M130,145 C130,95 270,95 270,145 Z' }, // ไอศกรีมลูกกลาง
+          { id: 'r4', num: 4, d: 'M120,180 C120,135 280,135 280,180 Z' }, // ไอศกรีมลูกล่าง
+          { id: 'r5', num: 8, d: 'M140,180 L260,180 L200,275 Z' } // โคนวาฟเฟิล
+        ],
+        decor: '<path d="M200,32 Q215,15 225,22" stroke="#2ed573" stroke-width="4" fill="none"/>'
+      },
+      {
+        id: 'cupcake', cat: 'sweet', title: '11. คัพเค้กวันเกิด', emoji: '🧁', animClass: 'alive-wiggle', sfxType: 'flutter',
+        aliveSpeechTh: 'แฮปปี้เบิร์ธเดย์ ทูยู! อธิษฐานแล้วเป่าเทียนคัพเค้กกันเลย ฟู่!', aliveSpeechEn: 'Happy Birthday! Make a wish and blow the candle!',
+        traceDots: [{x:200,y:50}, {x:275,y:145}, {x:250,y:255}, {x:150,y:255}],
+        regions: [
+          { id: 'r1', num: 2, d: 'M200,28 C215,48 212,68 200,68 C188,68 185,48 200,28 Z' }, // เปลวเทียน
+          { id: 'r2', num: 5, d: 'M190,68 L210,68 L210,110 L190,110 Z' }, // แท่งเทียน
+          { id: 'r3', num: 7, d: 'M115,175 C105,115 295,115 285,175 Z' }, // ครีมคัพเค้ก
+          { id: 'r4', num: 6, d: 'M130,175 L270,175 L250,260 L150,260 Z' }, // ถ้วยคัพเค้ก
+          { id: 'r5', num: 1, d: 'M155,145 A10,10 0 1,0 175,145 A10,10 0 1,0 155,145 Z M225,145 A10,10 0 1,0 245,145 A10,10 0 1,0 225,145 Z' } // ท็อปปิ้ง
+        ],
+        decor: '<line x1="175" y1="175" x2="180" y2="260" stroke="#2d3436" stroke-width="3"/><line x1="225" y1="175" x2="220" y2="260" stroke="#2d3436" stroke-width="3"/>'
+      },
+      {
+        id: 'rainbow', cat: 'sweet', title: '12. สายรุ้งกับปุยเมฆ', emoji: '🌈', animClass: 'alive-rocket', sfxType: 'flutter',
+        aliveSpeechTh: 'ว้าว! สายรุ้งส่องประกายสดใสบนท้องฟ้าหลังฝนตกแล้วจ้า!', aliveSpeechEn: 'Wow! A bright and colorful rainbow in the sky!',
+        traceDots: [{x:90,y:200}, {x:200,y:75}, {x:310,y:200}, {x:200,y:225}],
+        regions: [
+          { id: 'r1', num: 1, d: 'M65,215 A135,135 0 0,1 335,215 L305,215 A105,105 0 0,0 95,215 Z' }, // รุ้งชั้นนอก
+          { id: 'r2', num: 3, d: 'M95,215 A105,105 0 0,1 305,215 L275,215 A75,75 0 0,0 125,215 Z' }, // รุ้งชั้นกลาง
+          { id: 'r3', num: 4, d: 'M125,215 A75,75 0 0,1 275,215 L245,215 A45,45 0 0,0 155,215 Z' }, // รุ้งชั้นใน
+          { id: 'r4', num: 5, d: 'M45,225 C45,190 100,185 115,205 C140,195 165,215 155,245 L55,245 Z' }, // เมฆซ้าย
+          { id: 'r5', num: 5, d: 'M245,225 C245,190 300,185 315,205 C340,195 365,215 355,245 L255,245 Z' }  // เมฆขวา
+        ],
+        decor: ''
+      }
+    ];
+    /* ==========================================================
+       2. WEB AUDIO ENGINE & FUNNY SOUND EFFECTS
+    ========================================================== */
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state !== 'running') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function unlockMobileAudio() {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      if (src.start) src.start(0);
+    }
+    document.addEventListener('touchstart', unlockMobileAudio, { passive: true });
+    document.addEventListener('click', unlockMobileAudio, { passive: true });
+
+    function playArtSFX(type, stepIdx = 0) {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      if (type === 'pop') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(480, now);
+        osc.frequency.exponentialRampToValueAtTime(820, now + 0.08);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.095);
+      } else if (type === 'traceNote') {
+        const scale = [523.25, 587.33, 659.25, 783.99, 1046.5];
+        const freq = scale[stepIdx % scale.length];
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.32, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.23);
+      } else if (type === 'dino') {
+        [0, 0.16, 0.34].forEach((offset, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = i === 2 ? 'sawtooth' : 'triangle';
+          osc.frequency.setValueAtTime(i === 2 ? 160 : 320, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(i === 2 ? 420 : 140, now + offset + 0.14);
+          gain.gain.setValueAtTime(0.35, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.15);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.16);
+        });
+      } else if (type === 'rocket') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.55);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.58);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      } else if (type === 'train') {
+        [0, 0.22].forEach(offset => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(440, now + offset);
+          osc.frequency.setValueAtTime(587.33, now + offset + 0.08);
+          gain.gain.setValueAtTime(0.25, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.18);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.19);
+        });
+      } else if (type === 'bubble' || type === 'flutter') {
+        [400, 600, 500, 800, 1000].forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now + i * 0.07);
+          gain.gain.setValueAtTime(0.25, now + i * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.07 + 0.1);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.07);
+          osc.stop(now + i * 0.07 + 0.11);
+        });
+      } else if (type === 'win') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + i * 0.09);
+          gain.gain.setValueAtTime(0.28, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.09 + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.23);
+        });
+      } else if (type === 'wrong') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(190, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.22);
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.24);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      }
+    }
+
+    let voiceMode = 'both'; // 'both', 'th', 'en'
+    function toggleVoiceLang() {
+      playArtSFX('pop');
+      if (voiceMode === 'both') voiceMode = 'th';
+      else if (voiceMode === 'th') voiceMode = 'en';
+      else voiceMode = 'both';
+
+      const labels = {
+        both: '🇹🇭+🇬🇧 เสียง 2 ภาษา',
+        th: '🇹🇭 เสียงไทยล้วน',
+        en: '🇬🇧 เสียง Eng ล้วน'
+      };
+      document.getElementById('langBtn').textContent = labels[voiceMode];
+    }
+
+    function speakText(thText, enText) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+
+      if (voiceMode === 'th' || !enText) {
+        const u = new SpeechSynthesisUtterance(thText);
+        u.lang = 'th-TH';
+        u.rate = 0.94;
+        window.speechSynthesis.speak(u);
+      } else if (voiceMode === 'en') {
+        const u = new SpeechSynthesisUtterance(enText);
+        u.lang = 'en-US';
+        u.rate = 0.88;
+        window.speechSynthesis.speak(u);
+      } else {
+        const uEn = new SpeechSynthesisUtterance(enText);
+        uEn.lang = 'en-US';
+        uEn.rate = 0.88;
+        uEn.onend = () => {
+          const uTh = new SpeechSynthesisUtterance(thText);
+          uTh.lang = 'th-TH';
+          uTh.rate = 0.94;
+          window.speechSynthesis.speak(uTh);
+        };
+        window.speechSynthesis.speak(uEn);
+      }
+    }
+
+    function spawnSparkle(x, y, emoji = '✨') {
+      const el = document.createElement('div');
+      el.className = 'sparkle-dot';
+      el.style.left = (x - 10) + 'px';
+      el.style.top = (y - 10) + 'px';
+      el.textContent = emoji;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 700);
+    }
+
+    /* ==========================================================
+       3. SHARED STAR PROGRESS & SAVED COLORING STATE
+    ========================================================== */
+    function getUnifiedStars() {
+      const s1 = parseInt(localStorage.getItem('mlst_stars') || '0', 10);
+      const s2 = parseInt(localStorage.getItem('kidsMath_totalStars') || '0', 10);
+      return Math.max(isNaN(s1) ? 0 : s1, isNaN(s2) ? 0 : s2);
+    }
+
+    let stars = getUnifiedStars();
+    let starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+    let childName = localStorage.getItem('mlst_name') || 'น้องมะลิ';
+    let couponText = localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!';
+
+    let savedArtworks = {};
+    try {
+      savedArtworks = JSON.parse(localStorage.getItem('mlst_saved_art') || '{}');
+    } catch (e) { savedArtworks = {}; }
+
+    function saveArtworksToStorage() {
+      try {
+        localStorage.setItem('mlst_saved_art', JSON.stringify(savedArtworks));
+      } catch (e) {}
+    }
+
+    function updateStarUI() {
+      childName = localStorage.getItem('mlst_name') || 'น้องมะลิ';
+      starGoal = parseInt(localStorage.getItem('mlst_goal') || '50', 10);
+      couponText = localStorage.getItem('mlst_coupon') || '🍦 คูปองแลกไอศกรีม 1 แท่ง หรือนิทานก่อนนอน 2 เรื่อง!';
+
+      document.getElementById('childNameLabel').textContent = childName;
+      document.getElementById('couponTextDisplay').textContent = couponText;
+
+      const pct = Math.min(100, Math.round(((stars % starGoal) / starGoal) * 100));
+      document.getElementById('starFill').style.width = (stars > 0 && stars % starGoal === 0 ? 100 : pct) + '%';
+      document.getElementById('starText').textContent = `⭐ ${stars} / ${starGoal} ดาว`;
+    }
+
+    function addStar(amount = 1) {
+      stars += amount;
+      localStorage.setItem('mlst_stars', String(stars));
+      localStorage.setItem('kidsMath_totalStars', String(stars));
+      updateStarUI();
+      launchConfetti();
+
+      if (stars >= starGoal && stars % starGoal === 0) {
+        document.getElementById('rewardModalTitle').textContent = `🎉 ครบ ${stars} ดาวแล้ว!`;
+        document.getElementById('rewardModalDesc').textContent = `${childName} เป็นจิตรกรน้อยคนเก่ง! นำหน้าจอนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลยจ้า!`;
+        document.getElementById('rewardModal').classList.add('show');
+      }
+    }
+
+    function openRewardModal() {
+      playArtSFX('pop');
+      document.getElementById('rewardModalTitle').textContent = `⭐ สะสมได้ ${stars} / ${starGoal} ดาว`;
+      document.getElementById('rewardModalDesc').textContent =
+        stars >= starGoal
+          ? 'ครบตามเป้าหมายแล้ว! นำคูปองนี้ไปแลกรางวัลกับคุณพ่อคุณแม่ได้เลย!'
+          : `อีกแค่ ${starGoal - (stars % starGoal)} ดาว จะได้รับคูปองรางวัลพิเศษแล้ว สู้ๆ นะจ๊ะ!`;
+      document.getElementById('rewardModal').classList.add('show');
+    }
+
+    function closeRewardModal() {
+      document.getElementById('rewardModal').classList.remove('show');
+    }
+
+    /* ==========================================================
+       4. NAVIGATION & STAGE CONTROLLER
+    ========================================================== */
+    let currentArtStage = 0; // 1=FreeColoring, 2=ColorByNumber, 3=MixLab, 4=FreeDraw
+    let currentPicCat = 'all';
+    let currentPicId = 'dino';
+    let selectedColorObj = PAINT_PALETTE[0];
+
+    // Trace Step State
+    let traceStepActive = true;
+    let currentTraceProgress = 0; // 0 to 4
+
+    function goArtHub() {
+      playArtSFX('pop');
+      currentArtStage = 0;
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('hubScreen').classList.add('active');
+      document.getElementById('btnBackArtHub').style.display = 'none';
+      document.getElementById('quickStageBar').classList.remove('show');
+    }
+
+    function openArtStage(stageNum) {
+      playArtSFX('pop');
+      currentArtStage = stageNum;
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('btnBackArtHub').style.display = 'inline-flex';
+      document.getElementById('quickStageBar').classList.add('show');
+
+      [1, 2, 3, 4].forEach(i => {
+        const tab = document.getElementById('qTab' + i);
+        if (tab) tab.classList.toggle('active', i === stageNum);
+      });
+
+      if (stageNum === 1 || stageNum === 2) {
+        document.getElementById('stageColoring').classList.add('active');
+        renderPaletteBar('paletteBar');
+        renderPictureGallery();
+        loadPictureIntoCanvas(currentPicId);
+      } else if (stageNum === 3) {
+        document.getElementById('stageMixing').classList.add('active');
+        initMixingLab();
+      } else if (stageNum === 4) {
+        document.getElementById('stageFreeDraw').classList.add('active');
+        renderPaletteBar('freePaletteBar');
+        initFreeDrawCanvas();
+      }
+    }
+
+    /* ==========================================================
+       5. STAGE 1 & 2: DOTTED TRACING + TAP-TO-FILL + ALIVE SHOW
+    ========================================================== */
+    function renderPaletteBar(containerId) {
+      const bar = document.getElementById(containerId);
+      if (!bar) return;
+      bar.innerHTML = '';
+
+      PAINT_PALETTE.forEach(col => {
+        const btn = document.createElement('button');
+        btn.className = `color-swatch ${selectedColorObj.id === col.id ? 'active' : ''}`;
+        if (col.id === 9) {
+          btn.style.background = 'linear-gradient(135deg, #ff4757, #ffa502, #ffd32a, #2ed573, #1e90ff, #8c7ae6)';
+        } else if (col.id === 10) {
+          btn.style.background = 'radial-gradient(circle, #fff 20%, #ff6b81 22%)';
+          btn.style.backgroundSize = '14px 14px';
+        } else {
+          btn.style.background = col.hex;
+        }
+
+        const labelText = currentArtStage === 2 && col.id <= 8 ? col.id : (col.badge || '🎨');
+        btn.innerHTML = `<span>${labelText}</span>`;
+        btn.onclick = () => {
+          playArtSFX('pop');
+          selectedColorObj = col;
+          renderPaletteBar(containerId);
+          speakText(col.th, col.en);
+        };
+        bar.appendChild(btn);
+      });
+    }
+
+    function setPicCategory(cat) {
+      playArtSFX('pop');
+      currentPicCat = cat;
+      ['all', 'animals', 'vehicles', 'sweet'].forEach(c => {
+        const btn = document.getElementById('catBtn_' + c);
+        if (btn) btn.classList.toggle('active', c === cat);
+      });
+      renderPictureGallery();
+    }
+
+    function renderPictureGallery() {
+      const grid = document.getElementById('pictureGallery');
+      grid.innerHTML = '';
+
+      const list = currentPicCat === 'all'
+        ? PICTURES_DB
+        : PICTURES_DB.filter(p => p.cat === currentPicCat);
+
+      list.forEach(pic => {
+        const card = document.createElement('div');
+        card.className = `pic-thumb-card ${pic.id === currentPicId ? 'active' : ''}`;
+        const isDone = savedArtworks[pic.id] && Object.keys(savedArtworks[pic.id]).length >= pic.regions.length;
+        card.innerHTML = `
+          ${isDone ? '<div class="done-badge">⭐ เสร็จแล้ว</div>' : ''}
+          <div style="font-size: 38px;">${pic.emoji}</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">${pic.title}</div>
+        `;
+        card.onclick = () => {
+          playArtSFX('pop');
+          currentPicId = pic.id;
+          renderPictureGallery();
+          loadPictureIntoCanvas(pic.id);
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    function loadPictureIntoCanvas(picId) {
+      const pic = PICTURES_DB.find(p => p.id === picId) || PICTURES_DB[0];
+      const svg = document.getElementById('coloringSvg');
+      svg.setAttribute('class', '');
+
+      const hasSavedColors = savedArtworks[pic.id] && Object.keys(savedArtworks[pic.id]).length > 0;
+      if (hasSavedColors) {
+        currentTraceProgress = pic.traceDots.length;
+      } else {
+        currentTraceProgress = traceStepActive ? 0 : pic.traceDots.length;
+      }
+
+      drawCurrentSVGStage();
+      updateColoringPromptText();
+    }
+
+    function drawCurrentSVGStage() {
+      const pic = PICTURES_DB.find(p => p.id === currentPicId) || PICTURES_DB[0];
+      const svg = document.getElementById('coloringSvg');
+      const isTraceLocked = currentTraceProgress < pic.traceDots.length;
+
+      svg.classList.toggle('trace-locked', isTraceLocked);
+
+      const defsHtml = `
+        <defs>
+          <linearGradient id="rainbowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff4757"/>
+            <stop offset="25%" stop-color="#ffa502"/>
+            <stop offset="50%" stop-color="#ffd32a"/>
+            <stop offset="75%" stop-color="#2ed573"/>
+            <stop offset="100%" stop-color="#1e90ff"/>
+          </linearGradient>
+          <pattern id="polkaPat" width="24" height="24" patternUnits="userSpaceOnUse">
+            <rect width="24" height="24" fill="#ff6b81"/>
+            <circle cx="12" cy="12" r="5" fill="#ffeaa7"/>
+          </pattern>
+        </defs>
+      `;
+
+      const savedMap = savedArtworks[pic.id] || {};
+
+      const regionsHtml = pic.regions.map(reg => {
+        const fillVal = savedMap[reg.id] || '#ffffff';
+        return `<path class="color-region" id="reg_${reg.id}" d="${reg.d}" fill="${fillVal}" onclick="handleRegionTap('${reg.id}', ${reg.num}, event)"/>`;
+      }).join('');
+
+      // Number labels for Stage 2 (Color by Number)
+      let numberHintsHtml = '';
+      if (!isTraceLocked && currentArtStage === 2) {
+        // Calculate approximate center of each path bounding box after render
+        setTimeout(() => {
+          pic.regions.forEach(reg => {
+            const pathEl = document.getElementById('reg_' + reg.id);
+            if (!pathEl) return;
+            const bbox = pathEl.getBBox();
+            const cx = bbox.x + bbox.width / 2;
+            const cy = bbox.y + bbox.height / 2;
+            const numTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            numTxt.setAttribute('x', cx);
+            numTxt.setAttribute('y', cy + 6);
+            numTxt.setAttribute('text-anchor', 'middle');
+            numTxt.setAttribute('font-size', '20');
+            numTxt.setAttribute('font-weight', '700');
+            numTxt.setAttribute('fill', '#2d3436');
+            numTxt.setAttribute('stroke', '#ffffff');
+            numTxt.setAttribute('stroke-width', '4');
+            numTxt.setAttribute('paint-order', 'stroke');
+            numTxt.setAttribute('pointer-events', 'none');
+            numTxt.textContent = reg.num;
+            svg.appendChild(numTxt);
+          });
+        }, 20);
+      }
+
+      // Dotted Trace Checkpoints (⭐ 1 -> 2 -> 3 -> 4)
+      let traceOverlayHtml = '';
+      if (isTraceLocked) {
+        for (let i = 0; i < pic.traceDots.length; i++) {
+          const pt = pic.traceDots[i];
+          const nextPt = pic.traceDots[(i + 1) % pic.traceDots.length];
+          const isSegmentDone = i < currentTraceProgress;
+          traceOverlayHtml += `
+            <line x1="${pt.x}" y1="${pt.y}" x2="${nextPt.x}" y2="${nextPt.y}"
+                  stroke="${isSegmentDone ? '#00b894' : '#fdcb6e'}"
+                  stroke-width="${isSegmentDone ? '6' : '4'}"
+                  stroke-dasharray="${isSegmentDone ? 'none' : '8,8'}" />
+          `;
+        }
+
+        pic.traceDots.forEach((pt, idx) => {
+          const isDone = idx < currentTraceProgress;
+          const isNext = idx === currentTraceProgress;
+          const stateCls = isDone ? 'done' : (isNext ? 'next-target' : '');
+          traceOverlayHtml += `
+            <g class="trace-dot-group" onclick="hitTraceDot(${idx}, event)">
+              <circle class="trace-dot-circle ${stateCls}" cx="${pt.x}" cy="${pt.y}" r="18"/>
+              <text x="${pt.x}" y="${pt.y + 6}" text-anchor="middle" font-size="16" font-weight="700" fill="#2d3436" pointer-events="none">
+                ${isDone ? '✓' : (idx + 1)}
+              </text>
+            </g>
+          `;
+        });
+      }
+
+      svg.innerHTML = defsHtml + regionsHtml + pic.decor + numberHintsHtml + traceOverlayHtml;
+    }
+
+    // Touch / Mouse Drag across Trace Dots
+    function setupTraceDragEvents() {
+      const wrap = document.getElementById('svgStageWrap');
+      const svg = document.getElementById('coloringSvg');
+
+      function checkPointerNearNextDot(e) {
+        const pic = PICTURES_DB.find(p => p.id === currentPicId);
+        if (!pic || currentTraceProgress >= pic.traceDots.length) return;
+
+        const rect = svg.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const svgX = ((clientX - rect.left) / rect.width) * 400;
+        const svgY = ((clientY - rect.top) / rect.height) * 300;
+
+        const targetPt = pic.traceDots[currentTraceProgress];
+        const dist = Math.hypot(svgX - targetPt.x, svgY - targetPt.y);
+
+        if (dist < 38) {
+          hitTraceDot(currentTraceProgress, { clientX, clientY });
+        }
+      }
+
+      wrap.addEventListener('mousemove', e => {
+        if (e.buttons === 1) checkPointerNearNextDot(e);
+      });
+      wrap.addEventListener('touchmove', e => {
+        checkPointerNearNextDot(e);
+      }, { passive: true });
+    }
+
+    function hitTraceDot(idx, ev) {
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic || idx !== currentTraceProgress) return;
+
+      playArtSFX('traceNote', currentTraceProgress);
+      if (ev && ev.clientX) spawnSparkle(ev.clientX, ev.clientY, '⭐');
+
+      currentTraceProgress++;
+      drawCurrentSVGStage();
+      updateColoringPromptText();
+
+      if (currentTraceProgress >= pic.traceDots.length) {
+        playArtSFX('win');
+        speakText('วาดเส้นครบแล้วจ้า! มาเลือกสีด้านล่างไประบายกันเลย!', 'Lines completed! Let us paint with colors!');
+      }
+    }
+
+    function toggleTraceStep() {
+      playArtSFX('pop');
+      traceStepActive = !traceStepActive;
+      document.getElementById('btnTraceMode').classList.toggle('active', traceStepActive);
+      currentTraceProgress = traceStepActive ? 0 : 99;
+      drawCurrentSVGStage();
+      updateColoringPromptText();
+    }
+
+    function completeTraceInstantly() {
+      playArtSFX('win');
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic) return;
+      currentTraceProgress = pic.traceDots.length;
+      drawCurrentSVGStage();
+      updateColoringPromptText();
+      speakText('เสกเส้นเสร็จเรียบร้อย เลือกสีมาระบายได้เลยจ้า!', 'Ready to paint!');
+    }
+
+    function handleRegionTap(regId, requiredNum, ev) {
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic || currentTraceProgress < pic.traceDots.length) return;
+
+      // In Stage 2 (Color by Number), check if selected color matches the region's number
+      if (currentArtStage === 2 && selectedColorObj.id !== requiredNum) {
+        playArtSFX('wrong');
+        const targetCol = PAINT_PALETTE.find(c => c.id === requiredNum);
+        speakText(
+          `ช่องนี้หมายเลข ${requiredNum} ต้องใช้${targetCol ? targetCol.th : ''}นะจ๊ะ`,
+          `This is number ${requiredNum}. Please choose ${targetCol ? targetCol.en : ''}!`
+        );
+        return;
+      }
+
+      playArtSFX('pop');
+      if (ev && ev.clientX) spawnSparkle(ev.clientX, ev.clientY, '🎨');
+
+      if (!savedArtworks[pic.id]) savedArtworks[pic.id] = {};
+      savedArtworks[pic.id][regId] = selectedColorObj.hex;
+      saveArtworksToStorage();
+
+      const pathEl = document.getElementById('reg_' + regId);
+      if (pathEl) pathEl.setAttribute('fill', selectedColorObj.hex);
+
+      renderPictureGallery();
+
+      // Check if all regions of this picture are colored
+      const coloredCount = Object.keys(savedArtworks[pic.id]).length;
+      if (coloredCount === pic.regions.length) {
+        addStar(2);
+        triggerAliveShow();
+      }
+    }
+
+    function triggerAliveShow() {
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic) return;
+
+      // Unlock lines if not yet unlocked so child can see animation anytime
+      if (currentTraceProgress < pic.traceDots.length) {
+        currentTraceProgress = pic.traceDots.length;
+        drawCurrentSVGStage();
+      }
+
+      const svg = document.getElementById('coloringSvg');
+      svg.setAttribute('class', '');
+      void svg.offsetWidth;
+      svg.classList.add(pic.animClass);
+
+      playArtSFX(pic.sfxType);
+      launchConfetti();
+
+      document.getElementById('coloringPrompt').textContent = `🎬 ${pic.aliveSpeechTh}`;
+      speakText(pic.aliveSpeechTh, pic.aliveSpeechEn);
+    }
+
+    function clearCurrentPicture() {
+      playArtSFX('pop');
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic) return;
+      delete savedArtworks[pic.id];
+      saveArtworksToStorage();
+      document.getElementById('coloringSvg').setAttribute('class', '');
+      currentTraceProgress = traceStepActive ? 0 : pic.traceDots.length;
+      renderPictureGallery();
+      drawCurrentSVGStage();
+      updateColoringPromptText();
+    }
+
+    function updateColoringPromptText() {
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic) return;
+      const promptEl = document.getElementById('coloringPrompt');
+
+      if (currentTraceProgress < pic.traceDots.length) {
+        promptEl.textContent = `✏️ ขั้นที่ 1: แตะหรือลากนิ้วต่อจุดดาวหมายเลข ${currentTraceProgress + 1} เพื่อวาดรูป "${pic.title}" จ้า!`;
+      } else if (currentArtStage === 2) {
+        promptEl.textContent = `🔢 ขั้นที่ 2: ดูตัวเลขในภาพ "${pic.title}" แล้วจิ้มสีที่มีเลขตรงกันมาระบายเลย!`;
+      } else {
+        promptEl.textContent = `🎨 ขั้นที่ 2: เลือกสีที่ชอบด้านล่าง แล้วแตะระบายลงในภาพ "${pic.title}" ได้เลย!`;
+      }
+    }
+
+    function speakColoringPrompt() {
+      const pic = PICTURES_DB.find(p => p.id === currentPicId);
+      if (!pic) return;
+      if (currentTraceProgress < pic.traceDots.length) {
+        speakText(`มาลากนิ้วต่อจุดตามรอยประ รูป${pic.title}กันเถอะ`, `Let us trace the dotted lines!`);
+      } else {
+        speakText(`เลือกสีสวยๆ มาระบายรูป${pic.title}ได้เลยจ้า`, `Choose a color and tap to paint!`);
+      }
+    }
+
+    /* ==========================================================
+       6. STAGE 3: MAGIC COLOR MIXING LAB
+    ========================================================== */
+    const MIX_RECIPES = {
+      'red+yellow': { hex: '#ffa502', th: 'สีส้ม', en: 'Orange', emoji: '🍊' },
+      'blue+yellow': { hex: '#2ed573', th: 'สีเขียว', en: 'Green', emoji: '🐸' },
+      'blue+red': { hex: '#8c7ae6', th: 'สีม่วง', en: 'Purple', emoji: '🍇' },
+      'red+white': { hex: '#ff6b81', th: 'สีชมพู', en: 'Pink', emoji: '🌸' },
+      'blue+white': { hex: '#70a1ff', th: 'สีฟ้าอ่อน', en: 'Light Blue', emoji: '☁️' }
+    };
+
+    let cauldronDrops = [];
+    let currentMixTarget = MIX_RECIPES['red+yellow'];
+
+    function initMixingLab() {
+      resetCauldron();
+      newMixMission();
+    }
+
+    function newMixMission() {
+      const keys = Object.keys(MIX_RECIPES);
+      const rk = keys[Math.floor(Math.random() * keys.length)];
+      currentMixTarget = MIX_RECIPES[rk];
+      document.getElementById('mixMissionText').textContent =
+        `🎯 ภารกิจ: ลองผสมแม่สี 2 ขวดให้กลายเป็น "${currentMixTarget.th} (${currentMixTarget.en}) ${currentMixTarget.emoji}" ดูสิจ๊ะ!`;
+      speakText(`ลองผสมสีให้กลายเป็น ${currentMixTarget.th} ดูสิจ๊ะ`, `Can you mix colors to make ${currentMixTarget.en}?`);
+    }
+
+    function addDropToCauldron(colorName) {
+      if (cauldronDrops.length >= 2) cauldronDrops = [];
+      playArtSFX('bubble');
+      cauldronDrops.push(colorName);
+
+      const box = document.getElementById('cauldronBox');
+      const emojiEl = document.getElementById('cauldronEmoji');
+      const labelEl = document.getElementById('cauldronLabel');
+
+      const singleInfo = {
+        red: { hex: '#ff4757', th: 'สีแดง' },
+        yellow: { hex: '#ffd32a', th: 'สีเหลือง' },
+        blue: { hex: '#1e90ff', th: 'สีน้ำเงิน' },
+        white: { hex: '#dfe6e9', th: 'สีขาว' }
+      };
+
+      if (cauldronDrops.length === 1) {
+        box.style.background = singleInfo[colorName].hex;
+        emojiEl.textContent = '💧';
+        labelEl.textContent = `ใส่${singleInfo[colorName].th}แล้ว 1 หยด... เลือกอีก 1 สีเลย!`;
+      } else if (cauldronDrops.length === 2) {
+        const sortedKey = [...cauldronDrops].sort().join('+');
+        const result = MIX_RECIPES[sortedKey];
+
+        if (result) {
+          box.style.background = result.hex;
+          emojiEl.textContent = result.emoji;
+          labelEl.textContent = `ตู้ม! กลายเป็น "${result.th} (${result.en})"`;
+
+          if (result.th === currentMixTarget.th) {
+            playArtSFX('win');
+            addStar(2);
+            speakText(`เก่งมากจ้า! ผสมได้${result.th}ถูกต้องตามภารกิจเลย!`, `Awesome! You made ${result.en}!`);
+            setTimeout(newMixMission, 1800);
+          } else {
+            speakText(`ว้าว! ผสมกันได้${result.th}จ้า`, `You made ${result.en}!`);
+          }
+        } else {
+          box.style.background = singleInfo[colorName].hex;
+          emojiEl.textContent = '🎨';
+          labelEl.textContent = 'ลองหยดแม่สีต่างชนิดกัน 2 สีดูนะจ๊ะ!';
+        }
+      }
+    }
+
+    function resetCauldron() {
+      playArtSFX('pop');
+      cauldronDrops = [];
+      const box = document.getElementById('cauldronBox');
+      box.style.background = '#2d3436';
+      document.getElementById('cauldronEmoji').textContent = '🧪';
+      document.getElementById('cauldronLabel').textContent = 'หม้อว่างเปล่า (หยดสีลงมาเลย!)';
+    }
+
+    function speakMixPrompt() {
+      speakText(`ลองผสมสีให้กลายเป็น ${currentMixTarget.th} ดูสิจ๊ะ`, `Mix two colors to make ${currentMixTarget.en}!`);
+    }
+
+    /* ==========================================================
+       7. STAGE 4: FREE DRAW & MAGIC STAMPS CANVAS
+    ========================================================== */
+    let freeTool = 'brush';
+    let isDrawingFree = false;
+    let freeLastPos = { x: 0, y: 0 };
+    let rainbowHue = 0;
+    let freeCanvasInitialized = false;
+
+    function setFreeTool(tool) {
+      playArtSFX('pop');
+      freeTool = tool;
+      ['toolBrush', 'toolRainbow', 'toolStampStar', 'toolStampHeart', 'toolStampFlower', 'toolStampDino'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      if (tool === 'brush') document.getElementById('toolBrush').classList.add('active');
+      else if (tool === 'rainbow') document.getElementById('toolRainbow').classList.add('active');
+      else if (tool === '⭐') document.getElementById('toolStampStar').classList.add('active');
+      else if (tool === '💖') document.getElementById('toolStampHeart').classList.add('active');
+      else if (tool === '🌸') document.getElementById('toolStampFlower').classList.add('active');
+      else if (tool === '🦖') document.getElementById('toolStampDino').classList.add('active');
+    }
+
+    function initFreeDrawCanvas() {
+      const canvas = document.getElementById('freeDrawCanvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!freeCanvasInitialized) {
+        freeCanvasInitialized = true;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        function getCanvasCoords(e) {
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          return {
+            x: ((clientX - rect.left) / rect.width) * canvas.width,
+            y: ((clientY - rect.top) / rect.height) * canvas.height
+          };
+        }
+
+        function startFree(e) {
+          e.preventDefault();
+          const pos = getCanvasCoords(e);
+          if (freeTool !== 'brush' && freeTool !== 'rainbow') {
+            playArtSFX('pop');
+            ctx.font = '42px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(freeTool, pos.x, pos.y);
+            return;
+          }
+          isDrawingFree = true;
+          freeLastPos = pos;
+        }
+
+        function moveFree(e) {
+          if (!isDrawingFree) return;
+          e.preventDefault();
+          const pos = getCanvasCoords(e);
+          ctx.beginPath();
+          ctx.moveTo(freeLastPos.x, freeLastPos.y);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.lineWidth = 14;
+
+          if (freeTool === 'rainbow') {
+            rainbowHue = (rainbowHue + 6) % 360;
+            ctx.strokeStyle = `hsl(${rainbowHue}, 90%, 55%)`;
+          } else {
+            ctx.strokeStyle = selectedColorObj.id <= 8 ? selectedColorObj.hex : '#ff4757';
+          }
+          ctx.stroke();
+          freeLastPos = pos;
+        }
+
+        function endFree() {
+          isDrawingFree = false;
+        }
+
+        canvas.addEventListener('mousedown', startFree);
+        canvas.addEventListener('mousemove', moveFree);
+        window.addEventListener('mouseup', endFree);
+
+        canvas.addEventListener('touchstart', startFree, { passive: false });
+        canvas.addEventListener('touchmove', moveFree, { passive: false });
+        window.addEventListener('touchend', endFree);
+      }
+    }
+
+    function clearFreeCanvas() {
+      playArtSFX('pop');
+      const canvas = document.getElementById('freeDrawCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function saveFreeDrawing() {
+      playArtSFX('win');
+      addStar(1);
+      const canvas = document.getElementById('freeDrawCanvas');
+      const link = document.createElement('a');
+      link.download = `mali-artwork-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      speakText('บันทึกผลงานศิลปะของหนูเรียบร้อยแล้วจ้า เก่งมากเลย!', 'Artwork saved! Great job!');
+    }
+
+    /* ==========================================================
+       8. CONFETTI CELEBRATION & INITIALIZE
+    ========================================================== */
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeConfetti);
+    resizeConfetti();
+
+    function launchConfetti() {
+      const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#1dd1a1', '#5f27cd'];
+      for (let i = 0; i < 50; i++) {
+        particles.push({
+          x: window.innerWidth / 2,
+          y: window.innerHeight / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.8) * 16 - 4,
+          size: Math.random() * 9 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 12
+        });
+      }
+      requestAnimationFrame(updateConfetti);
+    }
+
+    function updateConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.42;
+        p.rot += p.vRot;
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate((p.rot * Math.PI) / 180);
+        confettiCtx.fillStyle = p.color;
+        confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        confettiCtx.restore();
+        if (p.y > confettiCanvas.height) particles.splice(idx, 1);
+      });
+      if (particles.length > 0) requestAnimationFrame(updateConfetti);
+    }
+
+    window.addEventListener('pageshow', () => {
+      stars = getUnifiedStars();
+      updateStarUI();
+    });
+
+    window.onload = () => {
+      stars = getUnifiedStars();
+      updateStarUI();
+      setupTraceDragEvents();
+
+      const params = new URLSearchParams(window.location.search);
+      const stParam = parseInt(params.get('stage'), 10);
+      if (stParam >= 1 && stParam <= 4) {
+        openArtStage(stParam);
+      }
+    };
+  </script>
+</body>
+</html>
